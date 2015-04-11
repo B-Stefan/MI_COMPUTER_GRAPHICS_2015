@@ -134,7 +134,7 @@ void Preview() {
   alpha_ += .1;
 
   SetMaterialColor(3, 1, 0, 0);
-  DrawSphere(Vec3( 5, 0, 0), 2);
+  DrawSphere(Vec3( 5, 0, 0), 3);
   SetMaterialColor(3, 1, 1, 0);
   DrawSphere(Vec3(-5, 0, 0), 2);
   SetMaterialColor(3, 0, 0, 1);
