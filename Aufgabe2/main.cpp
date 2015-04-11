@@ -2,13 +2,70 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <iostream>
 
 #include "../_lib/vec3.hpp"
+
+using namespace std;
 
 static double alpha_ = 0;
 static double window_width_ = 1024;
 static double window_height_ = 768;
 static double zoom;
+double rotateX = 0.0;
+double rotateY = 0.0;
+double rotateZ = 0.0;
+
+//Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
+void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+
+  if(action == GLFW_RELEASE){
+      if(rotateX != 0){
+        rotateY = 0;
+      }
+      if(rotateY != 0){
+      rotateX = 0;
+      }
+      //alpha_ += 0;
+
+
+
+
+  }
+
+  if (key == GLFW_KEY_W && action == GLFW_REPEAT || key == GLFW_KEY_W && action == GLFW_PRESS){
+    cout << "w"<<endl;
+    rotateX = 1;
+    alpha_ += 10;
+  }
+  if (key == GLFW_KEY_A && action == GLFW_REPEAT || key == GLFW_KEY_A && action == GLFW_PRESS){
+    cout << "a"<<endl;
+    rotateY = -1;
+    alpha_ += 10;
+
+  }
+  if (key == GLFW_KEY_S && action == GLFW_REPEAT|| key == GLFW_KEY_S && action == GLFW_PRESS){
+    cout << "s"<<endl;
+    rotateX = -1;
+    alpha_ += 10;
+
+  }
+  if (key == GLFW_KEY_D && action == GLFW_REPEAT|| key == GLFW_KEY_D && action == GLFW_PRESS){
+    cout << "d"<<endl;
+      rotateY = 1;
+      alpha_ += 10;
+
+  }
+  if (key == GLFW_KEY_O && action == GLFW_REPEAT|| key == GLFW_KEY_O && action == GLFW_PRESS){
+    cout << "o"<<endl;
+  }
+  if (key == GLFW_KEY_C && action == GLFW_REPEAT|| key == GLFW_KEY_C && action == GLFW_PRESS){
+    cout << "c"<<endl;
+  }
+
+
+
+}
 
 
 // draw a sphere composed of triangles
@@ -132,13 +189,15 @@ void drawTriangle(const Vec3& A,const Vec3& B,const Vec3& Top){
   glEnd();
 }
 
+
+
 void drawPyramid(){
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();						    // Reset The Current Modelview Matrix
   glTranslated(-7, -7, -10.0);      // Move 10 units backwards in z,
   // since camera is at origin
 
-  glRotated(alpha_*2, -5, -1, -1);
+  glRotated(alpha_, rotateX, rotateY, rotateZ);
 
   double Size = 4;
 
@@ -186,7 +245,7 @@ void Preview() {
   glLoadIdentity();						    // Reset The Current Modelview Matrix
   glTranslated(0, 0, -10.0);      // Move 10 units backwards in z,
                                   // since camera is at origin
-  glRotated(alpha_, 1, 0.1, 0);
+  glRotated(alpha_, rotateX, rotateY, rotateZ);
 
 
   SetMaterialColor(3, 1, 0, 0);
@@ -199,8 +258,9 @@ void Preview() {
   SetMaterialColor(1, 1, 0, 0);
   SetMaterialColor(2, 0, 1, 0);
   glTranslated(0, 0, 10.0);
-
 }
+
+
 
 int main() {
   GLFWwindow* window = NULL;
@@ -221,6 +281,12 @@ int main() {
   glfwMakeContextCurrent(window);
 
   while(!glfwWindowShouldClose(window)) {
+
+
+    //Method that ask the key_callback method for Key inputs
+    glfwSetKeyCallback(window, key_callback);
+
+
     // switch on lighting (or you don't see anything)
     InitLighting();
 
@@ -229,7 +295,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
-    alpha_ += 0.1;
+
+    //alpha_ += 10;
     Preview();
     drawPyramid();
 
@@ -237,6 +304,7 @@ int main() {
     glfwSwapBuffers(window);
 
     glfwPollEvents();
+
   }
 
   glfwTerminate();
