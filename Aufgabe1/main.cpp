@@ -85,7 +85,7 @@ void InitLighting() {
   GLfloat lp1[4]  = { 10,  5,  10,  0};
   GLfloat lp2[4]  = { -5,  5, -10,  0};
   GLfloat red[4]  = {10, .8,  .8,  1};
-  GLfloat blue[4] = { .8, .8, 1.0,  1};
+  GLfloat blue[4] = { 0, 10, 1.0,  1};
 
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
