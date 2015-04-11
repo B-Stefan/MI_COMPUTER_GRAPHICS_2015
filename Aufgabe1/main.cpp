@@ -122,6 +122,122 @@ void InitLighting() {
   glLoadIdentity();
 }
 
+void drawPyramid(){
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+  // Reset The Current Modelview Matrix
+  glTranslated(0, 0, -10.0);                  // Move 10 units backwards in z,
+  // since camera is at origin
+
+  glRotated(alpha_, 0, 1, 0);
+  alpha_ += 0.5;
+  /*
+   SetMaterialColor(1, 0, 0, 0);
+
+   glBegin(GL_TRIANGLES);                      // Start Drawing A Triangle
+   glNormal3f( 0.0,  0.0, 1.0);                // Set Top Point Of Triangle To Red
+   glVertex3f( 0.0,  2.0, 0.0);                // First Point Of The Triangle
+   glVertex3f(-2.0, -2.0, 0.0);                // Second Point Of The Triangle
+   glVertex3f( 2.0, -2.0, 0.0);
+   glNormal3b(1, 1, 1);                        // Third Point Of The Triangle
+   glEnd();
+
+
+   //clear color and depth buffer
+  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+   //glLoadIdentity();//load identity matrix
+
+   glTranslatef(0.0f,0.0f,-4.0f);//move forward 4 units
+
+   glColor3f(0.0f,0.0f,1.0f); //blue color
+
+   glBegin(GL_LINE_LOOP);//start drawing a line loop
+   glVertex3f(-1.0f,0.0f,0.0f);//left of window
+   glVertex3f(0.0f,-1.0f,0.0f);//bottom of window
+   glVertex3f(1.0f,0.0f,0.0f);//right of window
+   glVertex3f(0.0f,1.0f,0.0f);//top of window
+   glEnd();//end drawing of line loop
+   */
+  glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
+  // Front
+  glColor3f(1.0f, 0.0f, 0.0f);     // Red
+  glVertex3f( 0.0f, 1.0f, 0.0f);
+  glColor3f(0.0f, 1.0f, 0.0f);     // Green
+  glVertex3f(-1.0f, -1.0f, 1.0f);
+  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+  glVertex3f(1.0f, -1.0f, 1.0f);
+
+  // Right
+  glColor3f(1.0f, 0.0f, 0.0f);     // Red
+  glVertex3f(0.0f, 1.0f, 0.0f);
+  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+  glVertex3f(1.0f, -1.0f, 1.0f);
+  glColor3f(0.0f, 1.0f, 0.0f);     // Green
+  glVertex3f(1.0f, -1.0f, -1.0f);
+
+  // Back
+  glColor3f(1.0f, 0.0f, 0.0f);     // Red
+  glVertex3f(0.0f, 1.0f, 0.0f);
+  glColor3f(0.0f, 1.0f, 0.0f);     // Green
+  glVertex3f(1.0f, -1.0f, -1.0f);
+  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+  glVertex3f(-1.0f, -1.0f, -1.0f);
+
+  // Left
+  glColor3f(1.0f,0.0f,0.0f);       // Red
+  glVertex3f( 0.0f, 1.0f, 0.0f);
+  glColor3f(0.0f,0.0f,1.0f);       // Blue
+  glVertex3f(-1.0f,-1.0f,-1.0f);
+  glColor3f(0.0f,1.0f,0.0f);       // Green
+  glVertex3f(-1.0f,-1.0f, 1.0f);
+  glEnd();   // Done drawing the pyramid
+
+  glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
+  // Top face (y = 1.0f)
+  // Define vertices in counter-clockwise (CCW) order with normal pointing out
+  glColor3f(0.0f, 1.0f, 0.0f);     // Green
+  glVertex3f( 1.0f, 1.0f, -1.0f);
+  glVertex3f(-1.0f, 1.0f, -1.0f);
+  glVertex3f(-1.0f, 1.0f,  1.0f);
+  glVertex3f( 1.0f, 1.0f,  1.0f);
+
+  // Bottom face (y = -1.0f)
+  glColor3f(1.0f, 0.5f, 0.0f);     // Orange
+  glVertex3f( 1.0f, -1.0f,  1.0f);
+  glVertex3f(-1.0f, -1.0f,  1.0f);
+  glVertex3f(-1.0f, -1.0f, -1.0f);
+  glVertex3f( 1.0f, -1.0f, -1.0f);
+
+  // Front face  (z = 1.0f)
+  glColor3f(1.0f, 0.0f, 0.0f);     // Red
+  glVertex3f( 1.0f,  1.0f, 1.0f);
+  glVertex3f(-1.0f,  1.0f, 1.0f);
+  glVertex3f(-1.0f, -1.0f, 1.0f);
+  glVertex3f( 1.0f, -1.0f, 1.0f);
+
+  // Back face (z = -1.0f)
+  glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
+  glVertex3f( 1.0f, -1.0f, -1.0f);
+  glVertex3f(-1.0f, -1.0f, -1.0f);
+  glVertex3f(-1.0f,  1.0f, -1.0f);
+  glVertex3f( 1.0f,  1.0f, -1.0f);
+
+  // Left face (x = -1.0f)
+  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
+  glVertex3f(-1.0f,  1.0f,  1.0f);
+  glVertex3f(-1.0f,  1.0f, -1.0f);
+  glVertex3f(-1.0f, -1.0f, -1.0f);
+  glVertex3f(-1.0f, -1.0f,  1.0f);
+
+  // Right face (x = 1.0f)
+  glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
+  glVertex3f(1.0f,  1.0f, -1.0f);
+  glVertex3f(1.0f,  1.0f,  1.0f);
+  glVertex3f(1.0f, -1.0f,  1.0f);
+  glVertex3f(1.0f, -1.0f, -1.0f);
+  glEnd();  // End of drawing color-cube
+}
+
 
 
 // draw the entire scene
@@ -178,7 +294,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
-    Preview();
+   // Preview();
+    drawPyramid();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
