@@ -12,6 +12,7 @@ ENDIF()
 # include OpenGL
 include_directories(${OPENGL_INCLUDE_DIR})
 
+
 # GLFW3
 # GLFW3 ist ein Sondefall und kann nicht mit normalen find_package gefunden werden.
 # Es wird hierfür PkgConfig benötigt.
@@ -33,16 +34,15 @@ ENDIF()
 # include GLFW3
 include_directories(${GLFW_INCLUDE_DIRS})
 
+
 set(LIBRARIES_GLOBAL
     ${LIBRARIES_GLOBAL}
     ${GLFW_STATIC_LIBRARIES}
     ${OPENGL_LIBRARIES}
     # add other libs here
     # ${OPENGL_LIBRARIES} sind nach dem find_package() definiert.
-    ${CMAKE_CURRENT_SOURCE_DIR}/_lib/vec3.cpp
 )
-
-
+add_subdirectory(_lib)
 add_subdirectory(Aufgabe1)
 add_subdirectory(Aufgabe2)
 
@@ -56,5 +56,5 @@ endif()
 add_executable(GLFW3_Demo ${TASK1_SOURCES})
 target_link_libraries(GLFW3_Demo ${TASK1_LIBS}) # link against all libs
 
-add_executable(GLFW3_Demo_Aufgabe2 ${TASK2_SOURCES})
+add_executable(GLFW3_Demo_Aufgabe2 ${TASK2_SOURCES} _lib/DarwQuarter.cpp _lib/DarwQuarter.h)
 target_link_libraries(GLFW3_Demo_Aufgabe2 ${TASK2_LIBS}) # link against all libs
