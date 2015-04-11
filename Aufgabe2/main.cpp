@@ -5,6 +5,7 @@
 #include <iostream>
 
 #include "../_lib/vec3.hpp"
+#include "../_lib/DarwQuarter.h"
 
 using namespace std;
 
@@ -248,16 +249,9 @@ void Preview() {
   glRotated(alpha_, rotateX, rotateY, rotateZ);
 
 
-  SetMaterialColor(3, 1, 0, 0);
-  DrawSphere(Vec3( 5, 0, 0), 3);
-  SetMaterialColor(3, 1, 1, 0);
-  DrawSphere(Vec3(-5, 0, 0), 2);
-  SetMaterialColor(3, 0, 0, 1);
-  DrawSphere(Vec3( 0, 5, 0), 2);
-
-  SetMaterialColor(1, 1, 0, 0);
-  SetMaterialColor(2, 0, 1, 0);
-  glTranslated(0, 0, 10.0);
+  Vec3 point = Vec3(0,0,1);
+  double l = 5;
+  DarwQuarter::drawQuarter(point,l);
 }
 
 
@@ -298,7 +292,6 @@ int main() {
 
     //alpha_ += 10;
     Preview();
-    drawPyramid();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);

@@ -56,5 +56,5 @@ endif()
 add_executable(GLFW3_Demo ${TASK1_SOURCES})
 target_link_libraries(GLFW3_Demo ${TASK1_LIBS}) # link against all libs
 
-add_executable(GLFW3_Demo_Aufgabe2 ${TASK2_SOURCES} _lib/DarwQuarter.cpp _lib/DarwQuarter.h)
+add_executable(GLFW3_Demo_Aufgabe2 ${TASK2_SOURCES})
 target_link_libraries(GLFW3_Demo_Aufgabe2 ${TASK2_LIBS}) # link against all libs
