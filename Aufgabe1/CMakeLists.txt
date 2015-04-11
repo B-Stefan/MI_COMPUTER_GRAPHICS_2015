@@ -42,7 +42,7 @@ set(LIBRARIES
 set(SOURCES
     ${SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/vec3.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../_lib/vec3.cpp
     # add new source files here
 	  PARENT_SCOPE
 )

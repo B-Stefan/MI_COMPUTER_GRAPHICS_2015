@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include "vec3.hpp"
+#include "../_lib/vec3.hpp"
 
 static double alpha_ = 0;
 static double window_width_ = 1024;
