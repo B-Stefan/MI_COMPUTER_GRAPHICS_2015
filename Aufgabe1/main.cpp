@@ -13,7 +13,7 @@ static double window_height_ = 768;
 // draw a sphere composed of triangles
 void DrawSphere(const Vec3& ctr, double r){
   int     i, j,
-          n1 = 12, n2 = 24;
+          n1 = 6, n2 = 12;
   Vec3    normal, v1;
   double  a1, a1d = M_PI / n1,
           a2, a2d = M_PI / n2,
