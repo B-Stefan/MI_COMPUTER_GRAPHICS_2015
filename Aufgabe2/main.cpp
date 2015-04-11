@@ -20,48 +20,28 @@ double rotateZ = 0.0;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
-  if(action == GLFW_RELEASE){
-      if(rotateX != 0){
-        rotateY = 0;
-      }
-      if(rotateY != 0){
-      rotateX = 0;
-      }
-      //alpha_ += 0;
 
 
+  if(action == GLFW_REPEAT  || action == GLFW_PRESS){
+    switch (key) {
+      case GLFW_KEY_W:
+        cout << "w"<<endl;
+            rotateX = 1;
+      case GLFW_KEY_A:
+            cout << "w"<<endl;
+            rotateY = -1;
+      case GLFW_KEY_S:
+        cout << "w"<<endl;
+            rotateX = -1;
+      case GLFW_KEY_D:
+        cout << "w"<<endl;
+            rotateY = 1;
 
-
-  }
-
-  if (key == GLFW_KEY_W && action == GLFW_REPEAT || key == GLFW_KEY_W && action == GLFW_PRESS){
-    cout << "w"<<endl;
-    rotateX = 1;
-    alpha_ += 10;
-  }
-  if (key == GLFW_KEY_A && action == GLFW_REPEAT || key == GLFW_KEY_A && action == GLFW_PRESS){
-    cout << "a"<<endl;
-    rotateY = -1;
-    alpha_ += 10;
-
-  }
-  if (key == GLFW_KEY_S && action == GLFW_REPEAT|| key == GLFW_KEY_S && action == GLFW_PRESS){
-    cout << "s"<<endl;
-    rotateX = -1;
-    alpha_ += 10;
-
-  }
-  if (key == GLFW_KEY_D && action == GLFW_REPEAT|| key == GLFW_KEY_D && action == GLFW_PRESS){
-    cout << "d"<<endl;
-      rotateY = 1;
-      alpha_ += 10;
-
-  }
-  if (key == GLFW_KEY_O && action == GLFW_REPEAT|| key == GLFW_KEY_O && action == GLFW_PRESS){
-    cout << "o"<<endl;
-  }
-  if (key == GLFW_KEY_C && action == GLFW_REPEAT|| key == GLFW_KEY_C && action == GLFW_PRESS){
-    cout << "c"<<endl;
+    }
+  }else {
+    rotateX = 0;
+    rotateY = 0;
+    rotateZ = 0;
   }
 
 
@@ -181,77 +161,29 @@ void InitLighting() {
   glLoadIdentity();
 }
 
-void drawTriangle(const Vec3& A,const Vec3& B,const Vec3& Top){
-  glBegin(GL_TRIANGLES);            // Start Drawing A Triangle
-  glNormal3f( 0.0,  0.0, 1.0);			// Set Top Point Of Triangle To Red
-  glVertex3f( A.p[0],  A.p[1], A.p[2]);
-  glVertex3f( Top.p[0], Top.p[1], Top.p[2]);  // First Point Of The Triangle
-  glVertex3f( B.p[0],  B.p[1], B.p[2]);      // First Point Of The Triangle
-  glEnd();
-}
 
-
-
-void drawPyramid(){
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();						    // Reset The Current Modelview Matrix
-  glTranslated(-7, -7, -10.0);      // Move 10 units backwards in z,
-  // since camera is at origin
-
-  glRotated(alpha_, rotateX, rotateY, rotateZ);
-
-  double Size = 4;
-
-  Vec3 A = Size * Vec3(1,2,0) ;
-  Vec3 B = Size * Vec3(2,2,0);
-  Vec3 C = Size * Vec3(2,1,0);
-  Vec3 D = Size * Vec3(1,1,0);
-
-  Vec3 Top = Size * Vec3(1.5,1.5,1);
-
-
-  SetMaterialColor(1, 1, 0, 0);
-  SetMaterialColor(2, 0, 1, 0);
-  zoom = 5;
-  glBegin(GL_QUADS);            // Start Drawing A Triangle
-  glVertex3f(A.p[0],A.p[1],A.p[2]);
-  glVertex3f(B.p[0],B.p[1],B.p[2]);
-  glVertex3f(C.p[0],C.p[1],C.p[2]);
-  glVertex3f(D.p[0],D.p[1],D.p[2]);
-  glEnd();
-
-
-  SetMaterialColor(2, 1, 0, 0);
-  SetMaterialColor(1, 1, 0, 0);
-  drawTriangle(A,B,Top);
-  SetMaterialColor(2, 0, 1, 0);
-  SetMaterialColor(1, 0, 1, 0);
-  drawTriangle(B,C,Top);
-  SetMaterialColor(2, 0, 0, 1);
-  SetMaterialColor(1, 0, 0, 1);
-  drawTriangle(C,D,Top);
-
-  SetMaterialColor(2, 0, 1, 1);
-  SetMaterialColor(1, 0, 1, 1);
-  drawTriangle(D,A,Top);
-  glTranslated(7, 7, 10.0);      // Move 10 units backwards in z,
-
-}
 
 
 
 // draw the entire scene
-void Preview() {
+void DarwBox() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();						    // Reset The Current Modelview Matrix
-  glTranslated(0, 0, -10.0);      // Move 10 units backwards in z,
-                                  // since camera is at origin
+
   glRotated(alpha_, rotateX, rotateY, rotateZ);
+  alpha_ +=0.3;
 
-
-  Vec3 point = Vec3(0,0,1);
+  Vec3 point = Vec3(0,0,0);
   double l = 5;
   DarwQuarter::drawQuarter(point,l);
+
+  //Front Plane
+  Vec3 A = Vec3(-1,1,0);
+  Vec3 B = Vec3(1,1,0);
+  Vec3 C = Vec3(1,-1,0);
+  Vec3 D = Vec3(-1,-1,0);
+
+  DarwQuarter::drawPlane(A,B,C,D);
 }
 
 
@@ -280,7 +212,6 @@ int main() {
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
 
-
     // switch on lighting (or you don't see anything)
     InitLighting();
 
@@ -291,7 +222,7 @@ int main() {
     // draw the scene
 
     //alpha_ += 10;
-    Preview();
+    DarwBox();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);

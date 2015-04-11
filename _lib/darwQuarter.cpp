@@ -7,8 +7,8 @@
 
 void DarwQuarter::drawQuarter(Vec3& middlePoint, double &l) {
 
-    Vec3 pointTopLeftCorner = Vec3(middlePoint.p[0]+l/2,
-                              middlePoint.p[1]-l/2,
+    Vec3 pointTopLeftCorner = Vec3(middlePoint.p[0]-l/2,
+                              middlePoint.p[1]+l/2,
                               middlePoint.p[2]-l/2);
 
     //Front Plane
