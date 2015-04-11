@@ -8,6 +8,7 @@
 static double alpha_ = 0;
 static double window_width_ = 1024;
 static double window_height_ = 768;
+static double zoom;
 
 
 // draw a sphere composed of triangles
@@ -122,120 +123,59 @@ void InitLighting() {
   glLoadIdentity();
 }
 
+void drawTriangle(const Vec3& A,const Vec3& B,const Vec3& Top){
+  glBegin(GL_TRIANGLES);            // Start Drawing A Triangle
+  glNormal3f( 0.0,  0.0, 1.0);			// Set Top Point Of Triangle To Red
+  glVertex3f( A.p[0],  A.p[1], A.p[2]);
+  glVertex3f( Top.p[0], Top.p[1], Top.p[2]);  // First Point Of The Triangle
+  glVertex3f( B.p[0],  B.p[1], B.p[2]);      // First Point Of The Triangle
+  glEnd();
+}
+
 void drawPyramid(){
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  // Reset The Current Modelview Matrix
-  glTranslated(0, 0, -10.0);                  // Move 10 units backwards in z,
+  glLoadIdentity();						    // Reset The Current Modelview Matrix
+  glTranslated(-7, -7, -10.0);      // Move 10 units backwards in z,
   // since camera is at origin
 
-  glRotated(alpha_, 0, 1, 0);
-  alpha_ += 0.5;
-  /*
-   SetMaterialColor(1, 0, 0, 0);
+  glRotated(alpha_*2, -5, -1, -1);
 
-   glBegin(GL_TRIANGLES);                      // Start Drawing A Triangle
-   glNormal3f( 0.0,  0.0, 1.0);                // Set Top Point Of Triangle To Red
-   glVertex3f( 0.0,  2.0, 0.0);                // First Point Of The Triangle
-   glVertex3f(-2.0, -2.0, 0.0);                // Second Point Of The Triangle
-   glVertex3f( 2.0, -2.0, 0.0);
-   glNormal3b(1, 1, 1);                        // Third Point Of The Triangle
-   glEnd();
+  double Size = 4;
+
+  Vec3 A = Size * Vec3(1,2,0) ;
+  Vec3 B = Size * Vec3(2,2,0);
+  Vec3 C = Size * Vec3(2,1,0);
+  Vec3 D = Size * Vec3(1,1,0);
+
+  Vec3 Top = Size * Vec3(1.5,1.5,1);
 
 
-   //clear color and depth buffer
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-   //glLoadIdentity();//load identity matrix
+  SetMaterialColor(1, 1, 0, 0);
+  SetMaterialColor(2, 0, 1, 0);
+  zoom = 5;
+  glBegin(GL_QUADS);            // Start Drawing A Triangle
+  glVertex3f(A.p[0],A.p[1],A.p[2]);
+  glVertex3f(B.p[0],B.p[1],B.p[2]);
+  glVertex3f(C.p[0],C.p[1],C.p[2]);
+  glVertex3f(D.p[0],D.p[1],D.p[2]);
+  glEnd();
 
-   glTranslatef(0.0f,0.0f,-4.0f);//move forward 4 units
 
-   glColor3f(0.0f,0.0f,1.0f); //blue color
+  SetMaterialColor(2, 1, 0, 0);
+  SetMaterialColor(1, 1, 0, 0);
+  drawTriangle(A,B,Top);
+  SetMaterialColor(2, 0, 1, 0);
+  SetMaterialColor(1, 0, 1, 0);
+  drawTriangle(B,C,Top);
+  SetMaterialColor(2, 0, 0, 1);
+  SetMaterialColor(1, 0, 0, 1);
+  drawTriangle(C,D,Top);
 
-   glBegin(GL_LINE_LOOP);//start drawing a line loop
-   glVertex3f(-1.0f,0.0f,0.0f);//left of window
-   glVertex3f(0.0f,-1.0f,0.0f);//bottom of window
-   glVertex3f(1.0f,0.0f,0.0f);//right of window
-   glVertex3f(0.0f,1.0f,0.0f);//top of window
-   glEnd();//end drawing of line loop
-   */
-  glBegin(GL_TRIANGLES);           // Begin drawing the pyramid with 4 triangles
-  // Front
-  glColor3f(1.0f, 0.0f, 0.0f);     // Red
-  glVertex3f( 0.0f, 1.0f, 0.0f);
-  glColor3f(0.0f, 1.0f, 0.0f);     // Green
-  glVertex3f(-1.0f, -1.0f, 1.0f);
-  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-  glVertex3f(1.0f, -1.0f, 1.0f);
+  SetMaterialColor(2, 0, 1, 1);
+  SetMaterialColor(1, 0, 1, 1);
+  drawTriangle(D,A,Top);
+  glTranslated(7, 7, 10.0);      // Move 10 units backwards in z,
 
-  // Right
-  glColor3f(1.0f, 0.0f, 0.0f);     // Red
-  glVertex3f(0.0f, 1.0f, 0.0f);
-  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-  glVertex3f(1.0f, -1.0f, 1.0f);
-  glColor3f(0.0f, 1.0f, 0.0f);     // Green
-  glVertex3f(1.0f, -1.0f, -1.0f);
-
-  // Back
-  glColor3f(1.0f, 0.0f, 0.0f);     // Red
-  glVertex3f(0.0f, 1.0f, 0.0f);
-  glColor3f(0.0f, 1.0f, 0.0f);     // Green
-  glVertex3f(1.0f, -1.0f, -1.0f);
-  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-  glVertex3f(-1.0f, -1.0f, -1.0f);
-
-  // Left
-  glColor3f(1.0f,0.0f,0.0f);       // Red
-  glVertex3f( 0.0f, 1.0f, 0.0f);
-  glColor3f(0.0f,0.0f,1.0f);       // Blue
-  glVertex3f(-1.0f,-1.0f,-1.0f);
-  glColor3f(0.0f,1.0f,0.0f);       // Green
-  glVertex3f(-1.0f,-1.0f, 1.0f);
-  glEnd();   // Done drawing the pyramid
-
-  glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-  // Top face (y = 1.0f)
-  // Define vertices in counter-clockwise (CCW) order with normal pointing out
-  glColor3f(0.0f, 1.0f, 0.0f);     // Green
-  glVertex3f( 1.0f, 1.0f, -1.0f);
-  glVertex3f(-1.0f, 1.0f, -1.0f);
-  glVertex3f(-1.0f, 1.0f,  1.0f);
-  glVertex3f( 1.0f, 1.0f,  1.0f);
-
-  // Bottom face (y = -1.0f)
-  glColor3f(1.0f, 0.5f, 0.0f);     // Orange
-  glVertex3f( 1.0f, -1.0f,  1.0f);
-  glVertex3f(-1.0f, -1.0f,  1.0f);
-  glVertex3f(-1.0f, -1.0f, -1.0f);
-  glVertex3f( 1.0f, -1.0f, -1.0f);
-
-  // Front face  (z = 1.0f)
-  glColor3f(1.0f, 0.0f, 0.0f);     // Red
-  glVertex3f( 1.0f,  1.0f, 1.0f);
-  glVertex3f(-1.0f,  1.0f, 1.0f);
-  glVertex3f(-1.0f, -1.0f, 1.0f);
-  glVertex3f( 1.0f, -1.0f, 1.0f);
-
-  // Back face (z = -1.0f)
-  glColor3f(1.0f, 1.0f, 0.0f);     // Yellow
-  glVertex3f( 1.0f, -1.0f, -1.0f);
-  glVertex3f(-1.0f, -1.0f, -1.0f);
-  glVertex3f(-1.0f,  1.0f, -1.0f);
-  glVertex3f( 1.0f,  1.0f, -1.0f);
-
-  // Left face (x = -1.0f)
-  glColor3f(0.0f, 0.0f, 1.0f);     // Blue
-  glVertex3f(-1.0f,  1.0f,  1.0f);
-  glVertex3f(-1.0f,  1.0f, -1.0f);
-  glVertex3f(-1.0f, -1.0f, -1.0f);
-  glVertex3f(-1.0f, -1.0f,  1.0f);
-
-  // Right face (x = 1.0f)
-  glColor3f(1.0f, 0.0f, 1.0f);     // Magenta
-  glVertex3f(1.0f,  1.0f, -1.0f);
-  glVertex3f(1.0f,  1.0f,  1.0f);
-  glVertex3f(1.0f, -1.0f,  1.0f);
-  glVertex3f(1.0f, -1.0f, -1.0f);
-  glEnd();  // End of drawing color-cube
 }
 
 
@@ -247,7 +187,7 @@ void Preview() {
   glTranslated(0, 0, -10.0);      // Move 10 units backwards in z,
                                   // since camera is at origin
   glRotated(alpha_, 1, 0.1, 0);
-  alpha_ += 10;
+
 
   SetMaterialColor(3, 1, 0, 0);
   DrawSphere(Vec3( 5, 0, 0), 3);
@@ -258,13 +198,8 @@ void Preview() {
 
   SetMaterialColor(1, 1, 0, 0);
   SetMaterialColor(2, 0, 1, 0);
+  glTranslated(0, 0, 10.0);
 
-  glBegin(GL_TRIANGLES);            // Start Drawing A Triangle
-  glNormal3f( 0.0,  0.0, 1.0);			// Set Top Point Of Triangle To Red
-  glVertex3f( 0.0,  2.0, 0.0);      // First Point Of The Triangle
-  glVertex3f(-2.0, -2.0, 0.0);      // Second Point Of The Triangle
-  glVertex3f( 2.0, -2.0, 0.0);      // Third Point Of The Triangle
-  glEnd();
 }
 
 int main() {
@@ -294,7 +229,8 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
-   // Preview();
+    alpha_ += 0.1;
+    Preview();
     drawPyramid();
 
     // make it appear (before this, it's hidden in the rear buffer)
