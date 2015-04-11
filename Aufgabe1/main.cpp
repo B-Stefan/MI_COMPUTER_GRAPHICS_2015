@@ -131,7 +131,7 @@ void Preview() {
   glTranslated(0, 0, -10.0);      // Move 10 units backwards in z,
                                   // since camera is at origin
   glRotated(alpha_, 0, 3, 1);
-  alpha_ += .1;
+  alpha_ += 10;
 
   SetMaterialColor(3, 1, 0, 0);
   DrawSphere(Vec3( 5, 0, 0), 3);
