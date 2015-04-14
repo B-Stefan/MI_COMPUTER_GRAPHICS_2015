@@ -25,14 +25,6 @@ void DrawQuarter::drawQuarter(Vec3& middlePoint, double &l) {
     Vec3 D_BACK =   D +T;
     drawPlane(A,B,C,D); //FRONT
 
-    Vec3 normal = (A % B) % (C % D);
-    normal = normal  * -1.0;
-    glBegin(GL_LINES);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(middlePoint.p[0], middlePoint.p[1], middlePoint.p[2]);
-    glVertex3f(middlePoint.p[0]+normal.p[0], middlePoint.p[1]+normal.p[1], middlePoint.p[2]+normal.p[2]);
-    glEnd();          // Start Drawing A Triangle
-
 
 
 
@@ -47,10 +39,11 @@ void DrawQuarter::drawQuarter(Vec3& middlePoint, double &l) {
 
 void DrawQuarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
 
-
-    Vec3 normal = (A % B) % (C % D);
+    glEnable(GL_NORMALIZE);
+    Vec3 normal = ((A % B) % (C % D));
 
     glBegin(GL_LINES);
+    glNormal3f(normal.p[0],normal.p[1],normal.p[2]);
     glColor3f(1.0, 0.0, 0.0);
     glVertex3f(A.p[0], A.p[1], A.p[2]);
     glVertex3f(A.p[0]+normal.p[0], A.p[1]+normal.p[1], A.p[2]+normal.p[2]);
