@@ -178,6 +178,7 @@ void DrawBox() {
   alpha_ +=0.3;
 
   Vec3 point = Vec3(0,0,0);
+  SetMaterialColor(1,1,0,0);
   double l = 5;
   DrawQuarter::drawQuarter(point,l);
 
