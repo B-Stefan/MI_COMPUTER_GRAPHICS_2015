@@ -8,7 +8,7 @@
 
 #include "vec3.hpp"
 
-class DarwQuarter {
+class DrawQuarter {
 
 public:
     static void drawQuarter(Vec3& middlePoint, double &l);

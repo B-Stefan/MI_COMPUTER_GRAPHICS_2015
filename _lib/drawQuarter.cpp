@@ -2,10 +2,10 @@
 // Created by Stefan B. on 11.04.15.
 //
 #include <GLFW/glfw3.h>
-#include "DarwQuarter.h"
+#include "drawQuarter.h"
 #include "vec3.hpp"
 
-void DarwQuarter::drawQuarter(Vec3& middlePoint, double &l) {
+void DrawQuarter::drawQuarter(Vec3& middlePoint, double &l) {
 
     Vec3 pointTopLeftCorner = Vec3(middlePoint.p[0]-l/2,
                               middlePoint.p[1]+l/2,
@@ -34,7 +34,7 @@ void DarwQuarter::drawQuarter(Vec3& middlePoint, double &l) {
 
 }
 
-void DarwQuarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
+void DrawQuarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
     glBegin(GL_QUADS);            // Start Drawing A Triangle
     glVertex3f(A.p[0],A.p[1],A.p[2]);
     glVertex3f(B.p[0],B.p[1],B.p[2]);

@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "../_lib/vec3.hpp"
-#include "../_lib/DarwQuarter.h"
+#include "../_lib/drawQuarter.h"
 
 using namespace std;
 
@@ -16,7 +16,6 @@ static double zoom;
 double rotateX = 0.0;
 double rotateY = 0.0;
 double rotateZ = 0.0;
-
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
@@ -27,21 +26,26 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_W:
         cout << "w"<<endl;
             rotateX = 1;
+            break;
       case GLFW_KEY_A:
-            cout << "w"<<endl;
+            cout << "a"<<endl;
             rotateY = -1;
+            break;
       case GLFW_KEY_S:
-        cout << "w"<<endl;
+        cout << "s"<<endl;
             rotateX = -1;
+            break;
       case GLFW_KEY_D:
-        cout << "w"<<endl;
+        cout << "d"<<endl;
             rotateY = 1;
+            break;
 
     }
-  }else {
+  }else if(action == GLFW_RELEASE) {
     rotateX = 0;
     rotateY = 0;
     rotateZ = 0;
+
   }
 
 
@@ -166,7 +170,7 @@ void InitLighting() {
 
 
 // draw the entire scene
-void DarwBox() {
+void DrawBox() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();						    // Reset The Current Modelview Matrix
 
@@ -175,7 +179,7 @@ void DarwBox() {
 
   Vec3 point = Vec3(0,0,0);
   double l = 5;
-  DarwQuarter::drawQuarter(point,l);
+  DrawQuarter::drawQuarter(point,l);
 
   //Front Plane
   Vec3 A = Vec3(-1,1,0);
@@ -183,7 +187,7 @@ void DarwBox() {
   Vec3 C = Vec3(1,-1,0);
   Vec3 D = Vec3(-1,-1,0);
 
-  DarwQuarter::drawPlane(A,B,C,D);
+  DrawQuarter::drawPlane(A,B,C,D);
 }
 
 
@@ -222,7 +226,7 @@ int main() {
     // draw the scene
 
     //alpha_ += 10;
-    DarwBox();
+    DrawBox();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
