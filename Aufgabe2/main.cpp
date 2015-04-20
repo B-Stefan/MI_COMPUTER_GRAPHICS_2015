@@ -20,6 +20,7 @@ double translateX = 0;
 double translateY = 0;
 double translateZ = 0;
 double previewX = 0;
+double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
 
@@ -95,6 +96,18 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
   }else if(button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
     mouseClicked = false;
   }
+}
+
+void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+
+  if(previewYOffset < yoffset){
+    cout << "zoom in" << endl;
+    zoomValue += 0.02;
+  }else {
+    cout << "zoom out" << endl;
+    zoomValue -= 0.02;
+  }
+  previewYOffset = yoffset;
 }
 
 
@@ -275,7 +288,7 @@ int main() {
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
-
+    glfwSetScrollCallback(window, mouse_scroll_callback);
     // switch on lighting (or you don't see anything)
     InitLighting();
 
