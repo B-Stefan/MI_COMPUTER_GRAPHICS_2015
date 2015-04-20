@@ -11,16 +11,6 @@ void Quarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
     glEnable(GL_NORMALIZE);
     Vec3 normal = ((A % B) % (C % D));
 
-    glBegin(GL_LINES);
-    glNormal3f(normal.p[0],normal.p[1],normal.p[2]);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(A.p[0], A.p[1], A.p[2]);
-    glVertex3f(A.p[0]+normal.p[0], A.p[1]+normal.p[1], A.p[2]+normal.p[2]);
-    glEnd();          // Start Drawing A Triangle
-
-
-
-
     glBegin(GL_QUADS);
     glNormal3dv(normal.p);
     glVertex3f(A.p[0],A.p[1],A.p[2]);
@@ -30,7 +20,7 @@ void Quarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
     glEnd();
 }
  Quarter::Quarter(Vec3& middlePoint, double &l){
-
+    this->middlePoint = middlePoint;
     Vec3 pointTopLeftCorner = Vec3(middlePoint.p[0]-l/2,
                                    middlePoint.p[1]+l/2,
                                    middlePoint.p[2]-l/2);
@@ -94,13 +84,31 @@ void Quarter::setScale(double &s) {
 void Quarter::setTranslateVec(Vec3 &a) {
     this->translate_vec  = a;
 }
+void Quarter::drawNormals() {
+    this->drawNormal(this->front_A,this->front_B,this->front_C,this->front_D); //FRONT
+    this->drawNormal(this->back_A,this->back_B,this->back_C,this->back_D); //back
+    this->drawNormal(this->left_A,this->left_B,this->left_C,this->left_D);//left
+    this->drawNormal(this->top_A,this->top_B,this->top_C,this->top_D);//TOP
+    this->drawNormal(this->right_A,this->right_B,this->right_C,this->right_D);//right
+    this->drawNormal(this->bottom_A,this->bottom_B,this->bottom_C,this->bottom_D);//Bottom
+}
+void Quarter::drawNormal(Vec3 &A, Vec3 &B, Vec3 &C, Vec3 &D) {
+    glEnable(GL_NORMALIZE);
+    Vec3 normal = ((A % B) % (C % D));
+    glBegin(GL_LINES);
+    glNormal3f(normal.p[0],normal.p[1],normal.p[2]);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3f(this->middlePoint.p[0], this->middlePoint.p[1], this->middlePoint.p[2]);
+    glVertex3f(this->middlePoint.p[0]+normal.p[0], this->middlePoint.p[1]+normal.p[1], this->middlePoint.p[2]+normal.p[2]);
+    glEnd();          // Start Drawing A Triangle
+}
 void Quarter::draw() {
     glPushMatrix();
-
     glTranslated( this->translate_vec.p[0], this->translate_vec.p[1], this->translate_vec.p[2]);
     glRotated(this->rotate_alpha, this->rotate_vec.p[0], this->rotate_vec.p[1], this->rotate_vec.p[2]);
     glScalef(this->scale, this->scale, this->scale);
 
+    this->drawNormals();
     Quarter::drawPlane(this->front_A,this->front_B,this->front_C,this->front_D); //FRONT
     Quarter::drawPlane(this->back_A,this->back_B,this->back_C,this->back_D); //back
     Quarter::drawPlane(this->left_A,this->left_B,this->left_C,this->left_D);//left

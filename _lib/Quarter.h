@@ -14,12 +14,15 @@ public:
     static void drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D);
     Quarter(Vec3& middlePoint, double &l);
     void draw();
+    void drawNormals();
     void setRotateAlpha(double  &a);
     void setRotateVec(Vec3  &a);
     void setScale(double  &s);
     void setTranslateVec(Vec3  &a);
 
 private:
+    void drawNormal(Vec3 &A,Vec3 &B, Vec3 &C, Vec3 &D);
+    Vec3 middlePoint;
     Vec3 left_A;
     Vec3 left_B;
     Vec3 left_C;
