@@ -5,7 +5,7 @@
 #include <iostream>
 
 #include "../_lib/vec3.hpp"
-#include "../_lib/drawQuarter.h"
+#include "../_lib/Quarter.h"
 
 using namespace std;
 
@@ -16,6 +16,11 @@ static double zoom;
 double rotateX = 0.0;
 double rotateY = 0.0;
 double rotateZ = 0.0;
+
+
+Vec3 point = Vec3(0,0,0);
+double l = 5;
+Quarter *box  = new Quarter(point,l);
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
@@ -177,10 +182,8 @@ void DrawBox() {
   glRotated(alpha_, rotateX, rotateY, rotateZ);
   alpha_ +=0.3;
 
-  Vec3 point = Vec3(0,0,0);
   SetMaterialColor(1,1,0,0);
-  double l = 5;
-  DrawQuarter::drawQuarter(point,l);
+  box->draw();
 
   //Front Plane
   Vec3 A = Vec3(-1,1,0);
@@ -188,7 +191,7 @@ void DrawBox() {
   Vec3 C = Vec3(1,-1,0);
   Vec3 D = Vec3(-1,-1,0);
 
-  DrawQuarter::drawPlane(A,B,C,D);
+  Quarter::drawPlane(A,B,C,D);
 }
 
 
