@@ -226,13 +226,15 @@ void InitLighting() {
 void DrawBox() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  glTranslated(translateX, translateY, translateZ); // Reset The Current Modelview Matrix
-
-  glRotated(alpha_, rotateX, rotateY, rotateZ);
   alpha_ +=0.3;
-  glScalef(zoomValue, zoomValue, zoomValue);
-  Vec3 point = Vec3(0,0,0);
   SetMaterialColor(1,1,0,0);
+  Vec3 r = Vec3(rotateX, rotateY, rotateZ);
+  Vec3 t = Vec3(translateX, translateY, translateZ);
+
+  box->setTranslateVec(t);
+  box->setRotateVec(r);
+  box->setRotateAlpha(alpha_);
+  box->setScale(zoomValue);
   box->draw();
 
 }
@@ -276,9 +278,9 @@ int main() {
 
 
     //draw the box
-    glPushMatrix();
+
     DrawBox();
-    glPopMatrix();
+
 
     // draw the Sphere
     glPushMatrix();

@@ -82,12 +82,31 @@ void Quarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
     this->bottom_D = C;
 
 };
-
+void Quarter::setRotateAlpha(double &a) {
+    this->rotate_alpha = a;
+}
+void Quarter::setRotateVec(Vec3 &a) {
+    this->rotate_vec = a;
+}
+void Quarter::setScale(double &s) {
+    this->scale = s;
+}
+void Quarter::setTranslateVec(Vec3 &a) {
+    this->translate_vec  = a;
+}
 void Quarter::draw() {
+    glPushMatrix();
+
+    glTranslated( this->translate_vec.p[0], this->translate_vec.p[1], this->translate_vec.p[2]);
+    glRotated(this->rotate_alpha, this->rotate_vec.p[0], this->rotate_vec.p[1], this->rotate_vec.p[2]);
+    glScalef(this->scale, this->scale, this->scale);
+
     Quarter::drawPlane(this->front_A,this->front_B,this->front_C,this->front_D); //FRONT
     Quarter::drawPlane(this->back_A,this->back_B,this->back_C,this->back_D); //back
     Quarter::drawPlane(this->left_A,this->left_B,this->left_C,this->left_D);//left
     Quarter::drawPlane(this->top_A,this->top_B,this->top_C,this->top_D);//TOP
     Quarter::drawPlane(this->right_A,this->right_B,this->right_C,this->right_D);//right
     Quarter::drawPlane(this->bottom_A,this->bottom_B,this->bottom_C,this->bottom_D);//Bottom
+
+    glPopMatrix();
 }

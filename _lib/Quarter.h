@@ -14,6 +14,10 @@ public:
     static void drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D);
     Quarter(Vec3& middlePoint, double &l);
     void draw();
+    void setRotateAlpha(double  &a);
+    void setRotateVec(Vec3  &a);
+    void setScale(double  &s);
+    void setTranslateVec(Vec3  &a);
 
 private:
     Vec3 left_A;
@@ -31,12 +35,10 @@ private:
     Vec3 front_C;
     Vec3 front_D;
 
-
     Vec3 back_A;
     Vec3 back_B;
     Vec3 back_C;
     Vec3 back_D;
-
 
     Vec3 top_A;
     Vec3 top_B;
@@ -47,6 +49,11 @@ private:
     Vec3 bottom_B;
     Vec3 bottom_C;
     Vec3 bottom_D;
+
+    double scale;
+    double rotate_alpha;
+    Vec3 rotate_vec;
+    Vec3 translate_vec;
 };
 
 
