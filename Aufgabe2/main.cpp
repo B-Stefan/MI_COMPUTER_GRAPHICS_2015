@@ -25,7 +25,7 @@ double zoomValue = 1;
 
 
 Vec3 point = Vec3(0,0,0);
-double l = 5;
+double l = 2;
 Quarter *box  = new Quarter(point,l);
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -235,13 +235,6 @@ void DrawBox() {
   SetMaterialColor(1,1,0,0);
   box->draw();
 
-  //Front Plane
-  Vec3 A = Vec3(-1,1,0);
-  Vec3 B = Vec3(1,1,0);
-  Vec3 C = Vec3(1,-1,0);
-  Vec3 D = Vec3(-1,-1,0);
-
-  DrawQuarter::drawPlane(A,B,C,D);
 }
 
 
