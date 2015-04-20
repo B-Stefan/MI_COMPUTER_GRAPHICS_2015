@@ -16,6 +16,12 @@ static double zoom;
 double rotateX = 0.0;
 double rotateY = 0.0;
 double rotateZ = 0.0;
+double translateX = 0;
+double translateY = 0;
+double translateZ = 0;
+double previewX = 0;
+double previewY = 0;
+double zoomValue = 1;
 
 
 Vec3 point = Vec3(0,0,0);
@@ -44,8 +50,32 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         cout << "d"<<endl;
             rotateY = 1;
             break;
+      case GLFW_KEY_UP:
+        cout << "up"<<endl;
+            translateY += 1;
+            break;
+      case GLFW_KEY_LEFT:
+        cout << "left"<<endl;
+            translateX -= 1;
+            break;
+      case GLFW_KEY_DOWN:
+        cout << "down"<<endl;
+            translateY -= 1;
+            break;
+      case GLFW_KEY_RIGHT:
+        cout << "down"<<endl;
+            translateX += 1;
+            break;
+      case GLFW_KEY_RIGHT_BRACKET:
+        cout << "zoom +"<<endl;
+            zoomValue += 0.2;
+            break;
+      case GLFW_KEY_SLASH:
+        cout << "zoom -" <<endl;
+            zoomValue -= 0.2;
+            break;
 
-    }
+      }
   }else if(action == GLFW_RELEASE) {
     rotateX = 0;
     rotateY = 0;
@@ -54,6 +84,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   }
 
 
+
+}
+
+
+
+void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
+{
+
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  if(previewX > xpos) {
+    zoomValue += 0.02;
+    cout << xpos << endl;
+  }else{
+    zoomValue -= 0.02;
+  }
+  previewX = xpos;
 
 }
 
@@ -160,6 +207,7 @@ void InitLighting() {
   // init viewport to canvassize
   glViewport(0, 0, window_width_, window_height_);
 
+
   // init coordinate system
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -177,11 +225,13 @@ void InitLighting() {
 // draw the entire scene
 void DrawBox() {
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();						    // Reset The Current Modelview Matrix
+  glLoadIdentity();
+  glTranslated(translateX, translateY, translateZ); // Reset The Current Modelview Matrix
 
   glRotated(alpha_, rotateX, rotateY, rotateZ);
   alpha_ +=0.3;
-
+  glScalef(zoomValue, zoomValue, zoomValue);
+  Vec3 point = Vec3(0,0,0);
   SetMaterialColor(1,1,0,0);
   box->draw();
 
@@ -191,7 +241,7 @@ void DrawBox() {
   Vec3 C = Vec3(1,-1,0);
   Vec3 D = Vec3(-1,-1,0);
 
-  Quarter::drawPlane(A,B,C,D);
+  DrawQuarter::drawPlane(A,B,C,D);
 }
 
 
@@ -219,6 +269,7 @@ int main() {
 
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, cursor_pos_callback);
 
     // switch on lighting (or you don't see anything)
     InitLighting();
@@ -228,9 +279,22 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
+    Vec3 point = Vec3(0,7,0);
 
-    //alpha_ += 10;
+
+    //draw the box
+    glPushMatrix();
     DrawBox();
+    glPopMatrix();
+
+    // draw the Sphere
+    glPushMatrix();
+    SetMaterialColor(1,0,0,1);
+    glTranslated(translateX, translateY, translateZ);
+    glRotated(alpha_, rotateX, rotateY, rotateZ);
+    alpha_ +=0.3;
+    DrawSphere(point,3);
+    glPopMatrix();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
