@@ -254,9 +254,22 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     // draw the scene
+    Vec3 point = Vec3(0,7,0);
 
-    //alpha_ += 10;
+
+    //draw the box
+    glPushMatrix();
     DrawBox();
+    glPopMatrix();
+
+    // draw the Sphere
+    glPushMatrix();
+    SetMaterialColor(1,0,0,1);
+    glTranslated(translateX, translateY, translateZ);
+    glRotated(alpha_, rotateX, rotateY, rotateZ);
+    alpha_ +=0.3;
+    DrawSphere(point,3);
+    glPopMatrix();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
