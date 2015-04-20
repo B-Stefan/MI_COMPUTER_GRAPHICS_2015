@@ -22,10 +22,9 @@ double translateZ = 0;
 double previewX = 0;
 double previewY = 0;
 double zoomValue = 1;
+bool mouseClicked = false;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
-
-
 
   if(action == GLFW_REPEAT  || action == GLFW_PRESS){
     switch (key) {
@@ -75,6 +74,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     rotateX = 0;
     rotateY = 0;
     rotateZ = 0;
+    //mouseClicked = false;
 
   }
 
@@ -82,6 +82,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 }
 
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+  if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
+    mouseClicked = true;
+    cout << "ds" << endl;
+  }else if(button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
+    mouseClicked = false;
+  }
+}
 
 
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
@@ -89,10 +98,10 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 
   glfwGetCursorPos(window, &xpos, &ypos);
 
-  if(previewX > xpos) {
+  if(previewX > xpos && mouseClicked) {
     zoomValue += 0.02;
     cout << xpos << endl;
-  }else{
+  }else if (previewX < xpos && mouseClicked){
     zoomValue -= 0.02;
   }
   previewX = xpos;
@@ -266,6 +275,7 @@ int main() {
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     // switch on lighting (or you don't see anything)
     InitLighting();
