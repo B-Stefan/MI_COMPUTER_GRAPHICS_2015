@@ -16,6 +16,10 @@ static double zoom;
 double rotateX = 0.0;
 double rotateY = 0.0;
 double rotateZ = 0.0;
+double translateX = 0;
+double translateY = 0;
+double translateZ = 0;
+double zoomValue = 1;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
@@ -39,8 +43,31 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         cout << "d"<<endl;
             rotateY = 1;
             break;
+      case GLFW_KEY_UP:
+        cout << "up"<<endl;
+            translateY += 1;
+            break;
+      case GLFW_KEY_LEFT:
+        cout << "left"<<endl;
+            translateX -= 1;
+            break;
+      case GLFW_KEY_DOWN:
+        cout << "down"<<endl;
+            translateY -= 1;
+            break;
+      case GLFW_KEY_RIGHT:
+        cout << "down"<<endl;
+            translateX += 1;
+            break;
+      case GLFW_KEY_RIGHT_BRACKET:
+        cout << "right"<<endl;
+            zoomValue += 0.2;
+            break;
+      case GLFW_KEY_SLASH:
+            zoomValue -= 0.2;
+            break;
 
-    }
+      }
   }else if(action == GLFW_RELEASE) {
     rotateX = 0;
     rotateY = 0;
@@ -155,6 +182,7 @@ void InitLighting() {
   // init viewport to canvassize
   glViewport(0, 0, window_width_, window_height_);
 
+
   // init coordinate system
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -172,11 +200,12 @@ void InitLighting() {
 // draw the entire scene
 void DrawBox() {
   glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();						    // Reset The Current Modelview Matrix
+  glLoadIdentity();
+  glTranslated(translateX, translateY, translateZ); // Reset The Current Modelview Matrix
 
   glRotated(alpha_, rotateX, rotateY, rotateZ);
   alpha_ +=0.3;
-
+  glScalef(zoomValue, zoomValue, zoomValue);
   Vec3 point = Vec3(0,0,0);
   SetMaterialColor(1,1,0,0);
   double l = 5;
