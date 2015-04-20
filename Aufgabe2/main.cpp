@@ -19,6 +19,8 @@ double rotateZ = 0.0;
 double translateX = 0;
 double translateY = 0;
 double translateZ = 0;
+double previewX = 0;
+double previewY = 0;
 double zoomValue = 1;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -60,10 +62,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             translateX += 1;
             break;
       case GLFW_KEY_RIGHT_BRACKET:
-        cout << "right"<<endl;
+        cout << "zoom +"<<endl;
             zoomValue += 0.2;
             break;
       case GLFW_KEY_SLASH:
+        cout << "zoom -" <<endl;
             zoomValue -= 0.2;
             break;
 
@@ -76,6 +79,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   }
 
 
+
+}
+
+
+
+void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
+{
+
+  glfwGetCursorPos(window, &xpos, &ypos);
+
+  if(previewX > xpos) {
+    zoomValue += 0.02;
+    cout << xpos << endl;
+  }else{
+    zoomValue -= 0.02;
+  }
+  previewX = xpos;
 
 }
 
@@ -245,6 +265,7 @@ int main() {
 
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
+    glfwSetCursorPosCallback(window, cursor_pos_callback);
 
     // switch on lighting (or you don't see anything)
     InitLighting();
