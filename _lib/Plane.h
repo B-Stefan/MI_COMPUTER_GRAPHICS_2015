@@ -15,7 +15,7 @@ class Plane {
 
         Plane(Vec3 &middle, double l);
         void draw();
-        void drawNormal(Vec3 normal);
+        void drawAxis();
         void drawRotation();
         void setRotateAlpha(double  &a);
         void setRotateVec(Vec3  &a);

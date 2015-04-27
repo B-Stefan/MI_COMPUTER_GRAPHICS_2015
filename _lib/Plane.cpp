@@ -128,13 +128,33 @@ void Plane::setRotateAlpha(double &b) {
 }
 
 //Paint a line from the current center
-void Plane::drawNormal(Vec3 normal) {
+void Plane::drawAxis() {
+
+    //Normal z-axis
     glBegin(GL_LINES);
-    glNormal3f(normal.p[0],normal.p[1],normal.p[2]);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(normal.p[0], normal.p[1], normal.p[2]);
+    glColor3f(0, 1, 0.0);
+    glVertex3f(0, 0, 0.5);
+    glVertex3f(0,0, 1.5);
     glEnd();
+
+
+    //x-axis
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3f(0, 0, 0.5);
+    glVertex3f(1, 0, 0.5);
+    glEnd();
+
+    //y-axis
+    glBegin(GL_LINES);
+    glColor3f(0, 0.0, 1);
+    glVertex3f(0, 0, 0.5);
+    glVertex3f(0, 1, 0.5);
+    glEnd();
+
+
+
+
 }
 
 //Rotate the complete plane System
@@ -177,18 +197,19 @@ void Plane::draw() {
     glTranslated( this->middle.p[0]-this->length/2, this->middle.p[1]-this->length/2, this->middle.p[2]-this->length/2);
     glRotated(this->initAlpha, this->initRotationVector.p[0], this->initRotationVector.p[1], this->initRotationVector.p[2]);//Init Rotation
 
-    glEnable(GL_NORMALIZE);
 
     //Rotate the system around a local point
     this->drawRotation();
 
 
-    //Draw normals for debug
-    Vec3 normal = Vec3(0,0,1);
-    this->drawNormal(normal);
+    //Draw Axis for debug
+    this->drawAxis();
 
+
+    Vec3 normal = Vec3(0,0,1);
     //Begin to draw the plane
     glBegin(GL_QUADS);
+    glEnable(GL_NORMALIZE);
     glNormal3dv(normal.p);
     glVertex3f(A.p[0],A.p[1],A.p[2]);
     glVertex3f(B.p[0],B.p[1],B.p[2]);
