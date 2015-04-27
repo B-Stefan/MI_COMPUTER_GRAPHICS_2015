@@ -35,8 +35,8 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
 
     //Set up cover side
     Vec3 rotateVec = Vec3(0,1,0);
-    Vec3 rotateVecCenter = Plane::getSide(Plane::POINTS::A) - Plane::getSide(Plane::POINTS::B);
-    double alpha = 30.40;
+    Vec3 rotateVecCenter = Vec3(1,0,0);
+    double alpha = 30;
     this->top->setRotateCenterVec(rotateVecCenter);
     this->top->setRotateVec(rotateVec);
     this->top->setRotateAlpha(alpha);

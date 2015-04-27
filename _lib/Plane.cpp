@@ -67,12 +67,14 @@ void Plane::drawNormal(Vec3 normal) {
 }
 
 void Plane::drawRotation() {
-    glTranslated(this->rotateCenterVec.p[0], this->rotateCenterVec.p[1], this->rotateCenterVec.p[2]);
+    Vec3 transVec = Vec3(this->rotateCenterVec.p[0],this->rotateCenterVec.p[1],this->rotateCenterVec.p[2]) * (this->length);
+    glTranslated(transVec.p[0], transVec.p[1], transVec.p[2]);
     glRotated(this->rotate_alpha, this->rotate_vec.p[0], this->rotate_vec.p[1], this->rotate_vec.p[2]);//Init Rotation
-    glTranslated(this->rotateCenterVec.p[0]*-1, this->rotateCenterVec.p[1]*-1, this->rotateCenterVec.p[2]*-1);
+    transVec = transVec *-1;
+    glTranslated(transVec.p[0], transVec.p[1], transVec.p[2]);
 }
 void Plane::draw() {
-    Vec3 A = Plane::getSide(Plane::POINTS::A) * this->length;
+    Vec3 A = Plane::getSide(Plane::POINTS::A)* this->length;
     Vec3 B = Plane::getSide(Plane::POINTS::B)* this->length;
     Vec3 C = Plane::getSide(Plane::POINTS::C)* this->length;
     Vec3 D = Plane::getSide(Plane::POINTS::D)* this->length;
@@ -83,12 +85,12 @@ void Plane::draw() {
     glRotated(this->initAlpha, this->initRotationVector.p[0], this->initRotationVector.p[1], this->initRotationVector.p[2]);//Init Rotation
 
     glEnable(GL_NORMALIZE);
-    Vec3 normal = Vec3(0,0,1);
-    this->drawNormal(normal);
 
     //Rotate the system around a local point
     this->drawRotation();
 
+    Vec3 normal = Vec3(0,0,1);
+    this->drawNormal(normal);
 
     glBegin(GL_QUADS);
     glNormal3dv(normal.p);
