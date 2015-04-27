@@ -6,6 +6,12 @@
 #include "Plane.h"
 #include "vec3.hpp"
 
+/**
+ * Class for draw a simple quater
+ *
+ * middlePoint = (0,0,0) Point for the position of the quarter
+ * l = 2 edge length
+ */
 Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->middlePoint = middlePoint;
 
@@ -16,7 +22,7 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
     Vec3 Top    =   this->middlePoint +  l * Vec3(0,0,1);
     Vec3 Bottom =   this->middlePoint +  l * Vec3(0,0,-1);
 
-    //Create new planes
+    //Create all needed planes
     this->top       = new Plane(Top,l);
     this->bottom    = new Plane(Bottom,l);
     this->left      = new Plane(Left,l);
@@ -25,7 +31,7 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->front     = new Plane(Front,l);
 
 
-    //Rotate the planes in right position
+    //Rotate the planes in right position for lighting
     this->top->setInitRotation(0,Vec3(1,0,0));
     this->bottom->setInitRotation(180,Vec3(1,0,0));
     this->left->setInitRotation(-90,Vec3(0,1,0));
@@ -34,9 +40,34 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->front->setInitRotation(-90,Vec3(1,0,0));
 
     //Set up cover side
+
+    //Set rotation to y-axis
     Vec3 rotateVec = Vec3(0,1,0);
+
+    //Set Center Position to this:
+    /*
+     *
+     *      y
+     *  1   | A       R       B
+     *      |
+     *      |
+     *      |
+     *  0   |         M
+     *      |
+     *      |
+     * -1   | D               C
+     *      |
+     *      | _________________X
+     *       -1      0       1
+     */
     Vec3 rotateVecCenter = Vec3(1,0,0);
+
+
+    //Set angle
     double alpha = 30;
+
+    //Apply vars to panel
+    //If you change the alpha value the panel use your new value
     this->top->setRotateCenterVec(rotateVecCenter);
     this->top->setRotateVec(rotateVec);
     this->top->setRotateAlpha(alpha);
