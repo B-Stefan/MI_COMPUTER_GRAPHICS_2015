@@ -3,74 +3,43 @@
 //
 #include <GLFW/glfw3.h>
 #include "Quarter.h"
+#include "Plane.h"
 #include "vec3.hpp"
 
-
-void Quarter::drawPlane(Vec3 &A, Vec3 &B, Vec3 &C,Vec3 &D) {
-
-    glEnable(GL_NORMALIZE);
-    Vec3 normal = ((A % B) % (C % D));
-
-    glBegin(GL_QUADS);
-    glNormal3dv(normal.p);
-    glVertex3f(A.p[0],A.p[1],A.p[2]);
-    glVertex3f(B.p[0],B.p[1],B.p[2]);
-    glVertex3f(C.p[0],C.p[1],C.p[2]);
-    glVertex3f(D.p[0],D.p[1],D.p[2]);
-    glEnd();
-}
- Quarter::Quarter(Vec3& middlePoint, double &l){
+Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->middlePoint = middlePoint;
-    Vec3 pointTopLeftCorner = Vec3(middlePoint.p[0]-l/2,
-                                   middlePoint.p[1]+l/2,
-                                   middlePoint.p[2]-l/2);
 
-    //Front Plane
-    Vec3 A = l * Vec3(0,0,0)  + pointTopLeftCorner;
-    Vec3 B = l * Vec3(1,0,0)  + pointTopLeftCorner;
-    Vec3 C = l * Vec3(1,-1,0) + pointTopLeftCorner;
-    Vec3 D = l * Vec3(0,-1,0) + pointTopLeftCorner;
+    Vec3 Left   =   this->middlePoint +  l * Vec3(-1,0,0);
+    Vec3 Right  =   this->middlePoint +  l * Vec3(1,0,0);
+    Vec3 Front  =   this->middlePoint +  l * Vec3(0,1,0);
+    Vec3 Back   =   this->middlePoint +  l * Vec3(0,-1,0);
+    Vec3 Top    =   this->middlePoint +  l * Vec3(0,0,1);
+    Vec3 Bottom =   this->middlePoint +  l * Vec3(0,0,-1);
 
-    //Back Plane
-    Vec3 T = Vec3(0,0,l);
-    Vec3 A_BACK =   A +T;
-    Vec3 B_BACK =   B +T;
-    Vec3 C_BACK =   C +T;
-    Vec3 D_BACK =   D +T;
-
-
-    this->front_A = A;
-    this->front_B = B;
-    this->front_C = C;
-    this->front_D = D;
-
-    this->back_A = A_BACK;
-    this->back_B = B_BACK;
-    this->back_C = C_BACK;
-    this->back_D = D_BACK;
+    //Create new planes
+    this->top       = new Plane(Top,l);
+    this->bottom    = new Plane(Bottom,l);
+    this->left      = new Plane(Left,l);
+    this->right     = new Plane(Right,l);
+    this->back      = new Plane(Back,l);
+    this->front     = new Plane(Front,l);
 
 
-    this->left_A = A;
-    this->left_B = A_BACK;
-    this->left_C = D_BACK;
-    this->left_D = D;
+    //Rotate the planes in right position
+    this->top->setInitRotation(0,Vec3(1,0,0));
+    this->bottom->setInitRotation(180,Vec3(1,0,0));
+    this->left->setInitRotation(-90,Vec3(0,1,0));
+    this->right->setInitRotation(90,Vec3(0,1,0));
+    this->back->setInitRotation(90,Vec3(1,0,0));
+    this->front->setInitRotation(-90,Vec3(1,0,0));
 
-    this->right_A = B;
-    this->right_B = B_BACK;
-    this->right_C = C_BACK;
-    this->right_D = C;
-
-
-    this->top_A = A;
-    this->top_B = A_BACK;
-    this->top_C = B_BACK;
-    this->top_D = B;
-
-    this->bottom_A = D;
-    this->bottom_B = D_BACK;
-    this->bottom_C = C_BACK;
-    this->bottom_D = C;
-
+    //Set up cover side
+    Vec3 rotateVec = Vec3(0,1,0);
+    Vec3 rotateVecCenter = Plane::getSide(Plane::POINTS::A) - Plane::getSide(Plane::POINTS::B);
+    double alpha = 30.40;
+    this->top->setRotateCenterVec(rotateVecCenter);
+    this->top->setRotateVec(rotateVec);
+    this->top->setRotateAlpha(alpha);
 };
 void Quarter::setRotateAlpha(double &a) {
     this->rotate_alpha = a;
@@ -85,12 +54,6 @@ void Quarter::setTranslateVec(Vec3 &a) {
     this->translate_vec  = a;
 }
 void Quarter::drawNormals() {
-    this->drawNormal(this->front_A,this->front_B,this->front_C,this->front_D); //FRONT
-    this->drawNormal(this->back_A,this->back_B,this->back_C,this->back_D); //back
-    this->drawNormal(this->left_A,this->left_B,this->left_C,this->left_D);//left
-    this->drawNormal(this->top_A,this->top_B,this->top_C,this->top_D);//TOP
-    this->drawNormal(this->right_A,this->right_B,this->right_C,this->right_D);//right
-    this->drawNormal(this->bottom_A,this->bottom_B,this->bottom_C,this->bottom_D);//Bottom
 }
 void Quarter::drawNormal(Vec3 &A, Vec3 &B, Vec3 &C, Vec3 &D) {
     glEnable(GL_NORMALIZE);
@@ -108,13 +71,12 @@ void Quarter::draw() {
     glRotated(this->rotate_alpha, this->rotate_vec.p[0], this->rotate_vec.p[1], this->rotate_vec.p[2]);
     glScalef(this->scale, this->scale, this->scale);
 
-    this->drawNormals();
-    Quarter::drawPlane(this->front_A,this->front_B,this->front_C,this->front_D); //FRONT
-    Quarter::drawPlane(this->back_A,this->back_B,this->back_C,this->back_D); //back
-    Quarter::drawPlane(this->left_A,this->left_B,this->left_C,this->left_D);//left
-    Quarter::drawPlane(this->top_A,this->top_B,this->top_C,this->top_D);//TOP
-    Quarter::drawPlane(this->right_A,this->right_B,this->right_C,this->right_D);//right
-    Quarter::drawPlane(this->bottom_A,this->bottom_B,this->bottom_C,this->bottom_D);//Bottom
+    this->top->draw();
+    this->bottom->draw();
+    this->left->draw();
+    this->right->draw();
+    this->back->draw();
+    this->front->draw();
 
     glPopMatrix();
 }
