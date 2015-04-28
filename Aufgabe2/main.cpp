@@ -23,6 +23,7 @@ double previewX = 0;
 double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
+double openPercent = 0;
 
 
 Vec3 point = Vec3(0,0,0);
@@ -49,6 +50,21 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_D:
         cout << "d"<<endl;
             rotateY = 1;
+            break;
+      case GLFW_KEY_O:
+        cout << "open"<<endl;
+            if(openPercent < 100.0){
+              box->setOpenPercentage(openPercent);
+              openPercent += 0.5;
+
+            }
+            break;
+      case GLFW_KEY_C:
+        cout << "close"<<endl;
+            if(openPercent > -0.5){
+              box->setOpenPercentage(openPercent);
+              openPercent -= 0.5;
+            }
             break;
       case GLFW_KEY_UP:
         cout << "up"<<endl;

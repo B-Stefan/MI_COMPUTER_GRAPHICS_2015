@@ -107,7 +107,7 @@ void Quarter::draw() {
     glScalef(this->scale, this->scale, this->scale);
 
 
-    double alpha = this->openPercentage / 270 ;
+    double alpha = 269.0 / 100.0 * this->openPercentage ;
     this->top->setRotateAlpha(alpha);
 
     this->top->draw();
