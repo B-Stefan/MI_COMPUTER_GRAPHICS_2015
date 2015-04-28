@@ -19,10 +19,12 @@ public:
     void setRotateVec(Vec3  &a);
     void setScale(double  &s);
     void setTranslateVec(Vec3  &a);
+    void setOpenPercentage(double a);
 
 private:
     void drawNormal(Vec3 &A,Vec3 &B, Vec3 &C, Vec3 &D);
     Vec3 middlePoint;
+    double openPercentage;
     Plane *left;
     Plane *right;
     Plane *front;

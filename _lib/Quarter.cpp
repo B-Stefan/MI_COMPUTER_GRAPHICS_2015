@@ -14,6 +14,7 @@
  */
 Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->middlePoint = middlePoint;
+    this->openPercentage = 0;
 
     Vec3 Left   =   this->middlePoint +  l * Vec3(-1,0,0);
     Vec3 Right  =   this->middlePoint +  l * Vec3(1,0,0);
@@ -64,7 +65,7 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
 
 
     //Set angle
-    double alpha = 30;
+    double alpha = 0;
 
     //Apply vars to panel
     //If you change the alpha value the panel use your new value
@@ -72,6 +73,9 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->top->setRotateVec(rotateVec);
     this->top->setRotateAlpha(alpha);
 };
+void Quarter::setOpenPercentage(double a){
+    this->openPercentage = a;
+}
 void Quarter::setRotateAlpha(double &a) {
     this->rotate_alpha = a;
 }
@@ -101,6 +105,10 @@ void Quarter::draw() {
     glTranslated( this->translate_vec.p[0], this->translate_vec.p[1], this->translate_vec.p[2]);
     glRotated(this->rotate_alpha, this->rotate_vec.p[0], this->rotate_vec.p[1], this->rotate_vec.p[2]);
     glScalef(this->scale, this->scale, this->scale);
+
+
+    double alpha = this->openPercentage / 270 ;
+    this->top->setRotateAlpha(alpha);
 
     this->top->draw();
     this->bottom->draw();
