@@ -6,8 +6,8 @@
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
 #include "vec3.hpp"
-#include "iostream"
-using namespace std;
+#include <iostream>
+
 
 //To set up static vars you should do it like:
 Vec3 SIDE_A = Vec3(-1,1,0);
@@ -237,4 +237,17 @@ void Plane::getGlobalCoords(Vec3 &local,GLdouble &globalX, GLdouble &globalY, GL
     glGetIntegerv( GL_VIEWPORT, viewport );
 
     int res=gluProject(local.p[0],local.p[1],local.p[2],modelview,projection,viewport,&globalX,&globalY,&globalZ);
+}
+
+Vec3 Plane::getA(){
+    return this->middle + SIDE_A * this->length;
+}
+Vec3 Plane::getB(){
+    return this->middle + SIDE_B * this->length;
+}
+Vec3 Plane::getC(){
+    return this->middle + SIDE_C * this->length;
+}
+Vec3 Plane::getD(){
+    return this->middle + SIDE_D * this->length;
 }

@@ -23,6 +23,10 @@ class Plane {
         void setRotateCenterVec(Vec3  &a);
         void setTranslateVec(Vec3  &a);
         void setInitRotation(double alpha, Vec3  vector);
+        Vec3 getA();
+        Vec3 getB();
+        Vec3 getC();
+        Vec3 getD();
     private:
         void getGlobalCoords(Vec3 &local,GLdouble &winX, GLdouble &winY, GLdouble &winZ);
         Vec3 middle;
