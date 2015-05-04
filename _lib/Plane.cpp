@@ -5,6 +5,9 @@
 #include "Plane.h"
 #include <GLFW/glfw3.h>
 #include "vec3.hpp"
+#include <iostream>
+
+using namespace std;
 
 
 //To set up static vars you should do it like:
@@ -216,5 +219,25 @@ void Plane::draw() {
     glVertex3f(C.p[0],C.p[1],C.p[2]);
     glVertex3f(D.p[0],D.p[1],D.p[2]);
     glEnd();
+/*
+    GLdouble x,y,z;
+    glGetPointerv(GL_CURRENT_RASTER_POSITION, &x, &y, &z);
+    cout << x << endl;
+    cout << y << endl;
+    cout << z << endl;
+    */
     glPopMatrix();
+}
+
+Vec3 Plane::getA(){
+    return this->middle + SIDE_A * this->length;
+}
+Vec3 Plane::getB(){
+    return this->middle + SIDE_B * this->length;
+}
+Vec3 Plane::getC(){
+    return this->middle + SIDE_C * this->length;
+}
+Vec3 Plane::getD(){
+    return this->middle + SIDE_D * this->length;
 }

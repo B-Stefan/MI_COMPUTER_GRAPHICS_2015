@@ -1,13 +1,12 @@
 #include <GLFW/glfw3.h>
-#include <stdlib.h>
 #include <stdio.h>
-#include <math.h>
 #include <iostream>
+#include <cmath>
+
 
 #include "../_lib/vec3.hpp"
 #include "../_lib/Quarter.h"
 
-using namespace std;
 
 static double alpha_ = 0;
 static double window_width_ = 1024;
@@ -36,23 +35,23 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
   if(action == GLFW_REPEAT  || action == GLFW_PRESS){
     switch (key) {
       case GLFW_KEY_W:
-        cout << "w"<<endl;
+        std::cout << "w"<<std::endl;
             rotateX = 1;
             break;
       case GLFW_KEY_A:
-            cout << "a"<<endl;
+            std::cout << "a"<<std::endl;
             rotateY = -1;
             break;
       case GLFW_KEY_S:
-        cout << "s"<<endl;
+        std::cout << "s"<<std::endl;
             rotateX = -1;
             break;
       case GLFW_KEY_D:
-        cout << "d"<<endl;
+        std::cout << "d"<<std::endl;
             rotateY = 1;
             break;
       case GLFW_KEY_O:
-        cout << "open"<<endl;
+        std::cout << "open"<<std::endl;
             if(openPercent < 100.0){
               box->setOpenPercentage(openPercent);
               openPercent += 0.5;
@@ -60,34 +59,34 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             }
             break;
       case GLFW_KEY_C:
-        cout << "close"<<endl;
+        std::cout << "close"<<std::endl;
             if(openPercent > -0.5){
               box->setOpenPercentage(openPercent);
               openPercent -= 0.5;
             }
             break;
       case GLFW_KEY_UP:
-        cout << "up"<<endl;
+        std::cout << "up"<<std::endl;
             translateY += 1;
             break;
       case GLFW_KEY_LEFT:
-        cout << "left"<<endl;
+        std::cout << "left"<<std::endl;
             translateX -= 1;
             break;
       case GLFW_KEY_DOWN:
-        cout << "down"<<endl;
+        std::cout << "down"<<std::endl;
             translateY -= 1;
             break;
       case GLFW_KEY_RIGHT:
-        cout << "down"<<endl;
+        std::cout << "down"<<std::endl;
             translateX += 1;
             break;
       case GLFW_KEY_RIGHT_BRACKET:
-        cout << "zoom +"<<endl;
+        std::cout << "zoom +"<<std::endl;
             zoomValue += 0.2;
             break;
       case GLFW_KEY_SLASH:
-        cout << "zoom -" <<endl;
+        std::cout << "zoom -" <<std::endl;
             zoomValue -= 0.2;
             break;
 
@@ -108,7 +107,7 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
   if (button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS) {
     mouseClicked = true;
-    cout << "ds" << endl;
+    std::cout << "ds" << std::endl;
   }else if(button == GLFW_MOUSE_BUTTON_1 && action == GLFW_RELEASE) {
     mouseClicked = false;
   }
@@ -117,10 +116,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
 
   if(previewYOffset < yoffset){
-    cout << "zoom in" << endl;
+    std::cout << "zoom in" << std::endl;
     zoomValue += 0.02;
   }else {
-    cout << "zoom out" << endl;
+    std::cout << "zoom out" << std::endl;
     zoomValue -= 0.02;
   }
   previewYOffset = yoffset;
@@ -134,7 +133,7 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 
   if(previewX > xpos && mouseClicked) {
     zoomValue += 0.02;
-    cout << xpos << endl;
+    std::cout << xpos << std::endl;
   }else if (previewX < xpos && mouseClicked){
     zoomValue -= 0.02;
   }
@@ -276,6 +275,59 @@ void DrawBox() {
   box->draw();
   
 }
+/**
+    * Move the middle point so the system looks like
+    *
+    * M= middle and after translate coords (0,0,0)
+    * A = (-1,1,0) B = ...
+    *     y
+    *  1   | A               B
+    *      |
+    *      |
+    *      |
+    *  0   |         M
+    *      |
+    *      |
+    * -1   | D               C
+    *      |
+    *      | _________________X
+    *       -1      0       1
+    */
+bool checkCollision(Plane p, Vec3 sMiddlePoint, int sR){
+  Vec3 A = p.getA();
+  Vec3 B = p.getB();
+  Vec3 C = p.getC();
+  Vec3 D = p.getD();
+
+  bool checkX = false;
+  bool checkY = false;
+  bool checkZ = false;
+
+  //Top and down
+  int distanceTop   = std::abs(sMiddlePoint.p[1] - A.p[1]);
+  int distanceDown  = std::abs(sMiddlePoint.p[1] - D.p[1]);
+
+  //Left and right
+  int distanceRight = std::abs(sMiddlePoint.p[0] - B.p[1]);
+  int distanceLeft  = std::abs(sMiddlePoint.p[0] - D.p[1]);
+
+  std::cout << "distanceRight" << distanceRight << std::endl;
+  std::cout << "distanceLeft" << distanceLeft << std::endl;
+
+  //y check
+  if(distanceDown <= sR ||  distanceTop <= sR){
+    std::cout << "y" <<std::endl;
+    checkX = true;
+  }
+  //check x
+  if(distanceRight <= sR|| distanceLeft <= sR){
+    std::cout << "x" <<std::endl;
+    checkY = true;
+  }
+  return  checkY && checkX;
+
+
+}
 
 
 
@@ -320,7 +372,6 @@ int main() {
 
     DrawBox();
 
-
     // draw the Sphere
     glPushMatrix();
     SetMaterialColor(1,0,0,1);
@@ -334,6 +385,17 @@ int main() {
     glfwSwapBuffers(window);
 
     glfwPollEvents();
+
+    Vec3 plaineMiddle = Vec3(0,0,0);
+
+    Plane t = Plane(plaineMiddle,1);
+
+    Vec3 sMiddle = Vec3(0,0,0);
+    int r = 1;
+    bool  result = checkCollision(t,sMiddle,r);
+
+    std::cout<< "Kollision + " << result << std::endl;
+
 
   }
 
