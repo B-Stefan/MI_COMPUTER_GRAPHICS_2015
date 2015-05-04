@@ -1,14 +1,8 @@
 project("GLFW3_Demo_with_CMake")
 cmake_minimum_required(VERSION 2.8.8)
 
-# OpenGL
-find_package(OpenGL REQUIRED)
-IF(NOT OPENGL_FOUND)
-    MESSAGE(FATAL_ERROR
-      "OpenGL not found."
-    )
-ENDIF()
 
+#Setup compiler and c++ version
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
@@ -20,49 +14,25 @@ else()
         message(STATUS "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
 endif()
 
-# include OpenGL
-include_directories(${OPENGL_INCLUDE_DIR})
+include(${CMAKE_CURRENT_SOURCE_DIR}/_cmake/SetupGLFW.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/_cmake/SetupGlut.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/_cmake/SetupOpenGl.cmake)
 
 
-# GLFW3
-# GLFW3 ist ein Sondefall und kann nicht mit normalen find_package gefunden werden.
-# Es wird hierfür PkgConfig benötigt.
-find_package(PkgConfig REQUIRED)
-IF(NOT PKGCONFIG_FOUND)
-    MESSAGE(
-      FATAL_ERROR
-        "PkgConfig not found."
-    )
-ENDIF()
-
-pkg_search_module(GLFW REQUIRED glfw3)
-IF(NOT GLFW_FOUND)
-    MESSAGE(
-      FATAL_ERROR
-        "GLFW3 not found"
-      )
-ENDIF()
-# include GLFW3
-include_directories(${GLFW_INCLUDE_DIRS})
-
-
+#Setup global libs
 set(LIBRARIES_GLOBAL
     ${LIBRARIES_GLOBAL}
     ${GLFW_STATIC_LIBRARIES}
     ${OPENGL_LIBRARIES}
+    ${GLUT_LIBRARIES}
     # add other libs here
     # ${OPENGL_LIBRARIES} sind nach dem find_package() definiert.
 )
+
+# Add sub projects
 add_subdirectory(_lib)
 add_subdirectory(Aufgabe1)
 add_subdirectory(Aufgabe2)
-
-# GLFW3 ist ein Sonderfall und man muss Xcode sagen wie es GLFW3 findet.
-if(CMAKE_GENERATOR STREQUAL Xcode)
-  message(STATUS "INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
-  include_directories(${CMAKE_INSTALL_PREFIX}/include)
-  set (CMAKE_EXE_LINKER_FLAGS "-L${CMAKE_INSTALL_PREFIX}/lib")    # the same as "Library Search Paths"
-endif()
 
 add_executable(GLFW3_Demo ${TASK1_SOURCES})
 target_link_libraries(GLFW3_Demo ${TASK1_LIBS}) # link against all libs
