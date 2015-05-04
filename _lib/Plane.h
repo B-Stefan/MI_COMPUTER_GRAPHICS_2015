@@ -6,6 +6,7 @@
 #define GLFW3_DEMO_WITH_CMAKE_PLANE_H
 
 #import "vec3.hpp"
+#include <GLUT/glut.h>
 
 class Plane {
 
@@ -23,7 +24,7 @@ class Plane {
         void setTranslateVec(Vec3  &a);
         void setInitRotation(double alpha, Vec3  vector);
     private:
-
+        void getGlobalCoords(Vec3 &local,GLdouble &winX, GLdouble &winY, GLdouble &winZ);
         Vec3 middle;
         double length;
         double initAlpha;

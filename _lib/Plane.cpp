@@ -4,8 +4,10 @@
 
 #include "Plane.h"
 #include <GLFW/glfw3.h>
+#include <GLUT/glut.h>
 #include "vec3.hpp"
-
+#include "iostream"
+using namespace std;
 
 //To set up static vars you should do it like:
 Vec3 SIDE_A = Vec3(-1,1,0);
@@ -205,7 +207,6 @@ void Plane::draw() {
     //Draw Axis for debug
     this->drawAxis();
 
-
     Vec3 normal = Vec3(0,0,1);
     //Begin to draw the plane
     glBegin(GL_QUADS);
@@ -217,4 +218,23 @@ void Plane::draw() {
     glVertex3f(D.p[0],D.p[1],D.p[2]);
     glEnd();
     glPopMatrix();
+}
+
+void Plane::getGlobalCoords(Vec3 &local,GLdouble &globalX, GLdouble &globalY, GLdouble &globalZ) {
+    GLint viewport[4];
+    GLdouble modelview[16];
+    GLdouble viewVector[3];
+    GLdouble projection[16];
+
+    //get the matrices
+    glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
+
+    viewVector[0]=modelview[8];
+    viewVector[1]=modelview[9];
+    viewVector[2]=modelview[10];
+
+    glGetDoublev( GL_PROJECTION_MATRIX, projection );
+    glGetIntegerv( GL_VIEWPORT, viewport );
+
+    int res=gluProject(local.p[0],local.p[1],local.p[2],modelview,projection,viewport,&globalX,&globalY,&globalZ);
 }
