@@ -20,7 +20,7 @@ class Plane {
         void drawRotation();
         void setRotateAlpha(double  &a);
         void setRotateVec(Vec3  &a);
-        void setRotateCenterVec(Vec3  &a);
+        void setRotateCenterVec(Vec3 &a);
         void setTranslateVec(Vec3  &a);
         void setInitRotation(double alpha, Vec3  vector);
         Vec3 getA();
@@ -28,8 +28,12 @@ class Plane {
         Vec3 getC();
         Vec3 getD();
     private:
-        void getGlobalCoords(Vec3 &local,GLdouble &winX, GLdouble &winY, GLdouble &winZ);
+        void updateGlobalCoords(Vec3 &A,Vec3 &B,Vec3 &C,Vec3 &D);
         Vec3 middle;
+        Vec3 globalA;
+        Vec3 globalB;
+        Vec3 globalC;
+        Vec3 globalD;
         double length;
         double initAlpha;
         Vec3 initRotationVector;

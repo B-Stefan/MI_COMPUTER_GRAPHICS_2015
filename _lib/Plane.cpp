@@ -3,6 +3,7 @@
 //
 
 #include "Plane.h"
+#include "utils.h"
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
 #include "vec3.hpp"
@@ -45,6 +46,10 @@ Plane::Plane(Vec3 &middle, double l) {
     this->initRotationVector = Vec3(0,0,0);
     this->initAlpha =0.0;
     this->length = l;
+    this->globalA = Vec3(0,0,0);
+    this->globalB = Vec3(0,0,0);
+    this->globalC = Vec3(0,0,0);
+    this->globalD = Vec3(0,0,0);
 }
 
 /**
@@ -132,29 +137,8 @@ void Plane::setRotateAlpha(double &b) {
 //Paint a line from the current center
 void Plane::drawAxis() {
 
-    //Normal z-axis
-    glBegin(GL_LINES);
-    glColor3f(0, 1, 0.0);
-    glVertex3f(0, 0, 0.5);
-    glVertex3f(0,0, 1.5);
-    glEnd();
-
-
-    //x-axis
-    glBegin(GL_LINES);
-    glColor3f(1.0, 0.0, 0.0);
-    glVertex3f(0, 0, 0.5);
-    glVertex3f(1, 0, 0.5);
-    glEnd();
-
-    //y-axis
-    glBegin(GL_LINES);
-    glColor3f(0, 0.0, 1);
-    glVertex3f(0, 0, 0.5);
-    glVertex3f(0, 1, 0.5);
-    glEnd();
-
-
+    Vec3 point = Vec3(0,0,0.5);
+    Utils::drawAxis(point,1);
 
 
 }
@@ -217,37 +201,49 @@ void Plane::draw() {
     glVertex3f(C.p[0],C.p[1],C.p[2]);
     glVertex3f(D.p[0],D.p[1],D.p[2]);
     glEnd();
+
+    //Set global coords to the props of the panel
+    //Important: Do this inside the push/pop matrix
+    this->updateGlobalCoords(A,B,C,D);
+
     glPopMatrix();
 }
 
-void Plane::getGlobalCoords(Vec3 &local,GLdouble &globalX, GLdouble &globalY, GLdouble &globalZ) {
-    GLint viewport[4];
-    GLdouble modelview[16];
-    GLdouble viewVector[3];
-    GLdouble projection[16];
+/**
+ * Update the props on the class to the new global coords.
+ * Helpful for object collision
+ */
+void Plane::updateGlobalCoords(Vec3 &A,Vec3 &B,Vec3 &C,Vec3 &D ) {
 
-    //get the matrices
-    glGetDoublev( GL_MODELVIEW_MATRIX, modelview );
-
-    viewVector[0]=modelview[8];
-    viewVector[1]=modelview[9];
-    viewVector[2]=modelview[10];
-
-    glGetDoublev( GL_PROJECTION_MATRIX, projection );
-    glGetIntegerv( GL_VIEWPORT, viewport );
-
-    int res=gluProject(local.p[0],local.p[1],local.p[2],modelview,projection,viewport,&globalX,&globalY,&globalZ);
+    Utils::setGlobalCoords(A,this->globalA);
+    Utils::setGlobalCoords(B,this->globalB);
+    Utils::setGlobalCoords(C,this->globalC);
+    Utils::setGlobalCoords(D,this->globalD);
 }
-
+/**
+ * Get Globak A
+ */
 Vec3 Plane::getA(){
-    return this->middle + SIDE_A * this->length;
+    return Plane::getSide(Plane::POINTS::A)* this->length;
 }
+
+/**
+ * Get Globak B
+ */
 Vec3 Plane::getB(){
-    return this->middle + SIDE_B * this->length;
+    return Plane::getSide(Plane::POINTS::B)* this->length;
 }
+
+/**
+ * Get Globak C
+ */
 Vec3 Plane::getC(){
-    return this->middle + SIDE_C * this->length;
+    return Plane::getSide(Plane::POINTS::C)* this->length;
 }
+
+/**
+ * Get Globak D
+ */
 Vec3 Plane::getD(){
-    return this->middle + SIDE_D * this->length;
+    return Plane::getSide(Plane::POINTS::D)* this->length;
 }

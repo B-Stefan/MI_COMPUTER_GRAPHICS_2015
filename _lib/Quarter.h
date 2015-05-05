@@ -8,6 +8,7 @@
 
 #include "vec3.hpp"
 #import "Plane.h"
+#include "Sphere.h"
 
 class Quarter {
 
@@ -20,10 +21,14 @@ public:
     void setScale(double  &s);
     void setTranslateVec(Vec3  &a);
     void setOpenPercentage(double a);
+    void setTranslateSphere(Vec3 v);
 
 private:
     void drawNormal(Vec3 &A,Vec3 &B, Vec3 &C, Vec3 &D);
+
+    bool checkCollision(Plane p);
     Vec3 middlePoint;
+    Vec3 middlePointSphere;
     double openPercentage;
     Plane *left;
     Plane *right;
@@ -31,10 +36,12 @@ private:
     Plane *top;
     Plane *bottom;
     Plane *back;
+    Sphere *sphere;
     double scale;
     double rotate_alpha;
     Vec3 rotate_vec;
     Vec3 translate_vec;
+    Vec3 translate_vec_sphere;
 };
 
 

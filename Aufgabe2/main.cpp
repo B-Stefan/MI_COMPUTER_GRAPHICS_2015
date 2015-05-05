@@ -5,7 +5,9 @@
 
 
 #include "../_lib/vec3.hpp"
+#include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
+#include "../_lib/Sphere.h"
 
 
 static double alpha_ = 0;
@@ -26,8 +28,8 @@ double openPercent = 0;
 
 
 Vec3 point = Vec3(0,0,0);
-double l = 2;
-Quarter *box  = new Quarter(point,l);
+double l = 1;
+Quarter *box        = new Quarter(point,l);
 bool mouseClicked = false;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -142,45 +144,6 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 
-// draw a sphere composed of triangles
-void DrawSphere(const Vec3& ctr, double r){
-  int     i, j,
-          n1 = 24, n2 = 32;
-  Vec3    normal, v1;
-  double  a1, a1d = M_PI / n1,
-          a2, a2d = M_PI / n2,
-          s1, s2,
-          c1, c2;
-
-  glShadeModel(GL_SMOOTH);
-  for(i = 0; i < n1; i++){
-    a1 = i * a1d;
-
-    glBegin(GL_TRIANGLE_STRIP);
-    for(j = 0; j <= n2; j++){
-      a2 = (j + .5 * (i % 2)) * 2 * a2d;
-
-      s1 = sin(a1);
-      c1 = cos(a1);
-      s2 = sin(a2);
-      c2 = cos(a2);
-      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
-      v1 = ctr + r * normal;
-      glNormal3dv(normal.p);
-      glVertex3dv(v1.p);
-
-      s1 = sin(a1 + a1d);
-      c1 = cos(a1 + a1d);
-      s2 = sin(a2 + a2d);
-      c2 = cos(a2 + a2d);
-      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
-      v1 = ctr + r * normal;
-      glNormal3dv(normal.p);
-      glVertex3dv(v1.p);
-    }
-    glEnd();
-  }
-}
 
 void SetMaterialColor(int side, double r, double g, double b) {
   float	amb[4], dif[4], spe[4];
@@ -268,67 +231,13 @@ void DrawBox() {
   Vec3 r = Vec3(rotateX, rotateY, rotateZ);
   Vec3 t = Vec3(translateX, translateY, translateZ);
 
-  box->setTranslateVec(t);
+  box->setTranslateSphere(t);
   box->setRotateVec(r);
-  box->setRotateAlpha(alpha_);
+    //box->setRotateAlpha(alpha_);
   box->setScale(zoomValue);
   box->draw();
   
 }
-/**
-    * Move the middle point so the system looks like
-    *
-    * M= middle and after translate coords (0,0,0)
-    * A = (-1,1,0) B = ...
-    *     y
-    *  1   | A               B
-    *      |
-    *      |
-    *      |
-    *  0   |         M
-    *      |
-    *      |
-    * -1   | D               C
-    *      |
-    *      | _________________X
-    *       -1      0       1
-    */
-bool checkCollision(Plane p, Vec3 sMiddlePoint, int sR){
-  Vec3 A = p.getA();
-  Vec3 B = p.getB();
-  Vec3 C = p.getC();
-  Vec3 D = p.getD();
-
-  bool checkX = false;
-  bool checkY = false;
-  bool checkZ = false;
-
-  //Top and down
-  int distanceTop   = std::abs(sMiddlePoint.p[1] - A.p[1]);
-  int distanceDown  = std::abs(sMiddlePoint.p[1] - D.p[1]);
-
-  //Left and right
-  int distanceRight = std::abs(sMiddlePoint.p[0] - B.p[1]);
-  int distanceLeft  = std::abs(sMiddlePoint.p[0] - D.p[1]);
-
-  std::cout << "distanceRight" << distanceRight << std::endl;
-  std::cout << "distanceLeft" << distanceLeft << std::endl;
-
-  //y check
-  if(distanceDown <= sR ||  distanceTop <= sR){
-    std::cout << "y" <<std::endl;
-    checkX = true;
-  }
-  //check x
-  if(distanceRight <= sR|| distanceLeft <= sR){
-    std::cout << "x" <<std::endl;
-    checkY = true;
-  }
-  return  checkY && checkX;
-
-
-}
-
 
 
 int main() {
@@ -351,7 +260,6 @@ int main() {
 
   while(!glfwWindowShouldClose(window)) {
 
-
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
@@ -364,37 +272,14 @@ int main() {
     glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // draw the scene
-    Vec3 point = Vec3(0,7,0);
-
-
-    //draw the box
 
     DrawBox();
-
-    // draw the Sphere
-    glPushMatrix();
-    SetMaterialColor(1,0,0,1);
-    glTranslated(translateX, translateY, translateZ);
-    glRotated(alpha_, rotateX, rotateY, rotateZ);
-    alpha_ +=0.3;
-    DrawSphere(point,3);
-    glPopMatrix();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
 
     glfwPollEvents();
 
-    Vec3 plaineMiddle = Vec3(0,0,0);
-
-    Plane t = Plane(plaineMiddle,1);
-
-    Vec3 sMiddle = Vec3(0,0,0);
-    int r = 1;
-    bool  result = checkCollision(t,sMiddle,r);
-
-    std::cout<< "Kollision + " << result << std::endl;
 
 
   }
