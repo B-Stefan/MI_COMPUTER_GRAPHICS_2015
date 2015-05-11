@@ -218,7 +218,143 @@ void InitLighting() {
   glLoadIdentity();
 }
 
+// draw a sphere composed of triangles
+void DrawSphere(const Vec3& ctr, double r){
+  int     i, j,
+          n1 = 24, n2 = 32;
+  Vec3    normal, v1;
+  double  a1, a1d = M_PI / n1,
+          a2, a2d = M_PI / n2,
+          s1, s2,
+          c1, c2;
 
+  glShadeModel(GL_SMOOTH);
+  for(i = 0; i < n1; i++){
+    a1 = i * a1d;
+
+    glBegin(GL_TRIANGLE_STRIP);
+    for(j = 0; j <= n2; j++){
+      a2 = (j + .5 * (i % 2)) * 2 * a2d;
+
+      s1 = sin(a1);
+      c1 = cos(a1);
+      s2 = sin(a2);
+      c2 = cos(a2);
+      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
+      v1 = ctr + r * normal;
+      glNormal3dv(normal.p);
+      glVertex3dv(v1.p);
+
+      s1 = sin(a1 + a1d);
+      c1 = cos(a1 + a1d);
+      s2 = sin(a2 + a2d);
+      c2 = cos(a2 + a2d);
+      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
+      v1 = ctr + r * normal;
+      glNormal3dv(normal.p);
+      glVertex3dv(v1.p);
+    }
+    glEnd();
+  }
+}
+
+bool isInTheBox(Vec3 middlePoint, double radius){
+  //check x && y
+  if((middlePoint.p[0] - radius >=0 && middlePoint.p[0] + radius <=5
+  )&& (middlePoint.p[1] - radius >=0 && middlePoint.p[1] + radius <=10)){
+    std::cout << "in" << std::endl;
+    return true;
+  }
+  else{
+    std::cout << "out" << std::endl;
+    return false;
+  }
+
+}
+
+void drawTheScene(){
+  glPushMatrix();
+  //glRotated(alpha_,rotateX,rotateY,0);
+  //alpha_ += 1;
+
+  //--> Table Start
+  //ground
+  glBegin(GL_QUADS);
+    SetMaterialColor(1,1,0,0);
+    SetMaterialColor(2,1,0,0);
+    glVertex3f(0,0,0);
+    glVertex3f(5,0,0);
+    glVertex3f(5,10,0);
+    glVertex3f(0,10,0);
+  glEnd();
+  glFlush();
+
+  //left
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,2);
+  glVertex3f(0,10,2);
+  glVertex3f(0,0,0);
+  glVertex3f(0,10,0);
+  glEnd();
+  glFlush();
+
+  //right
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(5,0,0);
+  glVertex3f(5,10,0);
+  glVertex3f(5,0,2);
+  glVertex3f(5,10,2);
+  glEnd();
+  glFlush();
+
+  //down
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(5,0,0);
+  glVertex3f(0,0,2);
+  glVertex3f(5,0,2);
+  glEnd();
+  glFlush();
+
+  //Top
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,10,0);
+  glVertex3f(5,10,0);
+  glVertex3f(0,10,2);
+  glVertex3f(5,10,2);
+  glEnd();
+  glFlush();
+  //--> Table End
+  int sx= 2;
+  int sy =2;
+  const int sz = 1;
+
+
+  //Sphere middle point
+  Vec3 a = Vec3(sx,sy,sz);
+  //Sphere radius
+  double sRad = 1;
+  SetMaterialColor(1,0,0,0);
+  SetMaterialColor(2,0,0,0);
+  //draw the Sphere wit a and sRad;
+  //move Sphere
+  glTranslatef(translateX,translateY,translateZ);
+  DrawSphere(a,sRad);
+  int x = a.p[0] - translateX;
+  int y = a.p[1] - translateY;
+  int z = a.p[2] - translateZ;
+  Vec3 b = Vec3(x,y,z);
+  isInTheBox(b,sRad);
+  glPopMatrix();
+}
 
 
 
@@ -266,36 +402,16 @@ int main() {
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, mouse_scroll_callback);
     // switch on lighting (or you don't see anything)
+
     InitLighting();
 
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    drawTheScene();
+   // DrawBox();
 
 
-    //glRotated(45,1,1,0);
-    //DrawBox();
-    Vec3 pointL = Vec3(0,0,0);
-    Vec3 pointG1 = Vec3(0,0,0);
-    Vec3 pointG2 = Vec3(0,0,0);
-    glPushMatrix();
-        std::cout << "OUTER"<< std::endl;
-        glTranslated(0,0,0);
-          Utils::drawAxis(pointL,5);
-          Utils::setGlobalCoords(pointL,pointG1);
-        std::cout << "LOCAL x" << pointL.p[0] << " y: " << pointL.p[1] << " z:"<< pointL.p[2] << std::endl;
-        std::cout << "global x" << pointG1.p[0] << " y: " << pointG1.p[1] << " z:"<< pointG1.p[2] << std::endl;
-        glPushMatrix();
-          std::cout << "INNER"<< std::endl;
-          glTranslated(0,1,0);
-          Utils::drawAxis(pointL,10);
-          Utils::setGlobalCoords(pointL,pointG2);
-          std::cout << "LOCAL x" << pointL.p[0] << " y: " << pointL.p[1] << " z:"<< pointL.p[2] << std::endl;
-          std::cout << "global x" << pointG2.p[0] << " y: " << pointG2.p[1] << " z:"<< pointG2.p[2] << std::endl;
-        glPopMatrix();
-
-
-    glPopMatrix();
 
 
     // make it appear (before this, it's hidden in the rear buffer)
