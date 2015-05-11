@@ -33,9 +33,13 @@ set(LIBRARIES_GLOBAL
 add_subdirectory(_lib)
 add_subdirectory(Aufgabe1)
 add_subdirectory(Aufgabe2)
+add_subdirectory(Aufgabe3)
 
 add_executable(GLFW3_Demo ${TASK1_SOURCES})
 target_link_libraries(GLFW3_Demo ${TASK1_LIBS}) # link against all libs
 
 add_executable(GLFW3_Demo_Aufgabe2 ${TASK2_SOURCES})
 target_link_libraries(GLFW3_Demo_Aufgabe2 ${TASK2_LIBS}) # link against all libs
+
+add_executable(GLFW3_Demo_Aufgabe3 ${TASK3_SOURCES})
+target_link_libraries(GLFW3_Demo_Aufgabe3 ${TASK3_LIBS}) # link against all libs
