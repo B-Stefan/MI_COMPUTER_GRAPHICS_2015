@@ -121,10 +121,10 @@ bool Quarter::checkCollision(Plane p) {
     Vec3 B = p.getB();
     Vec3 C = p.getC();
     Vec3 D = p.getD();
-    std::cout << "A:" << A.p[0] << std::endl;
+   /* std::cout << "A:" << A.p[0] << std::endl;
     std::cout << "B:" << B.p[0] << std::endl;
     std::cout << "C:" << C.p[0] << std::endl;
-    std::cout << "D:" << D.p[0] << std::endl;
+    std::cout << "D:" << D.p[0] << std::endl;*/
     bool checkX = false;
     bool checkY = false;
     bool checkZ = false;
@@ -137,11 +137,11 @@ bool Quarter::checkCollision(Plane p) {
     int distanceRight = std::abs(this->sphere->getMiddle().p[0] - B.p[1]);
     int distanceLeft  = std::abs(this->sphere->getMiddle().p[0] - D.p[1]);
 
-    std::cout << "R:" << this->sphere->getR() << std::endl;
+    /*std::cout << "R:" << this->sphere->getR() << std::endl;
     std::cout << "distanceTop:" << distanceTop << std::endl;
     std::cout << "distanceDown:" << distanceDown << std::endl;
     std::cout << "distanceRight:" << distanceRight << std::endl;
-    std::cout << "distanceLeft:" << distanceLeft << std::endl;
+    std::cout << "distanceLeft:" << distanceLeft << std::endl;*/
     //y check
     if(distanceDown <= this->sphere->getR() ||  distanceTop <= this->sphere->getR()){
         checkX = true;
@@ -172,8 +172,8 @@ void Quarter::draw() {
     this->top->setRotateAlpha(alpha);
 
 
-    std::cout << "this->middlePointSphere: " << this->middlePointSphere.p[0] << std::endl;
-    std::cout << "this->this->translate_vec_sphere: " << this->translate_vec_sphere.p[0] << std::endl;
+    //std::cout << "this->middlePointSphere: " << this->middlePointSphere.p[0] << std::endl;
+    //std::cout << "this->this->translate_vec_sphere: " << this->translate_vec_sphere.p[0] << std::endl;
     Utils::drawAxis(this->translate_vec_sphere,1);
     this->sphere->draw();
     this->top->draw();
@@ -184,7 +184,7 @@ void Quarter::draw() {
     this->front->draw();
 
     if(this->checkCollision(*this->top)){
-        std::cout<< "yeeeeeeah "<< std::endl;
+       // std::cout<< "yeeeeeeah "<< std::endl;
     };
     glPopMatrix();
 }
