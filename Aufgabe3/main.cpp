@@ -9,6 +9,8 @@
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
 
+using namespace std;
+
 
 static double alpha_ = 0;
 static double window_width_ = 1024;
@@ -25,6 +27,10 @@ double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
 double openPercent = 0;
+double sx= 1;
+double sy =0;
+const int sz = 1.0;
+double step = .1;
 
 
 Vec3 point = Vec3(0,0,0);
@@ -70,18 +76,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_UP:
         std::cout << "up"<<std::endl;
             translateY += 1;
+            sy += step;
             break;
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
             translateX -= 1;
+            sx -= step;
             break;
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
             translateY -= 1;
+            sy -= step;
             break;
       case GLFW_KEY_RIGHT:
         std::cout << "down"<<std::endl;
             translateX += 1;
+            sx +=step;
             break;
       case GLFW_KEY_RIGHT_BRACKET:
         std::cout << "zoom +"<<std::endl;
@@ -272,6 +282,20 @@ bool isInTheBox(Vec3 middlePoint, double radius){
 
 }
 
+double calcDistanceOfTwoPoints(Vec3 a,double r, double x, double y){
+  double distance;
+  double ax, bx,ay,by;
+  ax = a.p[0]+r;
+  ay = a.p[1]-r;
+  bx = x;
+  by = y;
+
+  distance = sqrt(((bx - ax)*(bx - ax)) + ((by - ay)*(by - ay)));
+  return distance;
+
+
+}
+
 void drawTheScene(){
   glPushMatrix();
   //glRotated(alpha_,rotateX,rotateY,0);
@@ -333,26 +357,24 @@ void drawTheScene(){
   glEnd();
   glFlush();
   //--> Table End
-  int sx= 2;
-  int sy =2;
-  const int sz = 1;
 
 
   //Sphere middle point
   Vec3 a = Vec3(sx,sy,sz);
+
   //Sphere radius
   double sRad = 1;
   SetMaterialColor(1,0,0,0);
   SetMaterialColor(2,0,0,0);
+
   //draw the Sphere wit a and sRad;
-  //move Sphere
-  glTranslatef(translateX,translateY,translateZ);
   DrawSphere(a,sRad);
-  int x = a.p[0] - translateX;
-  int y = a.p[1] - translateY;
-  int z = a.p[2] - translateZ;
-  Vec3 b = Vec3(x,y,z);
-  isInTheBox(b,sRad);
+  double currentSX = sx;
+  double currentSY = sy;
+  cout<< "X:" << a.p[0] << " = " << currentSX << endl;
+  cout<< "Y:" << a.p[1] << " = " << currentSY << endl;
+
+  cout << calcDistanceOfTwoPoints(a,sRad, 1, 0) << endl;
   glPopMatrix();
 }
 
