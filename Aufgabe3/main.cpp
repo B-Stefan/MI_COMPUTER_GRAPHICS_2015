@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <cmath>
+#include <vector>
 
 
 #include "../_lib/vec3.hpp"
@@ -27,11 +28,26 @@ double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
 double openPercent = 0;
-double sx= 1;
-double sy =0;
+double sx = 2;
+double sy = 2;
 const int sz = 1.0;
-double step = .1;
+double step = .5;
 
+
+//versuch by Kai
+double const conZ = 0.0;
+
+
+//Sphere radius
+double sRad = 1;
+Vec3 A = Vec3(0, 0, 0.0);
+double h = 10;
+double b = 5;
+
+std::vector<double> test;
+
+double rx = .1;
+double ry = .2;
 
 Vec3 point = Vec3(0,0,0);
 double l = 1;
@@ -268,33 +284,23 @@ void DrawSphere(const Vec3& ctr, double r){
   }
 }
 
-bool isInTheBox(Vec3 middlePoint, double radius){
-  //check x && y
-  if((middlePoint.p[0] - radius >=0 && middlePoint.p[0] + radius <=5
-  )&& (middlePoint.p[1] - radius >=0 && middlePoint.p[1] + radius <=10)){
-    std::cout << "in" << std::endl;
-    return true;
-  }
-  else{
-    std::cout << "out" << std::endl;
-    return false;
-  }
 
+std::vector<double> distanceFromSIdes(Vec3 k){
+  std::vector<double> distances;
+    double o = (h-(k.p[1]-A.p[1]))-sRad;
+    double l = (k.p[0]-A.p[0])-sRad;
+    double r = (b-(k.p[0]-A.p[0]))-sRad;
+    double u = (k.p[1]-A.p[1])-sRad;
+
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
 }
 
-double calcDistanceOfTwoPoints(Vec3 a,double r, double x, double y){
-  double distance;
-  double ax, bx,ay,by;
-  ax = a.p[0]+r;
-  ay = a.p[1]-r;
-  bx = x;
-  by = y;
-
-  distance = sqrt(((bx - ax)*(bx - ax)) + ((by - ay)*(by - ay)));
-  return distance;
 
 
-}
 
 void drawTheScene(){
   glPushMatrix();
@@ -359,22 +365,36 @@ void drawTheScene(){
   //--> Table End
 
 
-  //Sphere middle point
-  Vec3 a = Vec3(sx,sy,sz);
-
-  //Sphere radius
-  double sRad = 1;
   SetMaterialColor(1,0,0,0);
   SetMaterialColor(2,0,0,0);
 
+  Vec3 ab = Vec3(sx,sy,sz);
+  sx += rx;
+  sy += ry;
   //draw the Sphere wit a and sRad;
-  DrawSphere(a,sRad);
-  double currentSX = sx;
-  double currentSY = sy;
-  cout<< "X:" << a.p[0] << " = " << currentSX << endl;
-  cout<< "Y:" << a.p[1] << " = " << currentSY << endl;
+  DrawSphere(ab,sRad);
+  test = distanceFromSIdes(ab);
 
-  cout << calcDistanceOfTwoPoints(a,sRad, 1, 0) << endl;
+  //case top
+  if(test.at(0) <= 0){
+    ry *= -1;
+    sy += ry*2;
+  }
+  //case left
+  if(test.at(1) <= 0){
+    rx *= -1;
+    sx += rx*2;
+  }
+  //case right
+  if(test.at(2) <= 0){
+    rx *= -1;
+    sx += rx*2;
+  }
+  //case down
+  if(test.at(3) <= 0){
+    ry *= -1;
+    sy += ry*2;
+  }
   glPopMatrix();
 }
 
@@ -423,8 +443,8 @@ int main() {
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, mouse_scroll_callback);
-    // switch on lighting (or you don't see anything)
 
+    // switch on lighting (or you don't see anything)
     InitLighting();
 
     // set background color
@@ -432,6 +452,12 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawTheScene();
    // DrawBox();
+
+cout << "o " << test[0] << endl;
+cout << "l " << test[1] << endl;
+cout << "r " << test[2] << endl;
+cout << "u " << test[3] << endl;
+
 
 
 
