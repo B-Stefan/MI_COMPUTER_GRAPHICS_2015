@@ -1,4 +1,5 @@
 #include <GLFW/glfw3.h>
+#include <GLUT/glut.h>
 #include <stdio.h>
 #include <iostream>
 #include <cmath>
@@ -127,11 +128,41 @@ void mouse_scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
   previewYOffset = yoffset;
 }
 
+Vec3 getCords(double xpos, double ypos){
+
+  GLint viewport[4]; //var to hold the viewport info
+  GLdouble modelview[16]; //var to hold the modelview info
+  GLdouble projection[16]; //var to hold the projection matrix info
+  GLfloat winX, winY, winZ; //variables to hold screen x,y,z coordinates
+  GLdouble worldX, worldY, worldZ; //variables to hold world x,y,z coordinates
+
+  glGetDoublev( GL_MODELVIEW_MATRIX, modelview ); //get the modelview info
+  glGetDoublev( GL_PROJECTION_MATRIX, projection ); //get the projection matrix info
+  glGetIntegerv( GL_VIEWPORT, viewport ); //get the viewport info
+
+  winX = (float)xpos;
+  winY = (float)viewport[3] - (float)ypos;
+  winZ = 0;
+
+  //get the world coordinates from the screen coordinates
+  gluUnProject( winX, winY, winZ, modelview, projection, viewport, &worldX, &worldY, &worldZ);
+  return Vec3(worldX,worldY,worldZ);
+
+
+
+}
 
 void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
 
   glfwGetCursorPos(window, &xpos, &ypos);
+
+  Vec3 test = getCords(xpos,ypos);
+
+
+  translateX = test.p[0];
+  translateY = test.p[1];
+
 
   if(previewX > xpos && mouseClicked) {
     zoomValue += 0.02;
@@ -274,6 +305,10 @@ int main() {
 
 
     DrawBox();
+    /*Vec3 test = Vec3(0,0,0);
+    Vec3 test1 = Vec3(1,1,0);
+    Utils::drawAxis(test,0);
+    Utils::drawAxis(test1,0);*/
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
