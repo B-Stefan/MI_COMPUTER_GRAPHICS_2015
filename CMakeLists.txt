@@ -34,6 +34,7 @@ add_subdirectory(_lib)
 add_subdirectory(Aufgabe1)
 add_subdirectory(Aufgabe2)
 add_subdirectory(Aufgabe3)
+add_subdirectory(Aufgabe-4-Snake)
 
 add_executable(GLFW3_Demo ${TASK1_SOURCES})
 target_link_libraries(GLFW3_Demo ${TASK1_LIBS}) # link against all libs
@@ -43,3 +44,7 @@ target_link_libraries(GLFW3_Demo_Aufgabe2 ${TASK2_LIBS}) # link against all libs
 
 add_executable(GLFW3_Demo_Aufgabe3 ${TASK3_SOURCES})
 target_link_libraries(GLFW3_Demo_Aufgabe3 ${TASK3_LIBS}) # link against all libs
+
+
+add_executable(GLFW3_Demo_Snake ${TASK4_SOURCES})
+target_link_libraries(GLFW3_Demo_Snake ${TASK4_LIBS}) # link against all libs
