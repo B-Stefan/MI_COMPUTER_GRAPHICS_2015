@@ -28,8 +28,8 @@ double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
 double openPercent = 0;
-double sx = 2;
-double sy = 2;
+double sx = 0;
+double sy = 0;
 const int sz = 1.0;
 double step = .5;
 
@@ -48,6 +48,14 @@ std::vector<double> test;
 
 double rx = .1;
 double ry = .2;
+
+//playground Variablen change for resize the Field
+double fieldWidth = 40.0;
+double fieldHeight = 40.0;
+//heihgt of Sides
+double fieldZ = 2;
+
+
 
 Vec3 point = Vec3(0,0,0);
 double l = 1;
@@ -299,7 +307,84 @@ std::vector<double> distanceFromSIdes(Vec3 k){
   return distances;
 }
 
+std::vector<double> distanceFromSides(Vec3 k){
+  std::vector<double> distances;
+  //distance from k to top
+  double o = (fieldHeight- k.p[1]);
+  //distance from k to left side
+  double l = (0 + k.p[0]);
+  //distance from k to right side
+  double r = (fieldWidth-k.p[0]);
+  //distance from k to down
+  double u = (0+k.p[1]);
 
+  //add distances to vector
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
+}
+
+void drawPlayGround(){
+
+  //ground
+  glBegin(GL_QUADS);
+  SetMaterialColor(1,1,0,0);
+  SetMaterialColor(2,1,0,0);
+  glVertex3f(0,0,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(0,fieldHeight,0);
+  glEnd();
+  glFlush();
+
+  //left
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(0,0,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
+  glEnd();
+  glFlush();
+
+  //right
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glEnd();
+  glFlush();
+
+  //down
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(0,0,fieldZ);
+  glEnd();
+  glFlush();
+
+  //Top
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
+  glEnd();
+  glFlush();
+  //--> Table End
+
+}
 
 
 void drawTheScene(){
@@ -427,14 +512,14 @@ int main() {
     return -1;
   }
 
-  window = glfwCreateWindow(window_width_, window_height_,
-                            "Simple 3D Animation", NULL, NULL);
+  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL, NULL);
   if(!window) {
     glfwTerminate();
     return -1;
   }
+  int visible = glfwGetWindowAttrib(window, GLFW_VISIBLE);
 
-  glfwMakeContextCurrent(window);
+
 
   while(!glfwWindowShouldClose(window)) {
 
@@ -450,15 +535,20 @@ int main() {
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawTheScene();
-   // DrawBox();
+    /**
+    glRotated(alpha_,rotateX,rotateY,0);
+    alpha_ += 1;
+     */
+    drawPlayGround();
 
-cout << "o " << test[0] << endl;
-cout << "l " << test[1] << endl;
-cout << "r " << test[2] << endl;
-cout << "u " << test[3] << endl;
+    Vec3 a = Vec3(sx,sy,sz);
+    DrawSphere(a,2);
 
-
+    std::vector<double> test = distanceFromSides(a);
+    cout <<"O: "<<test[0]<< endl;
+    cout <<"L: "<< test[1]<< endl;
+    cout <<"R: "<< test[2]<< endl;
+    cout <<"U: "<< test[3]<< endl;
 
 
 
