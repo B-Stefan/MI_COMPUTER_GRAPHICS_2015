@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
+#include "Cuboid.h"
 
 
 #include "../_lib/vec3.hpp"
@@ -12,10 +13,13 @@
 
 using namespace std;
 
+Vec3* originVec = new Vec3(0,0,0);
+Point* origin = new Point(originVec);
+Cuboid* object = new Cuboid(4,1,origin);
 
 static double alpha_ = 0;
-static double window_width_ = 1024;
-static double window_height_ = 768;
+static int window_width_ = 1024;
+static int window_height_ = 768;
 static double zoom;
 double rotateX = 0.0;
 double rotateY = 0.0;
@@ -91,22 +95,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_UP:
         std::cout << "up"<<std::endl;
-            translateY += 1;
+            translateZ = 0.01;
             sy += step;
             break;
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
-            translateX -= 1;
+            translateY = 0.01;
             sx -= step;
             break;
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
-            translateY -= 1;
+            translateY -= 0.01;
             sy -= step;
             break;
       case GLFW_KEY_RIGHT:
         std::cout << "down"<<std::endl;
-            translateX += 1;
+            translateX = 0.01;
             sx +=step;
             break;
       case GLFW_KEY_RIGHT_BRACKET:
@@ -120,6 +124,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
       }
   }else if(action == GLFW_RELEASE) {
+    translateX = 0;
+    translateY = 0;
+    translateZ = 0;
     rotateX = 0;
     rotateY = 0;
     rotateZ = 0;
@@ -168,7 +175,15 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
   previewX = xpos;
 
 }
+void resize_callback(GLFWwindow* window){
+  glfwGetWindowSize(window,&window_width_,&window_height_);
+}
 
+void frameBufffer_callback(GLFWwindow* window, int width, int height){
+  window_width_ = width;
+  window_height_ = height;
+
+}
 
 
 void SetMaterialColor(int side, double r, double g, double b) {
@@ -230,174 +245,24 @@ void InitLighting() {
   glClearColor(1, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // init viewport to canvassize
-  glViewport(0, 0, window_width_, window_height_);
+  glClear (GL_COLOR_BUFFER_BIT);
+  glColor3f (1.0, 1.0, 1.0);
+  glLoadIdentity ();             /* clear the matrix */
+  /* viewing transformation  */
+  gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
+  glScalef (1.0, 2.0, 1.0);      /* modeling transformation */
+  glutWireCube (1.0);
+  glFlush ();
 
 
-  // init coordinate system
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  glOrtho(-15, 15, -10, 10, -20, 20);
+  glViewport (0, 0, window_width_, window_height_);
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity ();
+  glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
+  glMatrixMode (GL_MODELVIEW);
 
 
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 }
-
-// draw a sphere composed of triangles
-void DrawSphere(const Vec3& ctr, double r){
-  int     i, j,
-          n1 = 24, n2 = 32;
-  Vec3    normal, v1;
-  double  a1, a1d = M_PI / n1,
-          a2, a2d = M_PI / n2,
-          s1, s2,
-          c1, c2;
-
-  glShadeModel(GL_SMOOTH);
-  for(i = 0; i < n1; i++){
-    a1 = i * a1d;
-
-    glBegin(GL_TRIANGLE_STRIP);
-    for(j = 0; j <= n2; j++){
-      a2 = (j + .5 * (i % 2)) * 2 * a2d;
-
-      s1 = sin(a1);
-      c1 = cos(a1);
-      s2 = sin(a2);
-      c2 = cos(a2);
-      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
-      v1 = ctr + r * normal;
-      glNormal3dv(normal.p);
-      glVertex3dv(v1.p);
-
-      s1 = sin(a1 + a1d);
-      c1 = cos(a1 + a1d);
-      s2 = sin(a2 + a2d);
-      c2 = cos(a2 + a2d);
-      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
-      v1 = ctr + r * normal;
-      glNormal3dv(normal.p);
-      glVertex3dv(v1.p);
-    }
-    glEnd();
-  }
-}
-
-
-std::vector<double> distanceFromSIdes(Vec3 k){
-  std::vector<double> distances;
-    double o = (h-(k.p[1]-A.p[1]))-sRad;
-    double l = (k.p[0]-A.p[0])-sRad;
-    double r = (b-(k.p[0]-A.p[0]))-sRad;
-    double u = (k.p[1]-A.p[1])-sRad;
-
-  distances.push_back(o);
-  distances.push_back(l);
-  distances.push_back(r);
-  distances.push_back(u);
-  return distances;
-}
-
-
-
-
-void drawTheScene(){
-  glPushMatrix();
-  //glRotated(alpha_,rotateX,rotateY,0);
-  //alpha_ += 1;
-
-  //--> Table Start
-  //ground
-  glBegin(GL_QUADS);
-    SetMaterialColor(1,1,0,0);
-    SetMaterialColor(2,1,0,0);
-    glVertex3f(0,0,0);
-    glVertex3f(5,0,0);
-    glVertex3f(5,10,0);
-    glVertex3f(0,10,0);
-  glEnd();
-  glFlush();
-
-  //left
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,2);
-  glVertex3f(0,10,2);
-  glVertex3f(0,0,0);
-  glVertex3f(0,10,0);
-  glEnd();
-  glFlush();
-
-  //right
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(5,0,0);
-  glVertex3f(5,10,0);
-  glVertex3f(5,0,2);
-  glVertex3f(5,10,2);
-  glEnd();
-  glFlush();
-
-  //down
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,0);
-  glVertex3f(5,0,0);
-  glVertex3f(0,0,2);
-  glVertex3f(5,0,2);
-  glEnd();
-  glFlush();
-
-  //Top
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,10,0);
-  glVertex3f(5,10,0);
-  glVertex3f(0,10,2);
-  glVertex3f(5,10,2);
-  glEnd();
-  glFlush();
-  //--> Table End
-
-
-  SetMaterialColor(1,0,0,0);
-  SetMaterialColor(2,0,0,0);
-
-  Vec3 ab = Vec3(sx,sy,sz);
-  sx += rx;
-  sy += ry;
-  //draw the Sphere wit a and sRad;
-  DrawSphere(ab,sRad);
-  test = distanceFromSIdes(ab);
-
-  //case top
-  if(test.at(0) <= 0){
-    ry *= -1;
-    sy += ry*2;
-  }
-  //case left
-  if(test.at(1) <= 0){
-    rx *= -1;
-    sx += rx*2;
-  }
-  //case right
-  if(test.at(2) <= 0){
-    rx *= -1;
-    sx += rx*2;
-  }
-  //case down
-  if(test.at(3) <= 0){
-    ry *= -1;
-    sy += ry*2;
-  }
-  glPopMatrix();
-}
-
 
 
 // draw the entire scene
@@ -415,6 +280,18 @@ void DrawBox() {
   box->setScale(zoomValue);
   box->draw();
   
+}
+
+
+// draw the entire scene
+void DrawObjectTest() {
+  glRotated(alpha_,1,1,1);
+  alpha_ = 45;
+  originVec->p[0] = originVec->p[0] + translateX;
+  originVec->p[1] = originVec->p[1] + translateY;
+  originVec->p[2] = originVec->p[2] + translateZ;
+  object->draw();
+
 }
 
 
@@ -443,24 +320,16 @@ int main() {
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, mouse_scroll_callback);
-
+    glfwSetWindowRefreshCallback(window, resize_callback);
+    glfwSetFramebufferSizeCallback(window, frameBufffer_callback);
     // switch on lighting (or you don't see anything)
     InitLighting();
 
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawTheScene();
-   // DrawBox();
 
-cout << "o " << test[0] << endl;
-cout << "l " << test[1] << endl;
-cout << "r " << test[2] << endl;
-cout << "u " << test[3] << endl;
-
-
-
-
+    DrawObjectTest();
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
