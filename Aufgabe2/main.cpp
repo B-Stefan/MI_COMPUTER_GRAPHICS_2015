@@ -36,6 +36,7 @@ bool mouseClicked = false;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
   if(action == GLFW_REPEAT  || action == GLFW_PRESS){
+    alpha_+=0.3;
     switch (key) {
       case GLFW_KEY_W:
         std::cout << "w"<<std::endl;
@@ -95,10 +96,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
       }
   }else if(action == GLFW_RELEASE) {
-    rotateX = 0;
-    rotateY = 0;
-    rotateZ = 0;
-    //mouseClicked = false;
+
+
 
   }
 
@@ -160,8 +159,9 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
   Vec3 test = getCords(xpos,ypos);
 
 
+
   translateX = test.p[0];
-  translateY = test.p[1];
+  translateY = test.p[1]- box->sphere->getR();
 
 
   if(previewX > xpos && mouseClicked) {
@@ -210,8 +210,8 @@ void SetMaterialColor(int side, double r, double g, double b) {
 void InitLighting() {
   GLfloat lp1[4]  = { 10,  5,  10,  0};
   GLfloat lp2[4]  = { -5,  5, -10,  0};
-  GLfloat red[4]  = {10, .8,  .8,  1};
-  GLfloat blue[4] = { 0, 10, 1.0,  1};
+  GLfloat red[4]  = {1.0, .8,  .8,  1};
+  GLfloat blue[4] = { .8, .8, 1.0,  1};
 
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
@@ -238,7 +238,6 @@ void InitLighting() {
   // init viewport to canvassize
   glViewport(0, 0, window_width_, window_height_);
 
-
   // init coordinate system
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -257,14 +256,14 @@ void InitLighting() {
 void DrawBox() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
-  alpha_ +=0.3;
+
   SetMaterialColor(1,1,0,0);
   Vec3 r = Vec3(rotateX, rotateY, rotateZ);
   Vec3 t = Vec3(translateX, translateY, translateZ);
 
   box->setTranslateSphere(t);
   box->setRotateVec(r);
-    //box->setRotateAlpha(alpha_);
+  box->setRotateAlpha(alpha_);
   box->setScale(zoomValue);
   box->draw();
   
