@@ -13,9 +13,12 @@ class GlObject {
     public:
         GlObject(Point *origin);
         virtual void draw();
+        void setRotation(double * angle, Vec3 *vec);
 
     protected:
         Point* originPoint;
+        Vec3 * rotationVec;
+        double * angle;
 };
 
 

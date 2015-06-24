@@ -9,8 +9,6 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 using namespace std;
-double angle = M_PI*0.5;
-Vec3* rotateVec = new Vec3(0,1,0);
 Cuboid::Cuboid(double height, double width, Point *origin)
         :GlObject(origin){
 
@@ -32,10 +30,11 @@ Cuboid::Cuboid(double height, double width, Point *origin)
     this->side_c = new Rectangle(w,h,side_c);
     this->side_d = new Rectangle(w,h,side_d);
 
-    this->top->setDefaultRotation(angle, 0, -1, 0);
-    this->bottom->setDefaultRotation(angle, 0, 1, 0);
-    this->side_b->setDefaultRotation(angle, -1, 0, 0);
-    this->side_d->setDefaultRotation(angle, 1, 0, 0);
+    double defaultAngle = M_PI *0.5;
+    this->top->setDefaultRotation(defaultAngle , 0, -1, 0);
+    this->bottom->setDefaultRotation(defaultAngle , 0, 1, 0);
+    this->side_b->setDefaultRotation(defaultAngle , -1, 0, 0);
+    this->side_d->setDefaultRotation(defaultAngle , 1, 0, 0);
 
 
 }
@@ -43,14 +42,12 @@ void Cuboid::draw() {
     GlObject::draw();
 
     Utils::drawAxis(*this->originPoint->getPosition(),2);
-    angle = angle + 0.01;
-
-    this->top->rotate(&angle,    rotateVec ,this->originPoint);
-    this->bottom->rotate(&angle, rotateVec,this->originPoint);
-    this->side_a->rotate(&angle, rotateVec,this->originPoint);
-    this->side_b->rotate(&angle, rotateVec,this->originPoint);
-    this->side_c->rotate(&angle, rotateVec,this->originPoint);
-    this->side_d->rotate(&angle, rotateVec,this->originPoint);
+    this->top->rotate   (this->angle, this->rotationVec,this->originPoint);
+    this->bottom->rotate(this->angle, this->rotationVec,this->originPoint);
+    this->side_a->rotate(this->angle, this->rotationVec,this->originPoint);
+    this->side_b->rotate(this->angle, this->rotationVec,this->originPoint);
+    this->side_c->rotate(this->angle, this->rotationVec,this->originPoint);
+    this->side_d->rotate(this->angle, this->rotationVec,this->originPoint);
 
 
     this->top->draw();

@@ -4,28 +4,83 @@
 #include <cmath>
 #include <vector>
 #include "Cuboid.h"
-
-
+#include "SnakeHead.h"
+#include "Snake.h"
+#include "Point.h"
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
 
+
+void drawPoint(Point *point, double length) {
+
+  length = length /2;
+
+  Vec3 * origin = point->getPosition();
+  Point* z = new Point(point,0,0,length);
+  Vec3 * vecZ = z->getPosition();
+  //Normal z-axis
+  glBegin(GL_LINES);
+  glColor3f(0, 1, 0.0);
+  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+  glVertex3f(vecZ->p[0],vecZ->p[1], vecZ->p[2]);
+  glEnd();
+
+  Point* x = new Point(point,length,0,0);
+  Vec3 * vecX = x->getPosition();
+  x->setName(point->getName() + "-x");
+
+  //x-axis
+  glBegin(GL_LINES);
+  glColor3f(1.0, 0.0, 0.0);
+  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+  glVertex3f(vecX->p[0],vecX->p[1], vecX->p[2]);
+  glEnd();
+
+  Point* y = new Point(point,0,length,0);
+  y->setName(point->getName() + "-y");
+  Vec3 * vecY = y->getPosition();
+
+  //y-axis
+  glBegin(GL_LINES);
+  glColor3f(1.0, 0.0, 1.0);
+  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+  glVertex3f(vecY->p[0],vecY->p[1], vecY->p[2]);
+  glEnd();
+
+
+  return;
+
+  cout << "=====> "<< point->getName() << "<====="<< endl;
+  Vec3 * vecNormal = point->getNormal();
+  Vec3 vecAbsolutPosition = *vecNormal + *point->getPosition();
+  Utils::printVec3(*vecNormal, "normal: ");
+  glBegin(GL_LINES);
+  glColor3f(1.0, 0.0, 0.0);
+  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+  glVertex3f(vecAbsolutPosition.p[0]*2,vecAbsolutPosition.p[1]*2, vecAbsolutPosition.p[2]*2);
+  glEnd();
+
+}
+
 using namespace std;
 
-Vec3* originVec = new Vec3(0,0,0);
+Vec3* originVec = new Vec3(0,0,-1);
 Point* origin = new Point(originVec);
-Cuboid* object = new Cuboid(4,1,origin);
-
+//Cuboid* cube = new Cuboid(1,1,origin);
+//cube->setRotationVec()
+//SnakeHead* head = new SnakeHead(4,origin);
+//Snake * snake = new Snake(origin);
 static double alpha_ = 0;
 static int window_width_ = 1024;
 static int window_height_ = 768;
 static double zoom;
 double rotateX = 0.0;
-double rotateY = 0.0;
+double rotateY = 0;
 double rotateZ = 0.0;
 double translateX = 0;
-double translateY = 0;
+double translateY = M_PI * 0.5;
 double translateZ = 0;
 double previewX = 0;
 double previewYOffset = 0;
@@ -54,6 +109,17 @@ double rx = .1;
 double ry = .2;
 
 Vec3 point = Vec3(0,0,0);
+Vec3* v1= new Vec3(0,0,0);
+
+Vec3* rotationVec = new Vec3(1,0,0);
+Vec3* rotationVec2 = new Vec3(0,1,0);
+
+
+Point* p1 = new Point(v1);
+Point* p2 = new Point(p1, 1,0,0);
+Point* p3 = new Point(p2, 1,0,0);
+Rectangle* rec = new Rectangle(1,1,p3);
+
 double l = 1;
 Quarter *box        = new Quarter(point,l);
 bool mouseClicked = false;
@@ -68,7 +134,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
-            rotateY = -1;
+            rotateY =rotateY +0.1;
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -128,12 +194,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     translateY = 0;
     translateZ = 0;
     rotateX = 0;
-    rotateY = 0;
+    //rotateY = 0;
     rotateZ = 0;
     //mouseClicked = false;
 
   }
-
 
 
 }
@@ -220,8 +285,8 @@ void SetMaterialColor(int side, double r, double g, double b) {
 void InitLighting() {
   GLfloat lp1[4]  = { 10,  5,  10,  0};
   GLfloat lp2[4]  = { -5,  5, -10,  0};
-  GLfloat red[4]  = {10, .8,  .8,  1};
-  GLfloat blue[4] = { 0, 10, 1.0,  1};
+  GLfloat red[4]  = {1.0, .8,  .8,  1};
+  GLfloat blue[4] = { .8, .8, 1.0,  1};
 
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
@@ -255,7 +320,7 @@ void InitLighting() {
   glFlush ();
 
 
-  glViewport (0, 0, window_width_, window_height_);
+  //glViewport (0, 0, window_width_, window_height_);
   glMatrixMode (GL_PROJECTION);
   glLoadIdentity ();
   glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
@@ -285,12 +350,27 @@ void DrawBox() {
 
 // draw the entire scene
 void DrawObjectTest() {
-  glRotated(alpha_,1,1,1);
-  alpha_ = 45;
-  originVec->p[0] = originVec->p[0] + translateX;
+  glRotated(45,1,0,0);
+  glRotated(alpha_,0,1,0);
+  alpha_ = alpha_ + 0.1;
+  /*originVec->p[0] = originVec->p[0] + translateX;
   originVec->p[1] = originVec->p[1] + translateY;
   originVec->p[2] = originVec->p[2] + translateZ;
-  object->draw();
+*/
+  Vec3 translationVec = *new Vec3(translateX, translateY, translateZ);
+  //drawPoint(p1,1);
+  //p2->setDynamicTranslationVec(&translationVec);
+  //Utils::printVec3(*p2->getPosition(), "P2");
+  //Utils::printVec3(*p1->getPosition(), "P1");
+  drawPoint(p1,1);
+  drawPoint(p2,1);
+  drawPoint(p3,2);
+  //drawPoint(p3,3);
+
+  //drawPoint(p2,2);
+  //Utils::drawAxis(*p3->getPosition(),3);
+  //origin->setDynamicRotate(&rotateY,rotationVec,origin->getPosition());
+  rec->draw();
 
 }
 
@@ -313,6 +393,12 @@ int main() {
 
   glfwMakeContextCurrent(window);
 
+  p1->setName("p1");
+  p2->setName("p2");
+  p1->setDynamicRotate(&rotateY,rotationVec,p1->getPosition());
+  p2->setDynamicRotate(&alpha_,rotationVec2,p2->getPosition());
+  double angleRec = M_PI*0.5;
+  rec->rotate(&angleRec,new Vec3(0,1,0),p3);
   while(!glfwWindowShouldClose(window)) {
 
     //Method that ask the key_callback method for Key inputs
