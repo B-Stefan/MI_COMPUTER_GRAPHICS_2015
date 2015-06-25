@@ -208,6 +208,8 @@ void InitLighting() {
   GLfloat red[4]  = {10, .8,  .8,  1};
   GLfloat blue[4] = { 0, 10, 1.0,  1};
 
+
+
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
   glClearColor(1, 1, 1, 1);
