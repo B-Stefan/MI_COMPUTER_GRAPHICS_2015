@@ -5,6 +5,8 @@
 #include <cmath>
 
 
+
+
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
@@ -28,9 +30,24 @@ double zoomValue = 1;
 double openPercent = 0;
 
 
+Vec3 transSphere(){
+  double transX = rand() & 28;
+  double transY = rand() & 18;
+  transX -= 14;
+  transY -= 9;
+  std::cout << "x: " << transX << "y: " << transY << std::endl;
+  Vec3 sTrans = Vec3(transX,transY,1);
+  return sTrans;
+}
+
 Vec3 point = Vec3(0,0,0);
 double l = 1;
 Quarter *box        = new Quarter(point,l);
+Vec3 t = transSphere();
+Sphere *sp  = new Sphere(t,0.2);
+
+
+
 bool mouseClicked = false;
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -67,6 +84,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             if(openPercent > -0.5){
               box->setOpenPercentage(openPercent);
               openPercent -= 0.5;
+
             }
             break;
       case GLFW_KEY_UP:
@@ -76,6 +94,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
             translateX -= 1;
+            sp->setMiddle(transSphere());
+            sp->draw();
             break;
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
@@ -104,6 +124,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 
 }
+
+
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
@@ -161,7 +183,7 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 
 
   translateX = test.p[0];
-  translateY = test.p[1]- box->sphere->getR();
+//  translateY = test.p[1]- box->sphere->getR();
 
 
   if(previewX > xpos && mouseClicked) {
@@ -266,6 +288,14 @@ void DrawBox() {
   box->setRotateAlpha(alpha_);
   box->setScale(zoomValue);
   box->draw();
+
+  double test1 = rand() & 5;
+
+  Vec3 test = Vec3(1,1,1);
+  double p = 2.0;
+
+  sp->draw();
+
   
 }
 
@@ -274,6 +304,7 @@ int main() {
   GLFWwindow* window = NULL;
 
   printf("Here we go!\n");
+
 
   if(!glfwInit()){
     return -1;
@@ -324,3 +355,4 @@ int main() {
 
   return 0;
 }
+
