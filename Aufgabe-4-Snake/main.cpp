@@ -9,6 +9,7 @@
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
+#include "Playground.h"
 
 using namespace std;
 
@@ -50,11 +51,13 @@ double rx = .1;
 double ry = .2;
 
 //playground Variablen change for resize the Field
+/*
 double fieldWidth = 40.0;
 double fieldHeight = 40.0;
 //heihgt of Sides
 double fieldZ = 2;
-
+*/
+double zoomINOUT = 0;
 
 
 Vec3 point = Vec3(0,0,0);
@@ -87,7 +90,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             if(openPercent < 100.0){
               box->setOpenPercentage(openPercent);
               openPercent += 0.5;
-
             }
             break;
       case GLFW_KEY_C:
@@ -126,7 +128,16 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             zoomValue -= 0.2;
             break;
 
-      }
+      case GLFW_KEY_P:
+        std::cout << "ZOOM ++" <<std::endl;
+      zoomINOUT += 1;
+      break;
+
+      case GLFW_KEY_L:
+        std::cout << "ZOOM --" <<std::endl;
+            zoomINOUT -= 1;
+            break;
+  }
   }else if(action == GLFW_RELEASE) {
     rotateX = 0;
     rotateY = 0;
@@ -178,7 +189,6 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 
-
 void SetMaterialColor(int side, double r, double g, double b) {
   float	amb[4], dif[4], spe[4];
   int mat;
@@ -209,12 +219,13 @@ void SetMaterialColor(int side, double r, double g, double b) {
 
 
 
+
 // set viewport transformations and draw objects
 void InitLighting() {
   GLfloat lp1[4]  = { 10,  5,  10,  0};
   GLfloat lp2[4]  = { -5,  5, -10,  0};
-  GLfloat red[4]  = {10, .8,  .8,  1};
-  GLfloat blue[4] = { 0, 10, 1.0,  1};
+  GLfloat red[4]  = {1.0, .8,  .8,  1};
+  GLfloat blue[4] = { .8, .8, 1.0,  1};
 
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LESS);
@@ -242,10 +253,12 @@ void InitLighting() {
   glViewport(0, 0, window_width_, window_height_);
 
 
+
   // init coordinate system
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(-15, 15, -10, 10, -20, 20);
+  //glOrtho(-15, 15, -10, 10, -20, 20);
+  glOrtho(-15 + zoomINOUT, 15 + zoomINOUT, -10 + zoomINOUT, 10 + zoomINOUT, -20, 20);
 
 
   glMatrixMode(GL_MODELVIEW);
@@ -292,7 +305,7 @@ void DrawSphere(const Vec3& ctr, double r){
   }
 }
 
-
+/*
 std::vector<double> distanceFromSIdes(Vec3 k){
   std::vector<double> distances;
     double o = (h-(k.p[1]-A.p[1]))-sRad;
@@ -325,13 +338,15 @@ std::vector<double> distanceFromSides(Vec3 k){
   distances.push_back(u);
   return distances;
 }
+*/
 
+/*
 void drawPlayGround(){
 
   //ground
   glBegin(GL_QUADS);
-  SetMaterialColor(1,1,0,0);
-  SetMaterialColor(2,1,0,0);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
   glVertex3f(0,0,0);
   glVertex3f(fieldWidth,0,0);
   glVertex3f(fieldWidth,fieldHeight,0);
@@ -385,6 +400,7 @@ void drawPlayGround(){
   //--> Table End
 
 }
+ */
 
 
 void drawTheScene(){
@@ -453,12 +469,13 @@ void drawTheScene(){
   SetMaterialColor(1,0,0,0);
   SetMaterialColor(2,0,0,0);
 
+
   Vec3 ab = Vec3(sx,sy,sz);
   sx += rx;
   sy += ry;
   //draw the Sphere wit a and sRad;
   DrawSphere(ab,sRad);
-  test = distanceFromSIdes(ab);
+  //(test = distanceFromSIdes(ab);
 
   //case top
   if(test.at(0) <= 0){
@@ -503,6 +520,7 @@ void DrawBox() {
 }
 
 
+
 int main() {
   GLFWwindow* window = NULL;
 
@@ -512,13 +530,16 @@ int main() {
     return -1;
   }
 
-  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL, NULL);
+  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
+  // x von -15 -> 15
+  // y von -10 -> 10
+
   if(!window) {
     glfwTerminate();
     return -1;
   }
-  int visible = glfwGetWindowAttrib(window, GLFW_VISIBLE);
-
+  //int visible = glfwGetWindowAttrib(window, GLFW_VISIBLE);
+  glfwMakeContextCurrent(window);
 
 
   while(!glfwWindowShouldClose(window)) {
@@ -532,19 +553,40 @@ int main() {
     // switch on lighting (or you don't see anything)
     InitLighting();
 
+
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
+    //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     /**
     glRotated(alpha_,rotateX,rotateY,0);
     alpha_ += 1;
      */
+
+    /*
     drawPlayGround();
+    */
 
     Vec3 a = Vec3(sx,sy,sz);
+    Playground pl = Playground();
+
+    glRotated(alpha_,rotateX,rotateY,0);
+    alpha_ += 1;
+    pl.drawPlaygrounD();
+    std::vector<double> test = pl.distanceFromSideS(a);
+
+
+    SetMaterialColor(1,0,0,0);
+    SetMaterialColor(2,0,0,0);
     DrawSphere(a,2);
 
-    std::vector<double> test = distanceFromSides(a);
+
+
+
+
+
+
+    //std::vector<double> test = distanceFromSides(a);
     cout <<"O: "<<test[0]<< endl;
     cout <<"L: "<< test[1]<< endl;
     cout <<"R: "<< test[2]<< endl;
