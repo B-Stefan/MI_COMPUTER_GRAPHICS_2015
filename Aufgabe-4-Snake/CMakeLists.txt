@@ -16,5 +16,6 @@ set(TASK4_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakeHead.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakePart.cpp
     # add new source files here
+    ${CMAKE_CURRENT_SOURCE_DIR}/Playground.cpp
 	PARENT_SCOPE
 )

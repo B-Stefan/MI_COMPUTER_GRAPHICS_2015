@@ -3,84 +3,25 @@
 #include <iostream>
 #include <cmath>
 #include <vector>
-#include "Cuboid.h"
-#include "SnakeHead.h"
-#include "Snake.h"
-#include "Point.h"
+
+
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
 
-
-void drawPoint(Point *point, double length) {
-
-  length = length /2;
-
-  Vec3 * origin = point->getPosition();
-  Point* z = new Point(point,0,0,length);
-  Vec3 * vecZ = z->getPosition();
-  //Normal z-axis
-  glBegin(GL_LINES);
-  glColor3f(0, 1, 0.0);
-  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
-  glVertex3f(vecZ->p[0],vecZ->p[1], vecZ->p[2]);
-  glEnd();
-
-  Point* x = new Point(point,length,0,0);
-  Vec3 * vecX = x->getPosition();
-  x->setName(point->getName() + "-x");
-
-  //x-axis
-  glBegin(GL_LINES);
-  glColor3f(1.0, 0.0, 0.0);
-  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
-  glVertex3f(vecX->p[0],vecX->p[1], vecX->p[2]);
-  glEnd();
-
-  Point* y = new Point(point,0,length,0);
-  y->setName(point->getName() + "-y");
-  Vec3 * vecY = y->getPosition();
-
-  //y-axis
-  glBegin(GL_LINES);
-  glColor3f(1.0, 0.0, 1.0);
-  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
-  glVertex3f(vecY->p[0],vecY->p[1], vecY->p[2]);
-  glEnd();
-
-
-  return;
-
-  cout << "=====> "<< point->getName() << "<====="<< endl;
-  Vec3 * vecNormal = point->getNormal();
-  Vec3 vecAbsolutPosition = *vecNormal + *point->getPosition();
-  Utils::printVec3(*vecNormal, "normal: ");
-  glBegin(GL_LINES);
-  glColor3f(1.0, 0.0, 0.0);
-  glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
-  glVertex3f(vecAbsolutPosition.p[0]*2,vecAbsolutPosition.p[1]*2, vecAbsolutPosition.p[2]*2);
-  glEnd();
-
-}
-
 using namespace std;
 
-Vec3* originVec = new Vec3(0,0,-1);
-Point* origin = new Point(originVec);
-//Cuboid* cube = new Cuboid(1,1,origin);
-//cube->setRotationVec()
-//SnakeHead* head = new SnakeHead(4,origin);
-//Snake * snake = new Snake(origin);
+
 static double alpha_ = 0;
-static int window_width_ = 1024;
-static int window_height_ = 768;
+static double window_width_ = 1024;
+static double window_height_ = 768;
 static double zoom;
 double rotateX = 0.0;
-double rotateY = 0;
+double rotateY = 0.0;
 double rotateZ = 0.0;
 double translateX = 0;
-double translateY = M_PI * 0.5;
+double translateY = 0;
 double translateZ = 0;
 double previewX = 0;
 double previewYOffset = 0;
@@ -108,18 +49,17 @@ std::vector<double> test;
 double rx = .1;
 double ry = .2;
 
+//playground Variablen change for resize the Field
+/*
+double fieldWidth = 40.0;
+double fieldHeight = 40.0;
+//heihgt of Sides
+double fieldZ = 2;
+*/
+double zoomINOUT = 0;
+
+
 Vec3 point = Vec3(0,0,0);
-Vec3* v1= new Vec3(0,0,0);
-
-Vec3* rotationVec = new Vec3(1,0,0);
-Vec3* rotationVec2 = new Vec3(0,1,0);
-
-
-Point* p1 = new Point(v1);
-Point* p2 = new Point(p1, 1,0,0);
-Point* p3 = new Point(p2, 1,0,0);
-Rectangle* rec = new Rectangle(1,1,p3);
-
 double l = 1;
 Quarter *box        = new Quarter(point,l);
 bool mouseClicked = false;
@@ -134,7 +74,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
-            rotateY =rotateY +0.1;
+            rotateY = -1;
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -161,22 +101,22 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_UP:
         std::cout << "up"<<std::endl;
-            translateZ = 0.01;
+            translateY += 1;
             sy += step;
             break;
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
-            translateY = 0.01;
+            translateX -= 1;
             sx -= step;
             break;
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
-            translateY -= 0.01;
+            translateY -= 1;
             sy -= step;
             break;
       case GLFW_KEY_RIGHT:
         std::cout << "down"<<std::endl;
-            translateX = 0.01;
+            translateX += 1;
             sx +=step;
             break;
       case GLFW_KEY_RIGHT_BRACKET:
@@ -188,17 +128,24 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             zoomValue -= 0.2;
             break;
 
-      }
+      case GLFW_KEY_P:
+        std::cout << "ZOOM ++" <<std::endl;
+      zoomINOUT += 1;
+      break;
+
+      case GLFW_KEY_L:
+        std::cout << "ZOOM --" <<std::endl;
+            zoomINOUT -= 1;
+            break;
+  }
   }else if(action == GLFW_RELEASE) {
-    translateX = 0;
-    translateY = 0;
-    translateZ = 0;
     rotateX = 0;
-    //rotateY = 0;
+    rotateY = 0;
     rotateZ = 0;
     //mouseClicked = false;
 
   }
+
 
 
 }
@@ -240,15 +187,6 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
   previewX = xpos;
 
 }
-void resize_callback(GLFWwindow* window){
-  glfwGetWindowSize(window,&window_width_,&window_height_);
-}
-
-void frameBufffer_callback(GLFWwindow* window, int width, int height){
-  window_width_ = width;
-  window_height_ = height;
-
-}
 
 
 void SetMaterialColor(int side, double r, double g, double b) {
@@ -278,6 +216,7 @@ void SetMaterialColor(int side, double r, double g, double b) {
   glMaterialfv(mat, GL_SPECULAR, spe);
   glMaterialf( mat, GL_SHININESS, 20);
 }
+
 
 
 
@@ -320,14 +259,251 @@ void InitLighting() {
   glFlush ();
 
 
-  //glViewport (0, 0, window_width_, window_height_);
-  glMatrixMode (GL_PROJECTION);
-  glLoadIdentity ();
+  // init coordinate system
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
   glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
   glMatrixMode (GL_MODELVIEW);
+  
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+}
 
+// draw a sphere composed of triangles
+void DrawSphere(const Vec3& ctr, double r){
+  int     i, j,
+          n1 = 24, n2 = 32;
+  Vec3    normal, v1;
+  double  a1, a1d = M_PI / n1,
+          a2, a2d = M_PI / n2,
+          s1, s2,
+          c1, c2;
+
+  glShadeModel(GL_SMOOTH);
+  for(i = 0; i < n1; i++){
+    a1 = i * a1d;
+
+    glBegin(GL_TRIANGLE_STRIP);
+    for(j = 0; j <= n2; j++){
+      a2 = (j + .5 * (i % 2)) * 2 * a2d;
+
+      s1 = sin(a1);
+      c1 = cos(a1);
+      s2 = sin(a2);
+      c2 = cos(a2);
+      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
+      v1 = ctr + r * normal;
+      glNormal3dv(normal.p);
+      glVertex3dv(v1.p);
+
+      s1 = sin(a1 + a1d);
+      c1 = cos(a1 + a1d);
+      s2 = sin(a2 + a2d);
+      c2 = cos(a2 + a2d);
+      normal = c1 * XVec3 + s1 * (c2 * YVec3 + s2 * ZVec3);
+      v1 = ctr + r * normal;
+      glNormal3dv(normal.p);
+      glVertex3dv(v1.p);
+    }
+    glEnd();
+  }
+}
+
+/*
+std::vector<double> distanceFromSIdes(Vec3 k){
+  std::vector<double> distances;
+    double o = (h-(k.p[1]-A.p[1]))-sRad;
+    double l = (k.p[0]-A.p[0])-sRad;
+    double r = (b-(k.p[0]-A.p[0]))-sRad;
+    double u = (k.p[1]-A.p[1])-sRad;
+
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
+}
+
+std::vector<double> distanceFromSides(Vec3 k){
+  std::vector<double> distances;
+  //distance from k to top
+  double o = (fieldHeight- k.p[1]);
+  //distance from k to left side
+  double l = (0 + k.p[0]);
+  //distance from k to right side
+  double r = (fieldWidth-k.p[0]);
+  //distance from k to down
+  double u = (0+k.p[1]);
+
+  //add distances to vector
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
+}
+*/
+
+/*
+void drawPlayGround(){
+
+  //ground
+  glBegin(GL_QUADS);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(0,fieldHeight,0);
+  glEnd();
+  glFlush();
+
+  //left
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(0,0,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
+  glEnd();
+  glFlush();
+
+  //right
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glEnd();
+  glFlush();
+
+  //down
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(0,0,fieldZ);
+  glEnd();
+  glFlush();
+
+  //Top
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
+  glEnd();
+  glFlush();
+  //--> Table End
 
 }
+ */
+
+
+void drawTheScene(){
+  glPushMatrix();
+  //glRotated(alpha_,rotateX,rotateY,0);
+  //alpha_ += 1;
+
+  //--> Table Start
+  //ground
+  glBegin(GL_QUADS);
+    SetMaterialColor(1,1,0,0);
+    SetMaterialColor(2,1,0,0);
+    glVertex3f(0,0,0);
+    glVertex3f(5,0,0);
+    glVertex3f(5,10,0);
+    glVertex3f(0,10,0);
+  glEnd();
+  glFlush();
+
+  //left
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,2);
+  glVertex3f(0,10,2);
+  glVertex3f(0,0,0);
+  glVertex3f(0,10,0);
+  glEnd();
+  glFlush();
+
+  //right
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(5,0,0);
+  glVertex3f(5,10,0);
+  glVertex3f(5,0,2);
+  glVertex3f(5,10,2);
+  glEnd();
+  glFlush();
+
+  //down
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(5,0,0);
+  glVertex3f(0,0,2);
+  glVertex3f(5,0,2);
+  glEnd();
+  glFlush();
+
+  //Top
+  glBegin(GL_QUAD_STRIP);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,10,0);
+  glVertex3f(5,10,0);
+  glVertex3f(0,10,2);
+  glVertex3f(5,10,2);
+  glEnd();
+  glFlush();
+  //--> Table End
+
+
+  SetMaterialColor(1,0,0,0);
+  SetMaterialColor(2,0,0,0);
+
+
+  Vec3 ab = Vec3(sx,sy,sz);
+  sx += rx;
+  sy += ry;
+  //draw the Sphere wit a and sRad;
+  DrawSphere(ab,sRad);
+  //(test = distanceFromSIdes(ab);
+
+  //case top
+  if(test.at(0) <= 0){
+    ry *= -1;
+    sy += ry*2;
+  }
+  //case left
+  if(test.at(1) <= 0){
+    rx *= -1;
+    sx += rx*2;
+  }
+  //case right
+  if(test.at(2) <= 0){
+    rx *= -1;
+    sx += rx*2;
+  }
+  //case down
+  if(test.at(3) <= 0){
+    ry *= -1;
+    sy += ry*2;
+  }
+  glPopMatrix();
+}
+
 
 
 // draw the entire scene
@@ -346,6 +522,7 @@ void DrawBox() {
   box->draw();
   
 }
+
 
 
 // draw the entire scene
@@ -384,8 +561,10 @@ int main() {
     return -1;
   }
 
-  window = glfwCreateWindow(window_width_, window_height_,
-                            "Simple 3D Animation", NULL, NULL);
+  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
+  // x von -15 -> 15
+  // y von -10 -> 10
+
   if(!window) {
     glfwTerminate();
     return -1;
@@ -393,12 +572,6 @@ int main() {
 
   glfwMakeContextCurrent(window);
 
-  p1->setName("p1");
-  p2->setName("p2");
-  p1->setRotate(&rotateY,rotationVec);
-  p2->setRotate(&alpha_,rotationVec2);
-  double angleRec = M_PI*0.5;
-  rec->setRotation(angleRec,*new Vec3(0,1,0));
   while(!glfwWindowShouldClose(window)) {
 
     //Method that ask the key_callback method for Key inputs
@@ -406,16 +579,26 @@ int main() {
     glfwSetCursorPosCallback(window, cursor_pos_callback);
     glfwSetMouseButtonCallback(window, mouse_button_callback);
     glfwSetScrollCallback(window, mouse_scroll_callback);
-    glfwSetWindowRefreshCallback(window, resize_callback);
-    glfwSetFramebufferSizeCallback(window, frameBufffer_callback);
+
     // switch on lighting (or you don't see anything)
     InitLighting();
 
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    /**
+    glRotated(alpha_,rotateX,rotateY,0);
+    alpha_ += 1;
+     */
 
-    DrawObjectTest();
+cout << "o " << test[0] << endl;
+cout << "l " << test[1] << endl;
+cout << "r " << test[2] << endl;
+cout << "u " << test[3] << endl;
+
+
+
+
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
