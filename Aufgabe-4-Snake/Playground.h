@@ -16,28 +16,27 @@
 
 class Playground {
 
+
 public:
     // attributes
     double fieldWidth;
     double fieldHeight;
     //height of Sides
-
-
     double fieldZ;
-
     //start x & y
     double startX;
     double startY;
     double fieldPosZ;
 
+
+    // constructor
     Playground();
+    Playground(double field_width, double field_height, double start_x, double start_y);
 
     //methods
     void setMaterialColoR(int side, double r, double g, double b);
     void drawPlaygrounD();
     std::vector<double> distanceFromSideS(Vec3 k);
-
-
 
 };
 
