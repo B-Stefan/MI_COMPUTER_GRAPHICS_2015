@@ -9,6 +9,7 @@
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
+#include "Playground.h"
 
 using namespace std;
 
@@ -255,7 +256,6 @@ void InitLighting() {
   /* viewing transformation  */
   gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
   glScalef (1.0, 2.0, 1.0);      /* modeling transformation */
-  glutWireCube (1.0);
   glFlush ();
 
 
@@ -265,8 +265,7 @@ void InitLighting() {
   glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
   glMatrixMode (GL_MODELVIEW);
   
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
+
 }
 
 // draw a sphere composed of triangles
@@ -539,15 +538,15 @@ void DrawObjectTest() {
   //p2->setDynamicTranslationVec(&translationVec);
   //Utils::printVec3(*p2->getPosition(), "P2");
   //Utils::printVec3(*p1->getPosition(), "P1");
-  drawPoint(p1,1);
-  drawPoint(p2,1);
-  drawPoint(p3,2);
+  //drawPoint(p1,1);
+  //drawPoint(p2,1);
+  //drawPoint(p3,2);
   //drawPoint(p3,3);
 
   //drawPoint(p2,2);
   //Utils::drawAxis(*p3->getPosition(),3);
   //origin->setDynamicRotate(&rotateY,rotationVec,origin->getPosition());
-  rec->draw();
+  //rec->draw();
 
 }
 
@@ -591,12 +590,34 @@ int main() {
     alpha_ += 1;
      */
 
-cout << "o " << test[0] << endl;
-cout << "l " << test[1] << endl;
-cout << "r " << test[2] << endl;
-cout << "u " << test[3] << endl;
+    /*
+    drawPlayGround();
+    */
+
+    Vec3 a = Vec3(sx,sy,sz);
+    Playground * pl = new Playground();
+    glRotated(alpha_,rotateX,rotateY,0);
+    Point * p = new Point(new Vec3(0,0,0));
+    Utils::drawPoint(p,10);
+
+    alpha_ += 0.1;
+    //pl->drawPlaygrounD();
+    std::vector<double> test = pl->distanceFromSideS(a);
 
 
+    SetMaterialColor(1,1,0.5,0);
+    SetMaterialColor(2,0,0,0);
+    DrawSphere(a,2);
+
+
+
+
+
+    //std::vector<double> test = distanceFromSides(a);
+    cout <<"O: "<<test[0]<< endl;
+    cout <<"L: "<< test[1]<< endl;
+    cout <<"R: "<< test[2]<< endl;
+    cout <<"U: "<< test[3]<< endl;
 
 
 
