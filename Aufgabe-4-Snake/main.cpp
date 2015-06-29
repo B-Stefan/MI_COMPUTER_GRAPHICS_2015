@@ -250,22 +250,20 @@ void InitLighting() {
   glClearColor(1, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  glClear (GL_COLOR_BUFFER_BIT);
-  glColor3f (1.0, 1.0, 1.0);
-  glLoadIdentity ();             /* clear the matrix */
-  /* viewing transformation  */
-  gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
-  glScalef (1.0, 2.0, 1.0);      /* modeling transformation */
-  glFlush ();
+  // init viewport to canvassize
+  glViewport(0, 0, window_width_, window_height_);
+
 
 
   // init coordinate system
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
-  glMatrixMode (GL_MODELVIEW);
-  
+  //glOrtho(-15, 15, -10, 10, -20, 20);
+  glOrtho(-15 + zoomINOUT, 15 + zoomINOUT, -10 + zoomINOUT, 10 + zoomINOUT, -20, 20);
 
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 // draw a sphere composed of triangles
@@ -524,33 +522,6 @@ void DrawBox() {
 
 
 
-// draw the entire scene
-void DrawObjectTest() {
-  glRotated(45,1,0,0);
-  glRotated(alpha_,0,1,0);
-  alpha_ = alpha_ + 0.1;
-  /*originVec->p[0] = originVec->p[0] + translateX;
-  originVec->p[1] = originVec->p[1] + translateY;
-  originVec->p[2] = originVec->p[2] + translateZ;
-*/
-  Vec3 translationVec = *new Vec3(translateX, translateY, translateZ);
-  //drawPoint(p1,1);
-  //p2->setDynamicTranslationVec(&translationVec);
-  //Utils::printVec3(*p2->getPosition(), "P2");
-  //Utils::printVec3(*p1->getPosition(), "P1");
-  //drawPoint(p1,1);
-  //drawPoint(p2,1);
-  //drawPoint(p3,2);
-  //drawPoint(p3,3);
-
-  //drawPoint(p2,2);
-  //Utils::drawAxis(*p3->getPosition(),3);
-  //origin->setDynamicRotate(&rotateY,rotationVec,origin->getPosition());
-  //rec->draw();
-
-}
-
-
 int main() {
   GLFWwindow* window = NULL;
 
@@ -568,8 +539,11 @@ int main() {
     glfwTerminate();
     return -1;
   }
-
+  //int visible = glfwGetWindowAttrib(window, GLFW_VISIBLE);
   glfwMakeContextCurrent(window);
+
+
+  Playground pl = Playground(5,5,0,0);
 
   while(!glfwWindowShouldClose(window)) {
 
@@ -582,42 +556,36 @@ int main() {
     // switch on lighting (or you don't see anything)
     InitLighting();
 
+
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
+    //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     /**
     glRotated(alpha_,rotateX,rotateY,0);
     alpha_ += 1;
      */
-
-    /*
-    drawPlayGround();
-    */
-
+    //testing collision
+    double x = 0.0;
+    double y = 0.0;
+    double z = 1.0;
     Vec3 a = Vec3(sx,sy,sz);
-    Playground * pl = new Playground();
-    glRotated(alpha_,rotateX,rotateY,0);
-    Point * p = new Point(new Vec3(0,0,0));
-    Utils::drawPoint(p,10);
-
-    alpha_ += 0.1;
-    //pl->drawPlaygrounD();
-    std::vector<double> test = pl->distanceFromSideS(a);
+    //Vec3 a = Vec3(x,y,z);
+    pl.drawPlaygrounD();
 
 
-    SetMaterialColor(1,1,0.5,0);
+
+    SetMaterialColor(1,0,0,0);
     SetMaterialColor(2,0,0,0);
-    DrawSphere(a,2);
-
-
-
-
+    DrawSphere(a,1);
 
     //std::vector<double> test = distanceFromSides(a);
-    cout <<"O: "<<test[0]<< endl;
+    std::vector<double> test = pl.distanceFromSideS(a);
+    cout <<"O: "<< test[0]<< endl;
     cout <<"L: "<< test[1]<< endl;
     cout <<"R: "<< test[2]<< endl;
     cout <<"U: "<< test[3]<< endl;
+
 
 
 
