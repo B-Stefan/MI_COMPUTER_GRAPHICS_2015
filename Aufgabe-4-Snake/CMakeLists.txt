@@ -13,7 +13,6 @@ set(TASK4_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/Rectangle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Cuboid.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Snake.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Triangle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakeHead.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakePart.cpp
     # add new source files here

@@ -7,18 +7,15 @@
 
 
 #import "GlObject.h"
-#import "Triangle.h"
 #import "Rectangle.h"
 class SnakeHead : public GlObject{
 public:
     SnakeHead(double l,Point *origin);
     void draw();
 private:
-    Triangle* top;
     Rectangle* side_a ;
     Rectangle* side_b ;
     Rectangle* side_c ;
-    Triangle* bottom ;
 };
 
 

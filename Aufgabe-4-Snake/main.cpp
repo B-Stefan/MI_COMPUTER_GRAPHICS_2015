@@ -395,10 +395,10 @@ int main() {
 
   p1->setName("p1");
   p2->setName("p2");
-  p1->setDynamicRotate(&rotateY,rotationVec,p1->getPosition());
-  p2->setDynamicRotate(&alpha_,rotationVec2,p2->getPosition());
+  p1->setRotate(&rotateY,rotationVec);
+  p2->setRotate(&alpha_,rotationVec2);
   double angleRec = M_PI*0.5;
-  rec->rotate(&angleRec,new Vec3(0,1,0),p3);
+  rec->setRotation(angleRec,*new Vec3(0,1,0));
   while(!glfwWindowShouldClose(window)) {
 
     //Method that ask the key_callback method for Key inputs
