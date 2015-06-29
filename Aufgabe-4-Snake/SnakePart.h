@@ -8,22 +8,34 @@
 #include "GlObject.h"
 #include "Point.h"
 #include "Cuboid.h"
-class SnakePart : public Cuboid{
+class SnakePart : public GlObject{
 public:
     SnakePart(double l,SnakePart *origin);
     SnakePart(double l,Point *origin);
     SnakePart* addPart();
-    void dawNextLoop();
     SnakePart* getBeforeNode();
+    Point* globalOrigin;
     void draw();
-    Vec3* getRotationVec();
     double* getAngle();
+    Vec3 getOldAbsolutPosition();
+    Vec3 getPositionForNewPart();
+    void setVelocity(double d);
+    double getVelocity();
+    void setRotation(double angle, int x, int y, int z);
+    Point * getTranslationPoint();
 private:
+    Cuboid * cuboid;
+    Vec3 * cuboidTranslationVec;
     void recalculateRotationValues();
+    void recalculateTranslationValues();
     void applyValues(double l);
+    void applyLastPosition();
     double part_length;
     SnakePart *beforeNode;
     SnakePart *nextNode;
+    Vec3 * oldAbsolutPosition;
+    Vec3 * oldAbsolutRotation;
+    double velocity;
 };
 
 

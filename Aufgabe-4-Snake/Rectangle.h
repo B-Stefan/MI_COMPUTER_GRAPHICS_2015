@@ -10,11 +10,8 @@ class Rectangle : public GlObject{
 public:
     Rectangle(double h, double w,Point *origin);
     void draw();
-    void setDefaultRotation(double angle, double x, double y, double z);
-    void rotate(double * angle, Vec3 * rotationVec, Point * origin);
+    bool colidate(Vec3 * postition);
 private:
-    Vec3*defaultRotationVec;
-    double*defaultRotationAngle;
     Point* A;
     Point* B;
     Point* C;

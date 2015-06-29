@@ -8,7 +8,7 @@
 #import "GlObject.h"
 #import "SnakeHead.h"
 #import "SnakePart.h"
-class Snake :GlObject{
+class Snake : public GlObject{
 public:
     Snake(Point *origin);
     void draw();

@@ -12,22 +12,25 @@
 
 class Point {
     public:
+        static int currentLoopNumber;
         Point(Vec3 *origin,std::string name);
         Point(Vec3 *origin);
         Point(Point *origin);
         Point(Point *origin, double x, double y, double z);
-        void setDefaultRotation(double *angle, Vec3 *a);
         Vec3* getPosition();
         Vec3* getNormal();
         void setName(std::string name);
         std::string getName();
-        void setDynamicTranslationVec(Vec3 *vec);
+        void setTranslationVec(Vec3 *vec);
         void recalculatePosition();
-        void setDynamicRotate(double *angle, Vec3 *rotationVec, Vec3 *rotationOrigin);
+        void recalculatePosition(bool force);
+        double * getAngle();
+        Vec3 * getRotationVec();
+        void setRotate(double *angle, Vec3 *rotationVec);
     private:
+        int  loopNumber = 0;
         void recalculateNormalVector();
         void applyRotations();
-        void applyRotate(double *angle, Vec3 *rotationVec, Vec3 *rotationOrigin, Vec3* resultVec);
         void applyDefaults();
         void applyTranslations();
         Vec3* originVec;
@@ -35,16 +38,11 @@ class Point {
         Vec3 calculatedPosition;
         Vec3 calculatedNormalVector;
 
+        Vec3*translateVec;
+        Vec3*rotationVec;
+        double*rotationAngle;
 
-        Vec3        defaultTranslateVec;
-        Vec3*       defaultRotationVec;
-        double*     defaultRotationAngle;
 
-
-        Vec3*       dynamicTranslateVec;
-        Vec3*       dynamicRotationVec;
-        double*     dynamicRotationAngle;
-        Vec3*       dynamicRotationOrigin;
         std::string name;
 };
 

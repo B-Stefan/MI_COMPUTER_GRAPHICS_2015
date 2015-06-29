@@ -11,6 +11,8 @@ class Cuboid : public GlObject{
 public:
     Cuboid(double h, double w,Point *origin);
     void draw();
+
+    bool colidate(Vec3 * position);
 private:
     Rectangle* top;
     Rectangle* side_a ;

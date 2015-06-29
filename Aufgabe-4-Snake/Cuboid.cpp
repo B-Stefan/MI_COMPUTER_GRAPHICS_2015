@@ -15,12 +15,12 @@ Cuboid::Cuboid(double height, double width, Point *origin)
     double h = height;
     double w = width;
 
-    Point* top    = new Point(origin,   h/2.0   ,0      ,0);
-    Point* bottom = new Point(origin,   -h/2.0  ,0      ,0);
-    Point* side_a = new Point(origin,   0       ,0      ,-w/2.0);
-    Point* side_b = new Point(origin,   0       ,-w/2.0  ,0);
-    Point* side_c = new Point(origin,   0       ,0      ,w/2.0);
-    Point* side_d = new Point(origin,   0       ,w/2.0  ,0);
+    Point* top    = new Point(this->originPoint,   h/2.0   ,0      ,0);
+    Point* bottom = new Point(this->originPoint,   -h/2.0  ,0      ,0);
+    Point* side_a = new Point(this->originPoint,   0       ,0      ,-w/2.0);
+    Point* side_b = new Point(this->originPoint,   0       ,-w/2.0  ,0);
+    Point* side_c = new Point(this->originPoint,   0       ,0      ,w/2.0);
+    Point* side_d = new Point(this->originPoint,   0       ,w/2.0  ,0);
 
     this->top = new Rectangle(w,w,top);
     this->bottom = new Rectangle(w,w,bottom);
@@ -31,24 +31,31 @@ Cuboid::Cuboid(double height, double width, Point *origin)
     this->side_d = new Rectangle(w,h,side_d);
 
     double defaultAngle = M_PI *0.5;
-    this->top->setDefaultRotation(defaultAngle , 0, -1, 0);
-    this->bottom->setDefaultRotation(defaultAngle , 0, 1, 0);
-    this->side_b->setDefaultRotation(defaultAngle , -1, 0, 0);
-    this->side_d->setDefaultRotation(defaultAngle , 1, 0, 0);
+    this->top->setRotation(defaultAngle , 0, -1, 0);
+    this->bottom->setRotation(defaultAngle , 0, 1, 0);
+    this->side_b->setRotation(defaultAngle , -1, 0, 0);
+    this->side_d->setRotation(defaultAngle , 1, 0, 0);
 
 
+}
+bool Cuboid::colidate(Vec3 *position) {
+    if(this->side_a->colidate(position)){
+        return true;
+    }
+    if(this->side_b->colidate(position)){
+        return true;
+    }
+    if(this->side_c->colidate(position)){
+        return true;
+    }
+    if(this->side_d->colidate(position)){
+        return true;
+    }
 }
 void Cuboid::draw() {
     GlObject::draw();
 
-    Utils::drawAxis(*this->originPoint->getPosition(),2);
-    this->top->rotate   (this->angle, this->rotationVec,this->originPoint);
-    this->bottom->rotate(this->angle, this->rotationVec,this->originPoint);
-    this->side_a->rotate(this->angle, this->rotationVec,this->originPoint);
-    this->side_b->rotate(this->angle, this->rotationVec,this->originPoint);
-    this->side_c->rotate(this->angle, this->rotationVec,this->originPoint);
-    this->side_d->rotate(this->angle, this->rotationVec,this->originPoint);
-
+    Utils::drawPoint(this->originPoint,4);
 
     this->top->draw();
     this->bottom->draw();

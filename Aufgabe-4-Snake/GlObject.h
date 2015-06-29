@@ -13,11 +13,15 @@ class GlObject {
     public:
         GlObject(Point *origin);
         virtual void draw();
-        void setRotation(double * angle, Vec3 *vec);
-
+        void setRotation(double angle, Vec3 vec);
+        void setRotation(double angle, int x, int y, int z);
+        Point * getOriginPoint();
+        void setTranslationVec(Vec3 vec);
+        void setTranslationVec(int x, int y, int z);
     protected:
         Point* originPoint;
         Vec3 * rotationVec;
+        Vec3 * translationVec;
         double * angle;
 };
 
