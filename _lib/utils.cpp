@@ -7,6 +7,7 @@
 #include <GLFW/glfw3.h>
 #include <GLUT/glut.h>
 #include <iostream>
+#include "./../Aufgabe-4-Snake/Point.h"
 //this creates my translation matrix which causes the cube to disappear
 using namespace std;
 void Utils::setGlobalCoords(Vec3 &local, Vec3 &global) {
@@ -90,3 +91,52 @@ void Utils::drawAxis(Vec3 &point, double length) {
     glEnd();
 
 }
+void Utils::drawPoint(Point *point, double length) {
+
+    length = length /2;
+
+    Vec3 * origin = point->getPosition();
+    Point* z = new Point(point,0,0,length);
+    Vec3 * vecZ = z->getPosition();
+    //Normal z-axis
+    glBegin(GL_LINES);
+    glColor3f(0, 1, 0.0);
+    glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+    glVertex3f(vecZ->p[0],vecZ->p[1], vecZ->p[2]);
+    glEnd();
+
+    Point* x = new Point(point,length,0,0);
+    Vec3 * vecX = x->getPosition();
+    x->setName(point->getName() + "-x");
+
+    //x-axis
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+    glVertex3f(vecX->p[0],vecX->p[1], vecX->p[2]);
+    glEnd();
+
+    Point* y = new Point(point,0,length,0);
+    y->setName(point->getName() + "-y");
+    Vec3 * vecY = y->getPosition();
+
+    //y-axis
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 1.0);
+    glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+    glVertex3f(vecY->p[0],vecY->p[1], vecY->p[2]);
+    glEnd();
+
+    return;
+    cout << "=====> "<< point->getName() << "<====="<< endl;
+    Vec3 * vecNormal = point->getNormal();
+    Vec3 vecAbsolutPosition = *vecNormal + *point->getPosition();
+    Utils::printVec3(*vecNormal, "normal: ");
+    glBegin(GL_LINES);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3f(origin->p[0],origin->p[1], origin->p[2]);
+    glVertex3f(vecAbsolutPosition.p[0]*2,vecAbsolutPosition.p[1]*2, vecAbsolutPosition.p[2]*2);
+    glEnd();
+
+}
+
