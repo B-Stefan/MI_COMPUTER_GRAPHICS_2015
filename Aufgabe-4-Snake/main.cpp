@@ -40,6 +40,10 @@ double step = .5;
 bool  gameStarted = false;
 bool  useGlFrustrum = false;
 
+
+int widhtActual = 0 ;
+int heightActual = 0 ;
+
 //Sphere radius
 double sRad = 1;
 Vec3 A = Vec3(0, 0, 0.0);
@@ -220,11 +224,19 @@ void InitLighting() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
+  int width  = window_width_;
+  int height = window_height_;
+
+  //If retina
+  if(widhtActual = 2048 ){
+    width = window_width_ * 2;
+    height = window_height_ * 2;
+  }
   if(useGlFrustrum == false){
 
 
     // init viewport to canvassize
-    glViewport(0, 0, window_width_, window_height_);
+    glViewport(0, 0, width, height);
 
 
     // init coordinate system
@@ -249,7 +261,7 @@ void InitLighting() {
     glFlush ();
 
 
-    glViewport (0, 0, window_width_, window_height_);
+    glViewport (0, 0, width, height);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
@@ -311,10 +323,8 @@ int main() {
 
   window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
 
-  int widht = 0 ;
-  int height = 0 ;
+  glfwGetFramebufferSize(window, &widhtActual,&heightActual);
 
-  glfwGetFramebufferSize(window, &widht,&height);
   // x von -15 -> 15
   // y von -10 -> 10
 
@@ -330,7 +340,6 @@ int main() {
   usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
-    std::cout << widht << std::endl;
     Point::currentLoopNumber ++;
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
