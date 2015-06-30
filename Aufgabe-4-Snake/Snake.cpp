@@ -25,7 +25,7 @@ void Snake::draw() {
  */
 Vec3 Snake::getHeadPoint() {
         Point p = new Point(this->firstPart->getOriginPoint(),
-                            this->firstPart->getPartLength()*-1
+                            this->firstPart->getPartLength()/2*-1
                            ,0,
                             0);
 
