@@ -69,7 +69,7 @@ bool Cuboid::colidate(Vec3 *position) {
 void Cuboid::draw() {
     GlObject::draw();
 
-    Utils::drawPoint(this->originPoint,4);
+    //Utils::drawPoint(this->originPoint,4);
 
 
 

@@ -24,6 +24,10 @@ void Snake::draw() {
  * Return the first point of the snake based on the current move direction
  */
 Vec3 Snake::getHeadPoint() {
-        Point p = new Point(this->firstPart->getOriginPoint(),this->firstPart->getPartLength()*-1,0,0);
+        Point p = new Point(this->firstPart->getOriginPoint(),
+                            this->firstPart->getPartLength()*-1
+                           ,0,
+                            0);
+
         return *p.getPosition();
 }

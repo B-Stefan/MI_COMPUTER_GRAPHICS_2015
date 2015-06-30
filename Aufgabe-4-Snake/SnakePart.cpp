@@ -33,11 +33,6 @@ double SnakePart::getPartLength() {
 double SnakePart::getVelocity() {
     return this->cuboidTranslationVec->p[0];
 }
-
-double *SnakePart::getAngle() {
-    return this->cuboid->getOriginPoint()->getAngle();
-}
-
 void SnakePart::applyValues(double l) {
     this->part_length = l;
     this->velocity = DEFAULT_VELOCITY;
@@ -60,6 +55,12 @@ SnakePart *SnakePart::getBeforeNode() {
 
 void SnakePart::setRotation(double angle, int x, int y, int z) {
     this->cuboid->setRotation(angle, x, y, z);
+}
+double *SnakePart::getAngle() {
+    return this->cuboid->getOriginPoint()->getAngle();
+}
+Point* SnakePart::getOriginPoint() {
+    return this->cuboid->getOriginPoint();
 }
 
 Point *SnakePart::getTranslationPoint() {
