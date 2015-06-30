@@ -232,6 +232,8 @@ void InitLighting() {
     width = window_width_ * 2;
     height = window_height_ * 2;
   }
+  std::cout << width << " - " << height << std::endl;
+  std::cout << widhtActual << " - " << heightActual << std::endl;
   if(useGlFrustrum == false){
 
 
