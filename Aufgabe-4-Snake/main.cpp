@@ -228,7 +228,7 @@ void InitLighting() {
   int height = window_height_;
 
   //If retina
-  if(widhtActual = 2048 ){
+  if(widhtActual == 2048 && heightActual == 1536 ){
     width = window_width_ * 2;
     height = window_height_ * 2;
   }
