@@ -8,6 +8,13 @@ set(TASK4_LIBS
 set(TASK4_SOURCES
     ${TASK4_SOURCES}
     ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/GlObject.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Point.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Rectangle.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Cuboid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Snake.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SnakeHead.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SnakePart.cpp
     # add new source files here
     ${CMAKE_CURRENT_SOURCE_DIR}/Playground.cpp
 	PARENT_SCOPE

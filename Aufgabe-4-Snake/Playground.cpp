@@ -3,7 +3,7 @@
 //
 
 #include "Playground.h"
-
+#include "GlObject.h"
 
 
 Playground::Playground() {
@@ -36,32 +36,8 @@ Playground::Playground(double field_width, double field_height, double start_x, 
     this->fieldPosZ = 0;
 }
 
-void Playground::setMaterialColoR(int side, double r, double g, double b) {
-    float	amb[4], dif[4], spe[4];
-    int mat;
-
-    dif[0] = r;
-    dif[1] = g;
-    dif[2] = b;
-
-    for(int i = 0; i < 3; i++) {
-        amb[i] = .1 * dif[i];
-        spe[i] = .5;
-    }
-    amb[3] = dif[3] = spe[3] = 1.0;
-
-    switch(side){
-        case 1:	mat = GL_FRONT;
-            break;
-        case 2:	mat = GL_BACK;
-            break;
-        default: mat = GL_FRONT_AND_BACK;
-    }
-
-    glMaterialfv(mat, GL_AMBIENT, amb);
-    glMaterialfv(mat, GL_DIFFUSE, dif);
-    glMaterialfv(mat, GL_SPECULAR, spe);
-    glMaterialf( mat, GL_SHININESS, 20);
+void Playground::setMaterialColoR(GlObject::MATERIAL_SIDES side, double r, double g, double b) {
+    GlObject::setMaterialColorStatic(side, r, g, b);
 }
 
 /*
@@ -69,8 +45,8 @@ void Playground::drawPlaygrounD(){
 
     //ground
     glBegin(GL_QUADS);
-    setMaterialColoR(1,0,1,0);
-    setMaterialColoR(2,0,1,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,1,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,1,0);
     glVertex3f(startX,startY,fieldPosZ);
     glVertex3f(fieldWidth + startX, startY, fieldPosZ);
     glVertex3f(fieldWidth + startX, fieldHeight + startY ,fieldPosZ);
@@ -81,8 +57,8 @@ void Playground::drawPlaygrounD(){
 
     //left
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(1,0,0,0);
-    setMaterialColoR(2,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,startY,fieldPosZ);
     glVertex3f(startX, fieldHeight + startY, fieldPosZ);
     glVertex3f(startX, startY, fieldZ);
@@ -92,8 +68,8 @@ void Playground::drawPlaygrounD(){
 
     //right
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(1,0,0,0);
-    setMaterialColoR(2,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(fieldWidth + startX, startY, fieldPosZ);
     glVertex3f(fieldWidth + startX ,startY ,fieldZ);
     glVertex3f(fieldWidth + startX, fieldHeight + startY, fieldPosZ);
@@ -104,8 +80,8 @@ void Playground::drawPlaygrounD(){
 
     //down
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(1,0,0,0);
-    setMaterialColoR(2,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,startY,fieldPosZ);
     glVertex3f(fieldWidth + startX, startY, fieldPosZ);
     glVertex3f(startX, startY, fieldZ);
@@ -115,8 +91,8 @@ void Playground::drawPlaygrounD(){
 
     //Top
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(1,0,0,0);
-    setMaterialColoR(2,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,fieldHeight + startY,fieldPosZ);
     glVertex3f(fieldWidth + startX, fieldHeight + startY, fieldPosZ);
     glVertex3f(startX,fieldHeight + startY,fieldZ);

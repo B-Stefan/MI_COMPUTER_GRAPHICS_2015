@@ -10,7 +10,11 @@
 #include "../_lib/Quarter.h"
 #include "../_lib/Sphere.h"
 #include "Playground.h"
-
+#include "Snake.h"
+#include "Cuboid.h"
+#include "Rectangle.h"
+#include "Point.h"
+#include <unistd.h>
 using namespace std;
 
 
@@ -29,15 +33,11 @@ double previewYOffset = 0;
 double previewY = 0;
 double zoomValue = 1;
 double openPercent = 0;
-double sx = 0;
-double sy = 0;
+double sx = 2;
+double sy = 2;
 const int sz = 1.0;
 double step = .5;
-
-
-//versuch by Kai
-double const conZ = 0.0;
-
+bool  gameStarted = false;
 
 //Sphere radius
 double sRad = 1;
@@ -53,10 +53,13 @@ double ry = .2;
 double zoomINOUT = 0;
 
 
-Vec3 point = Vec3(0,0,0);
-double l = 1;
-Quarter *box        = new Quarter(point,l);
+Playground * pl = new Playground(10,10,0,0);
+Point * origin = new Point(new Vec3(0,0,0));
+Cuboid * cuboid = new Cuboid(1,3,origin);
+Snake * snake = nullptr;
 bool mouseClicked = false;
+
+
 //Method which listen to defined keys on Keybord with glfw_action (key == GLFW_KEY_W && action == GLFW_REPEAT)
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
@@ -68,7 +71,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
-            rotateY = -1;
+            rotateY =  rotateY  -0.1;
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -76,19 +79,17 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_D:
         std::cout << "d"<<std::endl;
-            rotateY = 1;
+            rotateY = rotateY + 0.1;
             break;
       case GLFW_KEY_O:
         std::cout << "open"<<std::endl;
             if(openPercent < 100.0){
-              box->setOpenPercentage(openPercent);
               openPercent += 0.5;
             }
             break;
       case GLFW_KEY_C:
         std::cout << "close"<<std::endl;
             if(openPercent > -0.5){
-              box->setOpenPercentage(openPercent);
               openPercent -= 0.5;
             }
             break;
@@ -121,6 +122,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             zoomValue -= 0.2;
             break;
 
+      case GLFW_KEY_SPACE:
+        std::cout << "spalce " <<std::endl;
+            gameStarted = true;
+            snake = new Snake(origin);
+            break;
+
       case GLFW_KEY_P:
         std::cout << "ZOOM ++" <<std::endl;
       zoomINOUT += 1;
@@ -132,9 +139,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
   }
   }else if(action == GLFW_RELEASE) {
-    rotateX = 0;
-    rotateY = 0;
-    rotateZ = 0;
+    //rotateX = 0;
+    //rotateY = 0;
+    //rotateZ = 0;
     //mouseClicked = false;
 
   }
@@ -298,22 +305,52 @@ void DrawSphere(const Vec3& ctr, double r){
   }
 }
 
+/*
+std::vector<double> distanceFromSIdes(Vec3 k){
+  std::vector<double> distances;
+    double o = (h-(k.p[1]-A.p[1]))-sRad;
+    double l = (k.p[0]-A.p[0])-sRad;
+    double r = (b-(k.p[0]-A.p[0]))-sRad;
+    double u = (k.p[1]-A.p[1])-sRad;
 
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
+}
 
-void drawTheScene(){
-  glPushMatrix();
-  //glRotated(alpha_,rotateX,rotateY,0);
-  //alpha_ += 1;
+std::vector<double> distanceFromSides(Vec3 k){
+  std::vector<double> distances;
+  //distance from k to top
+  double o = (fieldHeight- k.p[1]);
+  //distance from k to left side
+  double l = (0 + k.p[0]);
+  //distance from k to right side
+  double r = (fieldWidth-k.p[0]);
+  //distance from k to down
+  double u = (0+k.p[1]);
 
-  //--> Table Start
+  //add distances to vector
+  distances.push_back(o);
+  distances.push_back(l);
+  distances.push_back(r);
+  distances.push_back(u);
+  return distances;
+}
+*/
+
+/*
+void drawPlayGround(){
+
   //ground
   glBegin(GL_QUADS);
-    SetMaterialColor(1,1,0,0);
-    SetMaterialColor(2,1,0,0);
-    glVertex3f(0,0,0);
-    glVertex3f(5,0,0);
-    glVertex3f(5,10,0);
-    glVertex3f(0,10,0);
+  SetMaterialColor(1,0,1,0);
+  SetMaterialColor(2,0,1,0);
+  glVertex3f(0,0,0);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(0,fieldHeight,0);
   glEnd();
   glFlush();
 
@@ -321,10 +358,10 @@ void drawTheScene(){
   glBegin(GL_QUAD_STRIP);
   SetMaterialColor(1,0,1,0);
   SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,2);
-  glVertex3f(0,10,2);
   glVertex3f(0,0,0);
-  glVertex3f(0,10,0);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(0,0,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
   glEnd();
   glFlush();
 
@@ -332,10 +369,10 @@ void drawTheScene(){
   glBegin(GL_QUAD_STRIP);
   SetMaterialColor(1,0,1,0);
   SetMaterialColor(2,0,1,0);
-  glVertex3f(5,0,0);
-  glVertex3f(5,10,0);
-  glVertex3f(5,0,2);
-  glVertex3f(5,10,2);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(fieldWidth,fieldHeight,0);
   glEnd();
   glFlush();
 
@@ -344,9 +381,9 @@ void drawTheScene(){
   SetMaterialColor(1,0,1,0);
   SetMaterialColor(2,0,1,0);
   glVertex3f(0,0,0);
-  glVertex3f(5,0,0);
-  glVertex3f(0,0,2);
-  glVertex3f(5,0,2);
+  glVertex3f(fieldWidth,0,0);
+  glVertex3f(fieldWidth,0,fieldZ);
+  glVertex3f(0,0,fieldZ);
   glEnd();
   glFlush();
 
@@ -354,68 +391,16 @@ void drawTheScene(){
   glBegin(GL_QUAD_STRIP);
   SetMaterialColor(1,0,1,0);
   SetMaterialColor(2,0,1,0);
-  glVertex3f(0,10,0);
-  glVertex3f(5,10,0);
-  glVertex3f(0,10,2);
-  glVertex3f(5,10,2);
+  glVertex3f(0,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,0);
+  glVertex3f(fieldWidth,fieldHeight,fieldZ);
+  glVertex3f(0,fieldHeight,fieldZ);
   glEnd();
   glFlush();
   //--> Table End
 
-
-  SetMaterialColor(1,0,0,0);
-  SetMaterialColor(2,0,0,0);
-
-
-  Vec3 ab = Vec3(sx,sy,sz);
-  sx += rx;
-  sy += ry;
-  //draw the Sphere wit a and sRad;
-  DrawSphere(ab,sRad);
-  //(test = distanceFromSIdes(ab);
-
-  //case top
-  if(test.at(0) <= 0){
-    ry *= -1;
-    sy += ry*2;
-  }
-  //case left
-  if(test.at(1) <= 0){
-    rx *= -1;
-    sx += rx*2;
-  }
-  //case right
-  if(test.at(2) <= 0){
-    rx *= -1;
-    sx += rx*2;
-  }
-  //case down
-  if(test.at(3) <= 0){
-    ry *= -1;
-    sy += ry*2;
-  }
-  glPopMatrix();
 }
-
-
-
-// draw the entire scene
-void DrawBox() {
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-  alpha_ +=0.3;
-  SetMaterialColor(1,1,0,0);
-  Vec3 r = Vec3(rotateX, rotateY, rotateZ);
-  Vec3 t = Vec3(translateX, translateY, translateZ);
-
-  box->setTranslateSphere(t);
-  box->setRotateVec(r);
-  box->setRotateAlpha(alpha_);
-  box->setScale(zoomValue);
-  box->draw();
-  
-}
-
+ */
 
 
 int main() {
@@ -438,11 +423,12 @@ int main() {
   //int visible = glfwGetWindowAttrib(window, GLFW_VISIBLE);
   glfwMakeContextCurrent(window);
 
+  //origin->setRotate(new double(M_PI*0.25), new Vec3(1,0,0));
 
-  Playground pl = Playground(5,5,0,0);
-
+  usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
+    Point::currentLoopNumber ++;
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
     glfwSetCursorPosCallback(window, cursor_pos_callback);
@@ -457,9 +443,9 @@ int main() {
     glClearColor(0.8, 0.8, 0.8, 1.0);
     //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    glRotated(alpha_,rotateX,rotateY,0);
-    alpha_ += 1;
+    glRotated(45,1,0,0);
+    //glRotated(45,0,0,1);
+    alpha_ += 0.1;
 
     //testing collision
     double x = 0.0;
@@ -470,19 +456,30 @@ int main() {
     pl.drawPlaygrounD();
 
 
+   
 
-    SetMaterialColor(1,0,0,0);
-    SetMaterialColor(2,0,0,0);
+    GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::FRONT, 0, 0, 0);
+    GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::BACK, 0, 0, 0);
+
+    cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
+    cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,0,0,1);
+
+    cuboid->draw();
+
+    if(gameStarted){
+      snake->setRotation(rotateY,*new Vec3(0,1,0));
+      snake->draw();
+    }
+
     DrawSphere(a,1);
 
     //std::vector<double> test = distanceFromSides(a);
-    std::vector<double> test = pl.distanceFromSideS(a);
+    /*std::vector<double> test = pl->distanceFromSideS(a);
     cout <<"O: "<< test[0]<< endl;
     cout <<"L: "<< test[1]<< endl;
     cout <<"R: "<< test[2]<< endl;
     cout <<"U: "<< test[3]<< endl;
-
-
+*/
 
 
     // make it appear (before this, it's hidden in the rear buffer)
