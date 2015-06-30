@@ -7,7 +7,6 @@
 
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
-#include "../_lib/Quarter.h"
 #include "Sphere.h"
 #include "Playground.h"
 #include "Snake.h"
@@ -76,7 +75,7 @@ Cuboid * cuboid = new Cuboid(1,3,origin);
 Snake * snake = nullptr;
 
 Vec3 vecApple = randomVec();
-Sphere * apple = new Sphere(vecApple,5);
+Sphere *apple = new Sphere(1,origin);
 
 bool mouseClicked = false;
 
@@ -93,8 +92,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
-            apple->setMiddle(randomVec());
-            apple->draw();
+            apple->setTranslationVec(2,0,3);
 
             break;
       case GLFW_KEY_S:
@@ -275,9 +273,9 @@ void InitLighting() {
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();             /* clear the matrix */
     /* viewing transformation  */
-    gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
+    //gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
     glScalef (1.0, 1.0, 1.0);      /* modeling transformation */
-    glutWireCube (1.0);
+    //glutWireCube (1.0);
     glFlush ();
 
 
@@ -391,7 +389,7 @@ int main() {
     }
 
     pl->drawPlaygrounD();
-
+    apple->draw();
 
     DrawSphere(a,1);
 

@@ -6,6 +6,7 @@
 #include "GlObject.h"
 #import "GLFW/glfw3.h"
 
+
 Sphere::Sphere(double r, Point *origin):GlObject::GlObject(origin) {
     this->radius = r;
 }

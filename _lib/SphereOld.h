@@ -7,10 +7,10 @@
 
 #import "vec3.hpp"
 
-class Sphere {
+class SphereOld {
 
     public:
-        Sphere(Vec3 &middle, double r);
+        SphereOld(Vec3 &middle, double r);
         void draw();
         Vec3 getMiddle();
         void setMiddle(Vec3 v);

@@ -8,7 +8,7 @@
 
 #include "vec3.hpp"
 #import "Plane.h"
-#include "Sphere.h"
+#include "SphereOld.h"
 
 class Quarter {
 
@@ -36,7 +36,7 @@ private:
     Plane *top;
     Plane *bottom;
     Plane *back;
-    Sphere *sphere;
+    SphereOld *sphere;
     double scale;
     double rotate_alpha;
     Vec3 rotate_vec;
