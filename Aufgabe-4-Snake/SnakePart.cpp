@@ -164,6 +164,10 @@ void SnakePart::draw() {
 
         this->recalculateRotationValues();
         this->recalculateTranslationValues();
+
+        this->cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, 1,0,0);
+        this->cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, 1,0,0);
+
         this->cuboid->draw();
 
         if(this->nextNode != nullptr){

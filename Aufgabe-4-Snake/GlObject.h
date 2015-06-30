@@ -11,6 +11,12 @@
 
 class GlObject {
     public:
+        static enum MATERIAL_SIDES {
+                FRONT = 1,
+                BACK = 2};
+        static void setMaterialColorStatic(MATERIAL_SIDES side, double r, double g, double b);
+        void setMaterialColor(MATERIAL_SIDES side, double r, double g, double b);
+        void setMaterialColor(MATERIAL_SIDES side, Vec3 *rgb);
         GlObject(Point *origin);
         virtual void draw();
         void setRotation(double angle, Vec3 vec);
@@ -22,6 +28,8 @@ class GlObject {
         Point* originPoint;
         Vec3 * rotationVec;
         Vec3 * translationVec;
+        Vec3 * material_front;
+        Vec3 * material_back;
         double * angle;
 };
 

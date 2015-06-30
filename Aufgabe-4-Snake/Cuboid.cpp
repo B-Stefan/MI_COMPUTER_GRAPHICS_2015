@@ -36,6 +36,20 @@ Cuboid::Cuboid(double height, double width, Point *origin)
     this->side_b->setRotation(defaultAngle , -1, 0, 0);
     this->side_d->setRotation(defaultAngle , 1, 0, 0);
 
+    this->top->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,this->material_front);
+    this->top->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,this->material_back);
+
+
+    this->bottom->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,this->material_front);
+    this->bottom->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,this->material_back);
+
+
+    this->side_b->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,this->material_front);
+    this->side_b->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,this->material_back);
+
+    this->side_d->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,this->material_front);
+    this->side_d->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,this->material_back);
+
 
 }
 bool Cuboid::colidate(Vec3 *position) {
@@ -56,6 +70,8 @@ void Cuboid::draw() {
     GlObject::draw();
 
     Utils::drawPoint(this->originPoint,4);
+
+
 
     this->top->draw();
     this->bottom->draw();

@@ -71,7 +71,7 @@ void Rectangle::draw() {
     GlObject::draw();
 
     Vec3 normal = Vec3(0,0,1);
-    Utils::drawPoint(this->originPoint,1);
+    //Utils::drawPoint(this->originPoint,1);
     //Begin to draw the plane
     glBegin(GL_QUADS);
     glEnable(GL_NORMALIZE);
