@@ -2,30 +2,30 @@
 // Created by Stefan B. on 04.05.15.
 //
 
-#include "Sphere.h"
+#include "SphereOld.h"
 #include "utils.h"
 #import "GLFW/glfw3.h"
 #import "iostream"
 /*
  * Plane  class to draw, move and rotate a plane
  */
-Sphere::Sphere(Vec3 &middle, double r) {
+SphereOld::SphereOld(Vec3 &middle, double r) {
     this->middle = middle;
     this->r = r;
 
 
 }
-double Sphere::getR() {
+double SphereOld::getR() {
     return this->r;
 }
 
-Vec3 Sphere::getMiddle()  {
+Vec3 SphereOld::getMiddle()  {
     return this->middle;
 }
-void Sphere::setMiddle(Vec3 v) {
+void SphereOld::setMiddle(Vec3 v) {
     this->middle = v;
 }
-void Sphere::drawSphere(){
+void SphereOld::drawSphere(){
         int     i, j,
                 n1 = 24, n2 = 32;
         Vec3    normal, v1;
@@ -65,7 +65,7 @@ void Sphere::drawSphere(){
         this->borderLocal = v1;
 }
 
-void Sphere::draw(){
+void SphereOld::draw(){
 
     glPushMatrix();
     //Translate to middle

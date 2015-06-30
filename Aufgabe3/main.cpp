@@ -8,7 +8,7 @@
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
-#include "../_lib/Sphere.h"
+#include "SphereOld.h"
 
 using namespace std;
 
@@ -38,7 +38,7 @@ double step = .5;
 double const conZ = 0.0;
 
 
-//Sphere radius
+//SphereOld radius
 double sRad = 1;
 Vec3 A = Vec3(0, 0, 0.0);
 double h = 10;
@@ -373,7 +373,7 @@ void drawTheScene(){
   Vec3 ab = Vec3(sx,sy,sz);
   sx += rx;
   sy += ry;
-  //draw the Sphere wit a and sRad;
+  //draw the SphereOld wit a and sRad;
   DrawSphere(ab,sRad);
   test = distanceFromSIdes(ab);
 
