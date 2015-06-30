@@ -8,7 +8,7 @@
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
-#include "../_lib/Sphere.h"
+#include "Sphere.h"
 #include "Playground.h"
 #include "Snake.h"
 #include "Cuboid.h"
@@ -57,11 +57,27 @@ double ry = .2;
 
 double zoomINOUT = 0;
 
+Vec3 randomVec(){
+
+
+  double x = rand() &10;
+  double z = rand() &10;
+
+  cout << x << endl;
+  cout << z << endl;
+  return Vec3(0,0,0);
+
+}
+
 
 Playground * pl = new Playground(10,10,0,0);
 Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,origin);
 Snake * snake = nullptr;
+
+Vec3 vecApple = randomVec();
+Sphere * apple = new Sphere(vecApple,5);
+
 bool mouseClicked = false;
 
 
@@ -77,6 +93,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
+            apple->setMiddle(randomVec());
+            apple->draw();
+
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -386,7 +405,7 @@ int main() {
     glfwSwapBuffers(window);
 
     glfwPollEvents();
-
+    apple->draw();
 
 
   }
