@@ -355,7 +355,6 @@ int main() {
 
   //origin->setRotate(new double(M_PI*0.25), new Vec3(1,0,0));
 
-  usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
     Point::currentLoopNumber ++;
@@ -384,10 +383,10 @@ int main() {
     if(gameStarted){
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
-     /* Vec3 headPoint = snake->getHeadPoint();
+      Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
       Utils::printVec3(headPoint);
-    */}
+    }
 
     pl->drawPlaygrounD();
     apple->draw();
