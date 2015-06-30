@@ -64,7 +64,7 @@ void Playground::setMaterialColoR(int side, double r, double g, double b) {
     glMaterialf( mat, GL_SHININESS, 20);
 }
 
-
+/*
 void Playground::drawPlaygrounD(){
 
     //ground
@@ -123,6 +123,68 @@ void Playground::drawPlaygrounD(){
     glVertex3f(fieldWidth + startX, fieldHeight + startY, fieldZ);
     glEnd();
     glFlush();
+
+}
+ */
+
+void Playground::drawPlaygrounD(){
+
+    //ground
+    glBegin(GL_QUADS);
+    setMaterialColoR(1,0,1,0);
+    setMaterialColoR(2,0,1,0);
+    glVertex3f(startX,fieldPosZ,startY);
+    glVertex3f(fieldWidth + startX, fieldPosZ, startY);
+    glVertex3f(fieldWidth + startX ,fieldPosZ, fieldHeight + startY);
+    glVertex3f(startX, fieldPosZ, fieldHeight + startY);
+    glEnd();
+    glFlush();
+
+
+    //left
+    glBegin(GL_QUAD_STRIP);
+    setMaterialColoR(1,0,0,0);
+    setMaterialColoR(2,0,0,0);
+    glVertex3f(startX,fieldPosZ,startY);
+    glVertex3f(startX, fieldPosZ, fieldHeight + startY);
+    glVertex3f(startX,  fieldZ, startY);
+    glVertex3f(startY, fieldZ, fieldHeight + startY);
+    glEnd();
+    glFlush();
+
+    //right
+    glBegin(GL_QUAD_STRIP);
+    setMaterialColoR(1,0,0,0);
+    setMaterialColoR(2,0,0,0);
+    glVertex3f(fieldWidth + startX, fieldPosZ, startY);
+    glVertex3f(fieldWidth + startX  ,fieldZ,startY);
+    glVertex3f(fieldWidth + startX, fieldPosZ, fieldHeight + startY);
+    glVertex3f(fieldWidth + startX, fieldZ, fieldHeight + startY);
+    glEnd();
+    glFlush();
+
+    //down
+    glBegin(GL_QUAD_STRIP);
+    setMaterialColoR(1,0,0,0);
+    setMaterialColoR(2,0,0,0);
+    glVertex3f(startX,fieldPosZ,startY);
+    glVertex3f(fieldWidth + startX, fieldPosZ, startY);
+    glVertex3f(startX, fieldZ, startY);
+    glVertex3f(fieldWidth + startX,fieldZ, startY);
+    glEnd();
+    glFlush();
+
+    //Top
+    glBegin(GL_QUAD_STRIP);
+    setMaterialColoR(1,0,0,0);
+    setMaterialColoR(2,0,0,0);
+    glVertex3f(startX,fieldPosZ,fieldHeight + startY);
+    glVertex3f(fieldWidth + startX, fieldPosZ, fieldHeight + startY);
+    glVertex3f(startX,fieldZ,fieldHeight + startY);
+    glVertex3f(fieldWidth + startX, fieldZ, fieldHeight + startY);
+    glEnd();
+    glFlush();
+
 
 }
 
