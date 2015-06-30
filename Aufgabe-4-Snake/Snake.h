@@ -12,6 +12,7 @@ class Snake : public GlObject{
 public:
     Snake(Point *origin);
     void draw();
+    Vec3 getHeadPoint();
 private:
     SnakePart * firstPart;
     void addPart();

@@ -22,6 +22,7 @@ public:
     void setVelocity(double d);
     double getVelocity();
     void setRotation(double angle, int x, int y, int z);
+    double getPartLength();
     Point * getTranslationPoint();
 private:
     Cuboid * cuboid;

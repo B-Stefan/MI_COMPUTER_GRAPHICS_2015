@@ -386,9 +386,12 @@ int main() {
     if(gameStarted){
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
+      Vec3 headPoint = snake->getHeadPoint();
+      Utils::printVec3(headPoint);
     }
 
     pl->drawPlaygrounD();
+
 
     DrawSphere(a,1);
 
