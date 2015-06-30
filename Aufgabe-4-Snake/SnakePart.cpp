@@ -27,6 +27,9 @@ SnakePart::SnakePart(double l, Point *origin)
 
 }
 
+double SnakePart::getPartLength() {
+    return this->part_length;
+}
 double SnakePart::getVelocity() {
     return this->cuboidTranslationVec->p[0];
 }
