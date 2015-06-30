@@ -219,11 +219,12 @@ void InitLighting() {
   glClearColor(1, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
   if(useGlFrustrum == false){
 
 
     // init viewport to canvassize
-    glViewport(0, 0, window_width_*2, window_height_*2);
+    glViewport(0, 0, window_width_, window_height_);
 
 
     // init coordinate system
@@ -248,7 +249,7 @@ void InitLighting() {
     glFlush ();
 
 
-    glViewport (0, 0, window_width_*2, window_height_*2);
+    glViewport (0, 0, window_width_, window_height_);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
@@ -309,6 +310,11 @@ int main() {
   }
 
   window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
+
+  int widht = 0 ;
+  int height = 0 ;
+
+  glfwGetFramebufferSize(window, &widht,&height);
   // x von -15 -> 15
   // y von -10 -> 10
 
@@ -324,6 +330,7 @@ int main() {
   usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
+    std::cout << widht << std::endl;
     Point::currentLoopNumber ++;
     //Method that ask the key_callback method for Key inputs
     glfwSetKeyCallback(window, key_callback);
