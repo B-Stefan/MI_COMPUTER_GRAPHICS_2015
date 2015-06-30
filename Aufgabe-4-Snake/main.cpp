@@ -37,7 +37,7 @@ double sx = 2;
 double sy = 2;
 const int sz = 1.0;
 double step = .5;
-
+bool  gameStarted = false;
 
 //Sphere radius
 double sRad = 1;
@@ -55,9 +55,8 @@ double zoomINOUT = 0;
 
 Playground * pl = new Playground(10,10,0,0);
 Point * origin = new Point(new Vec3(0,0,0));
-Snake * snake = new Snake(origin);
 Cuboid * cuboid = new Cuboid(1,3,origin);
-
+Snake * snake = nullptr;
 bool mouseClicked = false;
 
 
@@ -122,6 +121,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_SLASH:
         std::cout << "zoom -" <<std::endl;
             zoomValue -= 0.2;
+            break;
+
+      case GLFW_KEY_SPACE:
+        std::cout << "spalce " <<std::endl;
+            gameStarted = true;
+            snake = new Snake(origin);
             break;
 
       case GLFW_KEY_P:
@@ -416,17 +421,21 @@ int main() {
     double z = 1.0;
     Vec3 a = Vec3(sx,sy,sz);
 
-    snake->setRotation(rotateY,*new Vec3(0,1,0));
 
     pl->drawPlaygrounD();
 
     GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::FRONT, 0, 0, 0);
     GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::BACK, 0, 0, 0);
-    snake->draw();
+
     cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
     cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,0,0,1);
+
     cuboid->draw();
 
+    if(gameStarted){
+      snake->setRotation(rotateY,*new Vec3(0,1,0));
+      snake->draw();
+    }
 
     DrawSphere(a,1);
 
