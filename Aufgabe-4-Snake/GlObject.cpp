@@ -33,7 +33,7 @@ void GlObject::setMaterialColorStatic(MATERIAL_SIDES side, double r, double g, d
     glMaterialfv(mat, GL_AMBIENT, amb);
     glMaterialfv(mat, GL_DIFFUSE, dif);
     glMaterialfv(mat, GL_SPECULAR, spe);
-    glMaterialf( mat, GL_SHININESS, 50);
+    glMaterialf( mat, GL_SHININESS, 20);
 }
 void GlObject::setMaterialColor(MATERIAL_SIDES side, Vec3 *rgb) {
     if(MATERIAL_SIDES::FRONT == side){

@@ -13,7 +13,8 @@ class GlObject {
     public:
         static enum MATERIAL_SIDES {
                 FRONT = 1,
-                BACK = 2};
+                BACK = 2
+        };
         static void setMaterialColorStatic(MATERIAL_SIDES side, double r, double g, double b);
         void setMaterialColor(MATERIAL_SIDES side, double r, double g, double b);
         void setMaterialColor(MATERIAL_SIDES side, Vec3 *rgb);

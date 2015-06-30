@@ -38,6 +38,7 @@ double sy = 2;
 const int sz = 1.0;
 double step = .5;
 bool  gameStarted = false;
+bool  useGlFrustrum = false;
 
 //Sphere radius
 double sRad = 1;
@@ -189,37 +190,6 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 }
 
 
-void SetMaterialColor(int side, double r, double g, double b) {
-  float	amb[4], dif[4], spe[4];
-  int mat;
-
-  dif[0] = r;
-  dif[1] = g;
-  dif[2] = b;
-
-  for(int i = 0; i < 3; i++) {
-    amb[i] = .1 * dif[i];
-    spe[i] = .5;
-  }
-  amb[3] = dif[3] = spe[3] = 1.0;
-
-  switch(side){
-    case 1:	mat = GL_FRONT;
-      break;
-    case 2:	mat = GL_BACK;
-      break;
-    default: mat = GL_FRONT_AND_BACK;
-  }
-
-  glMaterialfv(mat, GL_AMBIENT, amb);
-  glMaterialfv(mat, GL_DIFFUSE, dif);
-  glMaterialfv(mat, GL_SPECULAR, spe);
-  glMaterialf( mat, GL_SHININESS, 20);
-}
-
-
-
-
 // set viewport transformations and draw objects
 void InitLighting() {
   GLfloat lp1[4]  = { 10,  5,  10,  0};
@@ -249,20 +219,44 @@ void InitLighting() {
   glClearColor(1, 0, 0, 1);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  // init viewport to canvassize
-  glViewport(0, 0, window_width_, window_height_);
+  if(useGlFrustrum == false){
+
+
+    // init viewport to canvassize
+    glViewport(0, 0, window_width_*2, window_height_*2);
+
+
+    // init coordinate system
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    //glOrtho(-15, 15, -10, 10, -20, 20);
+    glOrtho(-15 + zoomINOUT, 15 + zoomINOUT, -10 + zoomINOUT, 10 + zoomINOUT, -20, 20);
+
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+  }
+  else {
+
+    glClear (GL_COLOR_BUFFER_BIT);
+    glColor3f (1.0, 1.0, 1.0);
+    glLoadIdentity ();             /* clear the matrix */
+    /* viewing transformation  */
+    gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
+    glScalef (1.0, 1.0, 1.0);      /* modeling transformation */
+    glutWireCube (1.0);
+    glFlush ();
+
+
+    glViewport (0, 0, window_width_*2, window_height_*2);
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    glFrustum (-10.0, 10.0, -10.0, 10.0, 10, 20.0);
+    glMatrixMode (GL_MODELVIEW);
+  }
 
 
 
-  // init coordinate system
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  //glOrtho(-15, 15, -10, 10, -20, 20);
-  glOrtho(-15 + zoomINOUT, 15 + zoomINOUT, -10 + zoomINOUT, 10 + zoomINOUT, -20, 20);
-
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
 }
 
 // draw a sphere composed of triangles
@@ -305,104 +299,6 @@ void DrawSphere(const Vec3& ctr, double r){
   }
 }
 
-/*
-std::vector<double> distanceFromSIdes(Vec3 k){
-  std::vector<double> distances;
-    double o = (h-(k.p[1]-A.p[1]))-sRad;
-    double l = (k.p[0]-A.p[0])-sRad;
-    double r = (b-(k.p[0]-A.p[0]))-sRad;
-    double u = (k.p[1]-A.p[1])-sRad;
-
-  distances.push_back(o);
-  distances.push_back(l);
-  distances.push_back(r);
-  distances.push_back(u);
-  return distances;
-}
-
-std::vector<double> distanceFromSides(Vec3 k){
-  std::vector<double> distances;
-  //distance from k to top
-  double o = (fieldHeight- k.p[1]);
-  //distance from k to left side
-  double l = (0 + k.p[0]);
-  //distance from k to right side
-  double r = (fieldWidth-k.p[0]);
-  //distance from k to down
-  double u = (0+k.p[1]);
-
-  //add distances to vector
-  distances.push_back(o);
-  distances.push_back(l);
-  distances.push_back(r);
-  distances.push_back(u);
-  return distances;
-}
-*/
-
-/*
-void drawPlayGround(){
-
-  //ground
-  glBegin(GL_QUADS);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,0);
-  glVertex3f(fieldWidth,0,0);
-  glVertex3f(fieldWidth,fieldHeight,0);
-  glVertex3f(0,fieldHeight,0);
-  glEnd();
-  glFlush();
-
-  //left
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,0);
-  glVertex3f(0,fieldHeight,0);
-  glVertex3f(0,0,fieldZ);
-  glVertex3f(0,fieldHeight,fieldZ);
-  glEnd();
-  glFlush();
-
-  //right
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(fieldWidth,0,0);
-  glVertex3f(fieldWidth,0,fieldZ);
-  glVertex3f(fieldWidth,fieldHeight,fieldZ);
-  glVertex3f(fieldWidth,fieldHeight,0);
-  glEnd();
-  glFlush();
-
-  //down
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,0,0);
-  glVertex3f(fieldWidth,0,0);
-  glVertex3f(fieldWidth,0,fieldZ);
-  glVertex3f(0,0,fieldZ);
-  glEnd();
-  glFlush();
-
-  //Top
-  glBegin(GL_QUAD_STRIP);
-  SetMaterialColor(1,0,1,0);
-  SetMaterialColor(2,0,1,0);
-  glVertex3f(0,fieldHeight,0);
-  glVertex3f(fieldWidth,fieldHeight,0);
-  glVertex3f(fieldWidth,fieldHeight,fieldZ);
-  glVertex3f(0,fieldHeight,fieldZ);
-  glEnd();
-  glFlush();
-  //--> Table End
-
-}
- */
-
-
 int main() {
   GLFWwindow* window = NULL;
 
@@ -444,32 +340,19 @@ int main() {
     //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glRotated(45,1,0,0);
-    //glRotated(45,0,0,1);
+    glRotated(45,0,1,0);
     alpha_ += 0.1;
 
-    //testing collision
-    double x = 0.0;
-    double y = 0.0;
-    double z = 1.0;
     Vec3 a = Vec3(sx,sy,sz);
-    //Vec3 a = Vec3(x,y,z);
-    pl.drawPlaygrounD();
 
 
-   
-
-    GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::FRONT, 0, 0, 0);
-    GlObject::setMaterialColorStatic(GlObject::MATERIAL_SIDES::BACK, 0, 0, 0);
-
-    cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
-    cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,0,0,1);
-
-    cuboid->draw();
 
     if(gameStarted){
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
     }
+
+    pl->drawPlaygrounD();
 
     DrawSphere(a,1);
 
