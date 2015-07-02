@@ -56,7 +56,7 @@ void Sphere::draw() {
 
 }
 
-void Sphere::collision(Vec3 snakeHead) {
+bool Sphere::collision(Vec3 snakeHead) {
 
     double distanceX = fabs(this->originPoint->getPosition()->p[0] - snakeHead.p[0]);
     double distanceZ = fabs(this->originPoint->getPosition()->p[2] - snakeHead.p[2]);
@@ -69,9 +69,9 @@ void Sphere::collision(Vec3 snakeHead) {
     if(distanceX <= radius || distanceZ <= radius){
 
         std::cout << "treffer" << std::endl;
-
+        return true;
     }
-
+    return false;
 
 
 }
