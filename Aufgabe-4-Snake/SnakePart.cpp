@@ -45,10 +45,6 @@ void SnakePart::applyValues(double l) {
 
 }
 
-Vec3 SnakePart::getOldAbsolutPosition() {
-    return *this->oldAbsolutPosition;
-}
-
 SnakePart *SnakePart::getBeforeNode() {
     return this->beforeNode;
 }
@@ -110,7 +106,7 @@ void SnakePart::recalculateRotationValues() {
         }else {
             *currentangle = *currentangle + delta;
         }
-        std::cout << "delta: " << delta  << " - DIFF " << diff<<  std::endl;
+        //std::cout << "delta: " << delta  << " - DIFF " << diff<<  std::endl;
 
 
         this->cuboid->setRotation(*currentangle, 0, 1, 0);
@@ -134,6 +130,15 @@ Vec3 SnakePart::getPositionForNewPart() {
     return *newPos->getPosition();
 
 
+}
+bool SnakePart::collidate(Vec3 * vec) {
+    if(this->cuboid->colidate(vec)){
+        return true;
+    }else if(this->nextNode != nullptr){
+        return this->nextNode->collidate(vec);
+    }else {
+        return false;
+    }
 }
 
 /**

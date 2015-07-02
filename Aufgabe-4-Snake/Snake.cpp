@@ -2,6 +2,7 @@
 // Created by Stefan B. on 16.06.15.
 //
 
+#include <iostream>
 #include "Snake.h"
 #include "Point.h"
 #include "SnakePart.h"
@@ -17,6 +18,11 @@ Snake::Snake(Point *origin)
 
 void Snake::draw() {
         GlObject::draw();
+        Vec3 headPoint = this->getHeadPoint();
+        if(this->firstPart->collidate(&headPoint)){
+            std::cout << "COLIDATE "<< std::endl;
+            this->firstPart->setVelocity(0);
+        }
         this->firstPart->setRotation(*this->angle, 0,1,0);
         this->firstPart->draw();
 }

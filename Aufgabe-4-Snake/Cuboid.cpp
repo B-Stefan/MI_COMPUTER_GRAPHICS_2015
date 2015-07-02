@@ -56,15 +56,16 @@ bool Cuboid::colidate(Vec3 *position) {
     if(this->side_a->colidate(position)){
         return true;
     }
-    if(this->side_b->colidate(position)){
+    else if(this->side_b->colidate(position)){
         return true;
     }
-    if(this->side_c->colidate(position)){
+    else if(this->side_c->colidate(position)){
         return true;
     }
-    if(this->side_d->colidate(position)){
+    else if(this->side_d->colidate(position)){
         return true;
     }
+    return false;
 }
 void Cuboid::draw() {
     GlObject::draw();

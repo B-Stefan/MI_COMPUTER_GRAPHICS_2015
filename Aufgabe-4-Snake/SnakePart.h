@@ -17,7 +17,7 @@ public:
     Point* globalOrigin;
     void draw();
     double* getAngle();
-    Vec3 getOldAbsolutPosition();
+    bool collidate(Vec3 * vec);
     Vec3 getPositionForNewPart();
     void setVelocity(double d);
     double getVelocity();

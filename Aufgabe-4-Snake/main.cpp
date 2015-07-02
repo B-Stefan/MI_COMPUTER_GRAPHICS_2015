@@ -72,6 +72,7 @@ Vec3 randomVec(){
 Playground * pl = new Playground(10,10,0,0);
 Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,origin);
+Rectangle * rectangle = new Rectangle(1,3,origin);
 Snake * snake = nullptr;
 
 Vec3 vecApple = randomVec();
@@ -385,12 +386,15 @@ int main() {
       snake->draw();
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
-      Utils::printVec3(headPoint);
+      //Utils::printVec3(headPoint, "Head of Snake");
     }
+
+    Point * pC = new Point(new Vec3(0,0,0));
+    std::cout << "colidate" <<  cuboid->colidate(pC->getPosition()) << std::endl;
+    cuboid->draw();
 
     pl->drawPlaygrounD();
     apple->draw();
-
     DrawSphere(a,1);
 
     //std::vector<double> test = distanceFromSides(a);

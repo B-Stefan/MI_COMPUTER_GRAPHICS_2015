@@ -42,30 +42,30 @@ Rectangle::Rectangle(double height, double width, Point *origin)
 }
 bool Rectangle::colidate(Vec3* postition) {
     double x = postition->p[0];
-    double y = postition->p[0];
-    double z = postition->p[0];
+    double y = postition->p[1];
+    double z = postition->p[2];
 
     Vec3* borderLeftTopCorner = new Vec3();
     borderLeftTopCorner->p[0] = this->B->getPosition()->p[0];
-    borderLeftTopCorner->p[0] = this->B->getPosition()->p[1];
-    borderLeftTopCorner->p[0] = this->B->getPosition()->p[2];
+    borderLeftTopCorner->p[1] = this->B->getPosition()->p[1];
+    borderLeftTopCorner->p[2] = this->B->getPosition()->p[2];
 
     Vec3* borderRightBottomCorner = new Vec3();
     borderRightBottomCorner->p[0] = this->D->getPosition()->p[0];
-    borderRightBottomCorner->p[0] = this->D->getPosition()->p[1];
-    borderRightBottomCorner->p[0] = this->D->getPosition()->p[2];
+    borderRightBottomCorner->p[1] = this->D->getPosition()->p[1];
+    borderRightBottomCorner->p[2] = this->D->getPosition()->p[2];
 
 
     if(z != borderLeftTopCorner->p[2]){
         return false;
     }
-    if(x <= borderLeftTopCorner->p[0] && x >= borderRightBottomCorner->p[0]){
-        return false;
+    if(     (x >= borderLeftTopCorner->p[0] && x <= borderRightBottomCorner->p[0])
+       &&   (y <= borderLeftTopCorner->p[1] && y >= borderRightBottomCorner->p[1])
+       &&   (z <= borderLeftTopCorner->p[2] && y >= borderRightBottomCorner->p[2])){
+        return true;
     }
-    if(y <= borderLeftTopCorner->p[1] && y >= borderRightBottomCorner->p[1]){
-        return false;
-    }
-    return true;
+    return false;
+
 }
 void Rectangle::draw() {
     GlObject::draw();
