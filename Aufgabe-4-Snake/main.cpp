@@ -388,6 +388,9 @@ int main() {
 
     if(gameStarted){
         h->changeText("");
+        currentScore += 1;
+        string g = sp->intToString(currentScore);
+        sp->printDefaultText("SCORE: " + g);
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
       Vec3 headPoint = snake->getHeadPoint();
@@ -397,14 +400,12 @@ int main() {
         currentScore += 10;
         apple->setTranslationVec(randomVec());
       }else if(!pl->isVecInField(snake->getHeadPoint())){
-        h->changeText("Looser");
+        h->changeText("You Lost. Your Score is: " + g);
         gameStarted = false;
       }
 
 
-        currentScore += 1;
-        string g = sp->intToString(currentScore);
-        sp->printDefaultText("SCORE: " + g);
+
 
         pl->drawPlaygrounD();
         apple->draw();
