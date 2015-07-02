@@ -93,8 +93,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
-            apple->setTranslationVec(randomVec());
-
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -203,7 +201,6 @@ void cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 
   if(previewX > xpos && mouseClicked) {
     zoomValue += 0.02;
-    std::cout << xpos << std::endl;
   }else if (previewX < xpos && mouseClicked){
     zoomValue -= 0.02;
   }
@@ -395,7 +392,7 @@ int main() {
       snake->draw();
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
-      Utils::printVec3(headPoint);
+
       if(apple->collision(snake->getHeadPoint())){
         currentScore += 10;
         apple->setTranslationVec(randomVec());
@@ -404,12 +401,8 @@ int main() {
         gameStarted = false;
       }
 
-
-
-
         pl->drawPlaygrounD();
         apple->draw();
-        cout << pl->isVecInField(snake->getHeadPoint()) << endl;
     }
 
 
