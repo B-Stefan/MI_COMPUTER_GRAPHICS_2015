@@ -56,17 +56,7 @@ double ry = .2;
 
 double zoomINOUT = 0;
 
-Vec3 randomVec(){
 
-
-  double x = rand() &10;
-  double z = rand() &10;
-
-  cout << x << endl;
-  cout << z << endl;
-  return Vec3(0,0,0);
-
-}
 
 
 Playground * pl = new Playground(10,10,0,0);
@@ -74,8 +64,20 @@ Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,origin);
 Snake * snake = nullptr;
 
-Vec3 vecApple = randomVec();
-Sphere *apple = new Sphere(1,origin);
+Sphere *apple = new Sphere(0.3,origin);
+
+
+Vec3 randomVec(){
+
+
+  double x = rand() &9;
+  double z = rand() &9;
+  x -= apple->getMiddlePoint();
+  z -= apple->getMiddlePoint();
+
+  return Vec3(x,0,z);
+
+}
 
 bool mouseClicked = false;
 
@@ -92,7 +94,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
-            apple->setTranslationVec(2,0,3);
+            apple->setTranslationVec(randomVec());
 
             break;
       case GLFW_KEY_S:
@@ -386,12 +388,13 @@ int main() {
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
       Utils::printVec3(headPoint);
+      apple->collision(snake->getHeadPoint());
     }
 
     pl->drawPlaygrounD();
     apple->draw();
 
-    DrawSphere(a,1);
+    //DrawSphere(a,1);
 
     //std::vector<double> test = distanceFromSides(a);
     /*std::vector<double> test = pl->distanceFromSideS(a);
@@ -406,7 +409,7 @@ int main() {
     glfwSwapBuffers(window);
 
     glfwPollEvents();
-    apple->draw();
+
 
 
   }
