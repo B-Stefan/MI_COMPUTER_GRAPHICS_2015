@@ -14,10 +14,10 @@ SnakeHead::SnakeHead(double l, Point *origin)
         Point* bottom = new Point(this->originPoint, 0,0,-l/2.0);
         Point* left = new Point(this->originPoint, -l/2.0,0,0);
 
-//        this->top = new Triangle(l, top);
-  //      this->bottom = new Triangle(l, bottom);
+        this->top = new Triangle(l, top);
+        this->bottom = new Triangle(l, bottom);
         this->side_a = new Rectangle(l,l, left);
-//
+        //
   //      this->top->setDefaultRotation(M_PI*0.25,0,0,1);
     //    this->bottom->setDefaultRotation(M_PI*0.25,0,0,1);
 
@@ -26,8 +26,7 @@ SnakeHead::SnakeHead(double l, Point *origin)
 }
 void SnakeHead::draw() {
     GlObject::draw();
-//
-  //  this->top->draw();
-    //this->bottom->draw();
+    this->top->draw();
+    this->bottom->draw();
 
 }
