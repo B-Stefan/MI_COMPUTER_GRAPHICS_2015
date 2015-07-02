@@ -5,7 +5,8 @@
 #include "Sphere.h"
 #include "GlObject.h"
 #import "GLFW/glfw3.h"
-
+#import "iostream"
+#import "math.h"
 
 Sphere::Sphere(double r, Point *origin):GlObject::GlObject(origin) {
     this->radius = r;
@@ -49,4 +50,34 @@ void Sphere::draw() {
         }
         glEnd();
     }
+
+
+
+
+}
+
+bool Sphere::collision(Vec3 snakeHead) {
+
+    double distanceX = fabs(this->originPoint->getPosition()->p[0] - snakeHead.p[0]);
+    double distanceZ = fabs(this->originPoint->getPosition()->p[2] - snakeHead.p[2]);
+
+//    std::cout << "distanceX: " << distanceX << std::endl;
+//    std::cout << "distanceZ: " << distanceZ << std::endl;
+//    std::cout << "point 1 : " << this->originPoint->getPosition()->p[0] << std::endl;
+//    std::cout << "point 2 : " << this->originPoint->getPosition()->p[2] << std::endl;
+
+    if(distanceX <= radius || distanceZ <= radius){
+
+        std::cout << "treffer" << std::endl;
+        return true;
+    }
+    return false;
+
+
+}
+
+
+double Sphere::getMiddlePoint(){
+
+    return this->radius;
 }

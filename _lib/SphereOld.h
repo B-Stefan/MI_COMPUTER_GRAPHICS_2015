@@ -2,8 +2,8 @@
 // Created by Stefan B. on 04.05.15.
 //
 
-#ifndef GLFW3_DEMO_WITH_CMAKE_SPHERE_H
-#define GLFW3_DEMO_WITH_CMAKE_SPHERE_H
+#ifndef GLFW3_DEMO_WITH_CMAKE_SPHEREOLD_H
+#define GLFW3_DEMO_WITH_CMAKE_SPHEREOLD_H
 
 #import "vec3.hpp"
 
@@ -26,4 +26,4 @@ class SphereOld {
 };
 
 
-#endif //GLFW3_DEMO_WITH_CMAKE_SPHERE_H
+#endif //GLFW3_DEMO_WITH_CMAKE_SPHEREOLD_H

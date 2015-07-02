@@ -13,6 +13,7 @@
 #include "Cuboid.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "ScorePrinter.h"
 #include <unistd.h>
 using namespace std;
 
@@ -34,7 +35,7 @@ double zoomValue = 1;
 double openPercent = 0;
 double sx = 2;
 double sy = 2;
-const int sz = 1.0;
+double sz = 1.0;
 double step = .5;
 bool  gameStarted = false;
 bool  useGlFrustrum = false;
@@ -56,27 +57,26 @@ double ry = .2;
 
 double zoomINOUT = 0;
 
+
+Playground * pl = new Playground(17,17,-9,-9);
+Point * origin = new Point(new Vec3(0,0,0));
+Cuboid * cuboid = new Cuboid(1,3,origin);
+Snake * snake = nullptr;
+
+Sphere *apple = new Sphere(0.3,origin);
+
+
 Vec3 randomVec(){
 
 
-  double x = rand() &10;
-  double z = rand() &10;
+  double x = rand() &9;
+  double z = rand() &9;
+  x -= apple->getMiddlePoint();
+  z -= apple->getMiddlePoint();
 
-  cout << x << endl;
-  cout << z << endl;
-  return Vec3(0,0,0);
+  return Vec3(x,0,z);
 
 }
-
-
-Playground * pl = new Playground(10,10,0,0);
-Point * origin = new Point(new Vec3(0,0,0));
-Cuboid * cuboid = new Cuboid(1,3,origin);
-Rectangle * rectangle = new Rectangle(1,3,origin);
-Snake * snake = nullptr;
-
-Vec3 vecApple = randomVec();
-Sphere *apple = new Sphere(1,origin);
 
 bool mouseClicked = false;
 
@@ -93,7 +93,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
-            apple->setTranslationVec(2,0,3);
+            apple->setTranslationVec(randomVec());
 
             break;
       case GLFW_KEY_S:
@@ -119,7 +119,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_UP:
         std::cout << "up"<<std::endl;
             translateY += 1;
-            sy += step;
+            sz += step;
             break;
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
@@ -129,7 +129,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
             translateY -= 1;
-            sy -= step;
+            sz -= step;
             break;
       case GLFW_KEY_RIGHT:
         std::cout << "down"<<std::endl;
@@ -340,7 +340,7 @@ int main() {
     return -1;
   }
 
-  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
+  window = glfwCreateWindow(window_width_, window_height_, "Snake 3D",NULL , NULL);
 
   glfwGetFramebufferSize(window, &widhtActual,&heightActual);
 
@@ -356,6 +356,13 @@ int main() {
 
   //origin->setRotate(new double(M_PI*0.25), new Vec3(1,0,0));
 
+
+
+    ScorePrinter * sp = new ScorePrinter();
+    ScorePrinter * h = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
+    int currentScore = 0;
+
+  usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
     Point::currentLoopNumber ++;
@@ -367,8 +374,6 @@ int main() {
 
     // switch on lighting (or you don't see anything)
     InitLighting();
-
-
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     //glClearColor(1, 1, 1, 1);
@@ -377,40 +382,50 @@ int main() {
     glRotated(45,0,1,0);
     alpha_ += 0.1;
 
-    Vec3 a = Vec3(sx,sy,sz);
 
 
+    h->print();
 
     if(gameStarted){
+        h->changeText("");
+        currentScore += 1;
+        string g = sp->intToString(currentScore);
+        sp->printDefaultText("SCORE: " + g);
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
-      //Utils::printVec3(headPoint, "Head of Snake");
+      Utils::printVec3(headPoint);
+      if(apple->collision(snake->getHeadPoint())){
+        currentScore += 10;
+        apple->setTranslationVec(randomVec());
+      }else if(!pl->isVecInField(snake->getHeadPoint())){
+        h->changeText("You Lost. Your Score is: " + g);
+        gameStarted = false;
+      }
+
+
+
+
+        pl->drawPlaygrounD();
+        apple->draw();
+        cout << pl->isVecInField(snake->getHeadPoint()) << endl;
     }
 
-    Point * pC = new Point(new Vec3(0,0,0));
-    std::cout << "colidate" <<  cuboid->colidate(pC->getPosition()) << std::endl;
-    cuboid->draw();
 
-    pl->drawPlaygrounD();
-    apple->draw();
-    DrawSphere(a,1);
+//    std::vector<double> test = pl->distanceFromSideS(a);
+//    cout <<"O: "<< test[0]<< endl;
+//    cout <<"L: "<< test[1]<< endl;
+//    cout <<"R: "<< test[2]<< endl;
+//    cout <<"U: "<< test[3]<< endl;
 
-    //std::vector<double> test = distanceFromSides(a);
-    /*std::vector<double> test = pl->distanceFromSideS(a);
-    cout <<"O: "<< test[0]<< endl;
-    cout <<"L: "<< test[1]<< endl;
-    cout <<"R: "<< test[2]<< endl;
-    cout <<"U: "<< test[3]<< endl;
-*/
 
 
     // make it appear (before this, it's hidden in the rear buffer)
     glfwSwapBuffers(window);
 
     glfwPollEvents();
-    apple->draw();
+
 
 
   }

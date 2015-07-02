@@ -13,6 +13,8 @@ public:
     Sphere(double r, Point * origin);
 
     void draw();
+    double getMiddlePoint();
+    bool collision(Vec3 snakeHead);
 
 private:
     double radius;

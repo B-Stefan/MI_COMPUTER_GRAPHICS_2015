@@ -15,6 +15,7 @@ set(TASK4_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/Snake.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakeHead.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/SnakePart.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/ScorePrinter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Sphere.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Triangle.cpp
     # add new source files here
