@@ -44,8 +44,8 @@ void Playground::drawPlaygrounD(){
 
     //ground
     glBegin(GL_QUADS);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,1,0);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,1,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,10,10,10);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,10,10,10);
     glVertex3f(startX,fieldPosZ,startY);
     glVertex3f(fieldWidth + startX, fieldPosZ, startY);
     glVertex3f(fieldWidth + startX ,fieldPosZ, fieldHeight + startY);
@@ -56,8 +56,8 @@ void Playground::drawPlaygrounD(){
 
     //left
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,1,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,fieldPosZ,startY);
     glVertex3f(startX, fieldPosZ, fieldHeight + startY);
     glVertex3f(startX,  fieldZ, startY);
@@ -67,8 +67,8 @@ void Playground::drawPlaygrounD(){
 
     //right
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,1,0);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,1,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(fieldWidth + startX, fieldPosZ, startY);
     glVertex3f(fieldWidth + startX  ,fieldZ,startY);
     glVertex3f(fieldWidth + startX, fieldPosZ, fieldHeight + startY);
@@ -78,8 +78,8 @@ void Playground::drawPlaygrounD(){
 
     //down
     glBegin(GL_QUAD_STRIP);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,0,1);
-    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,1);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,0,0);
+    setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,fieldPosZ,startY);
     glVertex3f(fieldWidth + startX, fieldPosZ, startY);
     glVertex3f(startX, fieldZ, startY);

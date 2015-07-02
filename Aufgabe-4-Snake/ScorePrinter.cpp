@@ -24,7 +24,7 @@ void ScorePrinter::changeText(string newText) {
 
 void ScorePrinter::print() {
     //x,y & z position of the text
-    glRasterPos3f(this->posX,this->posY,this->posY);
+    glRasterPos3f(this->posX, this->posY, this->posZ);
     //get lenght of the string
     int len = this->textToPrint.length();
     //display char by char

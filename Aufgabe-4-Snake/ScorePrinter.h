@@ -27,7 +27,6 @@ private:
     int posX;
     int posY;
     int posZ;
-    int startScore = 0;
 
 
 public:
@@ -40,13 +39,6 @@ public:
     void printDefaultText(string defaultText);
     string intToString(int number);
 
-    //getter & Setter
-    int getStartScore(){
-        return startScore;
-    }
-    void setStartScore(int startScore) {
-        ScorePrinter::startScore = startScore;
-    }
     void changeText(string newText);
 };
 

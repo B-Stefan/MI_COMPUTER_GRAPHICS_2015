@@ -358,8 +358,9 @@ int main() {
 
 
 
-  ScorePrinter * sp = new ScorePrinter();
-  int pstand = 0;
+    ScorePrinter * sp = new ScorePrinter();
+    ScorePrinter * h = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
+    int currentScore = 0;
 
   usleep(1000);
   while(!glfwWindowShouldClose(window)) {
@@ -373,45 +374,35 @@ int main() {
 
     // switch on lighting (or you don't see anything)
     InitLighting();
-
-
     // set background color
     glClearColor(0.8, 0.8, 0.8, 1.0);
     //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    Vec3 a = Vec3(sx,sy,sz);
     glRotated(45,1,0,0);
     glRotated(45,0,1,0);
     alpha_ += 0.1;
 
 
 
-
+    h->print();
 
     if(gameStarted){
+        h->changeText("");
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
       Utils::printVec3(headPoint);
       apple->collision(snake->getHeadPoint());
+
+        currentScore += 1;
+        string g = sp->intToString(currentScore);
+        sp->printDefaultText("SCORE: " + g);
+
+        pl->drawPlaygrounD();
+        apple->draw();
+        cout << pl->isVecInField(snake->getHeadPoint()) << endl;
     }
-
-
-    pstand += 1;
-    string g = sp->intToString(pstand);
-    sp->printDefaultText("SCORE: " + g);
-;
-
-    pl->drawPlaygrounD();
-    apple->draw();
-
-    DrawSphere(a,1);
-    cout << endl;
-    cout << pl->isVecInField(a) << endl;
-    //DrawSphere(a,1);
-
-
 
 
 //    std::vector<double> test = pl->distanceFromSideS(a);
