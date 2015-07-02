@@ -10,8 +10,10 @@
 using namespace std;
 Rectangle::Rectangle(double height, double width, Point *origin)
         :GlObject(origin){
-    double h = height;
-    double b = width;
+    this->height = height;
+    this->width= width;
+    double h = this->height;
+    double b = this->width;
 
     /**
      *
@@ -41,27 +43,32 @@ Rectangle::Rectangle(double height, double width, Point *origin)
 
 }
 bool Rectangle::colidate(Vec3* postition) {
-    double x = postition->p[0];
-    double y = postition->p[1];
-    double z = postition->p[2];
+    double x = round(postition->p[0]* 100) / 100;
+    double y = round(postition->p[1]* 100) / 100;
+    double z = round(postition->p[2]* 100) / 100;
 
     Vec3* borderLeftTopCorner = new Vec3();
-    borderLeftTopCorner->p[0] = this->B->getPosition()->p[0];
-    borderLeftTopCorner->p[1] = this->B->getPosition()->p[1];
-    borderLeftTopCorner->p[2] = this->B->getPosition()->p[2];
+    borderLeftTopCorner->p[0] = round(this->B->getPosition()->p[0]* 100) / 100;
+    borderLeftTopCorner->p[1] = round(this->B->getPosition()->p[1]* 100) / 100;
+    borderLeftTopCorner->p[2] = round(this->B->getPosition()->p[2]* 100) / 100;
 
     Vec3* borderRightBottomCorner = new Vec3();
-    borderRightBottomCorner->p[0] = this->D->getPosition()->p[0];
-    borderRightBottomCorner->p[1] = this->D->getPosition()->p[1];
-    borderRightBottomCorner->p[2] = this->D->getPosition()->p[2];
+    borderRightBottomCorner->p[0] =  round(this->D->getPosition()->p[0]* 100) / 100;
+    borderRightBottomCorner->p[1] =  round(this->D->getPosition()->p[1]* 100) / 100;
+    borderRightBottomCorner->p[2] =  round(this->D->getPosition()->p[2]* 100) / 100;
 
+    Vec3 * p = new Vec3(*this->A->getPosition());
+    Vec3 * q = new Vec3(*this->B->getPosition());
+    Vec3 * r = new Vec3(*this->C->getPosition());
+    Vec3 * vecToCenter = new Vec3(*postition  - * this->originPoint->getPosition());
 
-    if(z != borderLeftTopCorner->p[2]){
-        return false;
-    }
-    if(     (x >= borderLeftTopCorner->p[0] && x <= borderRightBottomCorner->p[0])
-       &&   (y <= borderLeftTopCorner->p[1] && y >= borderRightBottomCorner->p[1])
-       &&   (z <= borderLeftTopCorner->p[2] && y >= borderRightBottomCorner->p[2])){
+    Vec3 u = *p-*q;
+    Vec3 v = *r-*p;
+    Vec3 n = u%v;
+
+    double distanceToLayer = fabs((*postition - *p) * n)/n.Length();
+    double distanceToCenter = vecToCenter->Length();
+    if(round(distanceToLayer*100)/100  == 0 && distanceToCenter <= this->width/2){
         return true;
     }
     return false;
@@ -71,7 +78,7 @@ void Rectangle::draw() {
     GlObject::draw();
 
     Vec3 normal = Vec3(0,0,1);
-    //Utils::drawPoint(this->originPoint,1);
+    Utils::drawPoint(this->originPoint,1);
     //Begin to draw the plane
     glBegin(GL_QUADS);
     glEnable(GL_NORMALIZE);

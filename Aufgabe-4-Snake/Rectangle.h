@@ -12,6 +12,8 @@ public:
     void draw();
     bool colidate(Vec3 * postition);
 private:
+    double width;
+    double height;
     Point* A;
     Point* B;
     Point* C;
