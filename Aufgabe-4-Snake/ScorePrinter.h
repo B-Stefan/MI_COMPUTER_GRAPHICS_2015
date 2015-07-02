@@ -13,7 +13,6 @@
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
 #include "../_lib/Quarter.h"
-#include "../_lib/Sphere.h"
 #include "Playground.h"
 #include "Snake.h"
 #include "Cuboid.h"

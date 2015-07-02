@@ -7,8 +7,7 @@
 
 #include "../_lib/vec3.hpp"
 #include "../_lib/utils.h"
-#include "../_lib/Quarter.h"
-#include "../_lib/Sphere.h"
+#include "Sphere.h"
 #include "Playground.h"
 #include "Snake.h"
 #include "Cuboid.h"
@@ -63,6 +62,22 @@ Playground * pl = new Playground(17,17,-9,-9);
 Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,origin);
 Snake * snake = nullptr;
+
+Sphere *apple = new Sphere(0.3,origin);
+
+
+Vec3 randomVec(){
+
+
+  double x = rand() &9;
+  double z = rand() &9;
+  x -= apple->getMiddlePoint();
+  z -= apple->getMiddlePoint();
+
+  return Vec3(x,0,z);
+
+}
+
 bool mouseClicked = false;
 
 
@@ -78,6 +93,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
             rotateY =  rotateY  -0.1;
+            apple->setTranslationVec(randomVec());
+
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -233,8 +250,7 @@ void InitLighting() {
     width = window_width_ * 2;
     height = window_height_ * 2;
   }
-  std::cout << width << " - " << height << std::endl;
-  std::cout << widhtActual << " - " << heightActual << std::endl;
+
   if(useGlFrustrum == false){
 
 
@@ -258,9 +274,9 @@ void InitLighting() {
     glColor3f (1.0, 1.0, 1.0);
     glLoadIdentity ();             /* clear the matrix */
     /* viewing transformation  */
-    gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
+    //gluLookAt (0.0, 0.0, 15, 0.0, 0.0, 0.0, 0.0, 0.5, 0.0);
     glScalef (1.0, 1.0, 1.0);      /* modeling transformation */
-    glutWireCube (1.0);
+    //glutWireCube (1.0);
     glFlush ();
 
 
@@ -320,7 +336,6 @@ int main() {
 
   printf("Here we go!\n");
 
-
   if(!glfwInit()){
     return -1;
   }
@@ -372,9 +387,14 @@ int main() {
 
 
 
+
     if(gameStarted){
       snake->setRotation(rotateY,*new Vec3(0,1,0));
       snake->draw();
+      Vec3 headPoint = snake->getHeadPoint();
+      Utils::drawAxis(headPoint,5);
+      Utils::printVec3(headPoint);
+      apple->collision(snake->getHeadPoint());
     }
 
 
@@ -384,10 +404,12 @@ int main() {
 ;
 
     pl->drawPlaygrounD();
+    apple->draw();
 
     DrawSphere(a,1);
     cout << endl;
     cout << pl->isVecInField(a) << endl;
+    //DrawSphere(a,1);
 
 
 

@@ -20,3 +20,14 @@ void Snake::draw() {
         this->firstPart->setRotation(*this->angle, 0,1,0);
         this->firstPart->draw();
 }
+/**
+ * Return the first point of the snake based on the current move direction
+ */
+Vec3 Snake::getHeadPoint() {
+        Point p = new Point(this->firstPart->getOriginPoint(),
+                            this->firstPart->getPartLength()/2*-1
+                           ,0,
+                            0);
+
+        return *p.getPosition();
+}

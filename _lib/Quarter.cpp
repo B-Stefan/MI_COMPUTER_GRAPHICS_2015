@@ -52,7 +52,7 @@ Quarter::Quarter(Vec3 &middlePoint, double &l){
     this->right     = new Plane(Right,l);
     this->back      = new Plane(Back,l);
     this->front     = new Plane(Front,l);
-    this->sphere    = new Sphere(this->middlePoint,l);
+    this->sphere    = new SphereOld(this->middlePoint,l);
 
 
     //Rotate the planes in right position for lighting
