@@ -14,6 +14,7 @@
 #include "Cuboid.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "ScorePrinter.h"
 #include <unistd.h>
 using namespace std;
 
@@ -35,7 +36,7 @@ double zoomValue = 1;
 double openPercent = 0;
 double sx = 2;
 double sy = 2;
-const int sz = 1.0;
+double sz = 1.0;
 double step = .5;
 bool  gameStarted = false;
 bool  useGlFrustrum = false;
@@ -58,7 +59,7 @@ double ry = .2;
 double zoomINOUT = 0;
 
 
-Playground * pl = new Playground(10,10,0,0);
+Playground * pl = new Playground(17,17,-9,-9);
 Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,origin);
 Snake * snake = nullptr;
@@ -101,7 +102,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_UP:
         std::cout << "up"<<std::endl;
             translateY += 1;
-            sy += step;
+            sz += step;
             break;
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
@@ -111,7 +112,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_DOWN:
         std::cout << "down"<<std::endl;
             translateY -= 1;
-            sy -= step;
+            sz -= step;
             break;
       case GLFW_KEY_RIGHT:
         std::cout << "down"<<std::endl;
@@ -319,11 +320,12 @@ int main() {
 
   printf("Here we go!\n");
 
+
   if(!glfwInit()){
     return -1;
   }
 
-  window = glfwCreateWindow(window_width_, window_height_, "Simple 3D Animation",NULL , NULL);
+  window = glfwCreateWindow(window_width_, window_height_, "Snake 3D",NULL , NULL);
 
   glfwGetFramebufferSize(window, &widhtActual,&heightActual);
 
@@ -338,6 +340,11 @@ int main() {
   glfwMakeContextCurrent(window);
 
   //origin->setRotate(new double(M_PI*0.25), new Vec3(1,0,0));
+
+
+
+  ScorePrinter * sp = new ScorePrinter();
+  int pstand = 0;
 
   usleep(1000);
   while(!glfwWindowShouldClose(window)) {
@@ -357,11 +364,11 @@ int main() {
     glClearColor(0.8, 0.8, 0.8, 1.0);
     //glClearColor(1, 1, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    Vec3 a = Vec3(sx,sy,sz);
     glRotated(45,1,0,0);
     glRotated(45,0,1,0);
     alpha_ += 0.1;
 
-    Vec3 a = Vec3(sx,sy,sz);
 
 
 
@@ -370,17 +377,27 @@ int main() {
       snake->draw();
     }
 
+
+    pstand += 1;
+    string g = sp->intToString(pstand);
+    sp->printDefaultText("SCORE: " + g);
+;
+
     pl->drawPlaygrounD();
 
     DrawSphere(a,1);
+    cout << endl;
+    cout << pl->isVecInField(a) << endl;
 
-    //std::vector<double> test = distanceFromSides(a);
-    /*std::vector<double> test = pl->distanceFromSideS(a);
-    cout <<"O: "<< test[0]<< endl;
-    cout <<"L: "<< test[1]<< endl;
-    cout <<"R: "<< test[2]<< endl;
-    cout <<"U: "<< test[3]<< endl;
-*/
+
+
+
+//    std::vector<double> test = pl->distanceFromSideS(a);
+//    cout <<"O: "<< test[0]<< endl;
+//    cout <<"L: "<< test[1]<< endl;
+//    cout <<"R: "<< test[2]<< endl;
+//    cout <<"U: "<< test[3]<< endl;
+
 
 
     // make it appear (before this, it's hidden in the rear buffer)

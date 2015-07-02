@@ -27,6 +27,12 @@ public:
     double startY;
     double fieldPosZ;
 
+    //for collision
+    double fieldMaxX = 8.0;
+    double fieldMinX = -9.0;
+    double fieldMaxY = 8.0;
+    double fieldMinY = -9.0;
+
 
     // constructor
     Playground();
@@ -35,7 +41,7 @@ public:
     //methods
     void setMaterialColoR(GlObject::MATERIAL_SIDES side, double r, double g, double b);
     void drawPlaygrounD();
-    std::vector<double> distanceFromSideS(Vec3 k);
+    bool isVecInField(Vec3 k);
 
 };
 
