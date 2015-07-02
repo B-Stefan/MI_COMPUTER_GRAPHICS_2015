@@ -393,7 +393,14 @@ int main() {
       Vec3 headPoint = snake->getHeadPoint();
       Utils::drawAxis(headPoint,5);
       Utils::printVec3(headPoint);
-      apple->collision(snake->getHeadPoint());
+      if(apple->collision(snake->getHeadPoint())){
+        currentScore += 10;
+        apple->setTranslationVec(randomVec());
+      }else if(!pl->isVecInField(snake->getHeadPoint())){
+        h->changeText("Looser");
+        gameStarted = false;
+      }
+
 
         currentScore += 1;
         string g = sp->intToString(currentScore);
