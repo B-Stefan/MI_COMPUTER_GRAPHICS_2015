@@ -13,6 +13,8 @@ public:
     Snake(Point *origin);
     void draw();
     Vec3 getHeadPoint();
+    bool collidateThemSelf();
+    bool colidate(Vec3 * vec);
 private:
     SnakePart * firstPart;
     void addPart();

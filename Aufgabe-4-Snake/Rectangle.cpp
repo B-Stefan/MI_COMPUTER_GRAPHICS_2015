@@ -68,6 +68,7 @@ bool Rectangle::colidate(Vec3* postition) {
 
     double distanceToLayer = fabs((*postition - *p) * n)/n.Length();
     double distanceToCenter = vecToCenter->Length();
+    //std::cout << "distanceToCenter" <<distanceToCenter << std::endl;
     if(round(distanceToLayer*100)/100  == 0 && distanceToCenter <= this->width/2){
         return true;
     }

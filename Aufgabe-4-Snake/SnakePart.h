@@ -19,6 +19,7 @@ public:
     double* getAngle();
     bool collidate(Vec3 * vec);
     Vec3 getPositionForNewPart();
+    Vec3 getPositionBehind();
     void setVelocity(double d);
     double getVelocity();
     void setRotation(double angle, int x, int y, int z);

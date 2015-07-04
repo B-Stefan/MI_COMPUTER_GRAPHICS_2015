@@ -31,7 +31,7 @@ double SnakePart::getPartLength() {
     return this->part_length;
 }
 double SnakePart::getVelocity() {
-    return this->cuboidTranslationVec->p[0];
+    return this->velocity;
 }
 void SnakePart::applyValues(double l) {
     this->part_length = l;
@@ -97,20 +97,27 @@ void SnakePart::recalculateRotationValues() {
             //Function diagramm: https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=y%20%3D%201%2Fx%5E2
             diff = 1/exp(delta);
             //delta = delta * 0.004  + diff *delta * 0.004;
-            delta = delta * 0.005;
+            double percent = fabs(*currentangle / *angleBefore);
+            delta = delta * percent/55;// (1- fabs(*currentangle / *angleBefore));
+            if(fabs(delta) < 0.000005){
+                delta = 0;
+                *currentangle = *angleBefore;
+            }else {
+                *currentangle = *currentangle + delta;
+            }
+            double currentVelocity = this->getVelocity();
+            double deltaVelocity = this->getVelocity() - currentVelocity;
+           // this->setVelocity(currentVelocity + (deltaVelocity * percent)) ;
+            /*std::cout << percent<< std::endl;
+            std::cout << "Delta"<< deltaVelocity<< std::endl;
+            std::cout << "currentVelocity"<< this->velocity<< std::endl;
+        */
         }
 
-        if(fabs(delta) < 0.000005){
-            delta = 0;
-            *currentangle = *angleBefore;
-        }else {
-            *currentangle = *currentangle + delta;
-        }
         //std::cout << "delta: " << delta  << " - DIFF " << diff<<  std::endl;
 
 
         this->cuboid->setRotation(*currentangle, 0, 1, 0);
-        this->setVelocity(DEFAULT_VELOCITY);
 
     } else {
         //if the part is the first part
@@ -139,6 +146,7 @@ bool SnakePart::collidate(Vec3 * vec) {
     }else {
         return false;
     }
+    return false;
 }
 
 /**
@@ -190,11 +198,14 @@ void SnakePart::applyLastPosition() {
     } else {
         //store the absolut position of the cuboid in a vector
 
-        this->cuboid->getOriginPoint()->recalculatePosition(true);
-        Vec3 *calculatedInnerPos = this->cuboid->getOriginPoint()->getPosition();
-        this->oldAbsolutPosition->p[0] = calculatedInnerPos->p[0];
-        this->oldAbsolutPosition->p[1] = calculatedInnerPos->p[1];
-        this->oldAbsolutPosition->p[2] = calculatedInnerPos->p[2];
+
+
+            this->cuboid->getOriginPoint()->recalculatePosition(true);
+            Vec3 *calculatedInnerPos = this->cuboid->getOriginPoint()->getPosition();
+            this->oldAbsolutPosition->p[0] = calculatedInnerPos->p[0];
+            this->oldAbsolutPosition->p[1] = calculatedInnerPos->p[1];
+            this->oldAbsolutPosition->p[2] = calculatedInnerPos->p[2];
+
 
 
         double *calculatedInnerRotation = this->cuboid->getOriginPoint()->getAngle();

@@ -53,10 +53,10 @@ Cuboid::Cuboid(double height, double width, Point *origin)
 
 }
 bool Cuboid::colidate(Vec3 *position) {
-    if(this->side_a->colidate(position)){
+    if(this->side_b->colidate(position)){
         return true;
     }
-    else if(this->side_b->colidate(position)){
+    else if(this->side_a->colidate(position)){
         return true;
     }
     else if(this->side_c->colidate(position)){
@@ -65,14 +65,18 @@ bool Cuboid::colidate(Vec3 *position) {
     else if(this->side_d->colidate(position)){
         return true;
     }
+    else if(this->top->colidate(position)){
+        return true;
+    }
+    else if(this->bottom->colidate(position)){
+        return true;
+    }
     return false;
 }
 void Cuboid::draw() {
     GlObject::draw();
 
     //Utils::drawPoint(this->originPoint,4);
-
-
 
     this->top->draw();
     this->bottom->draw();

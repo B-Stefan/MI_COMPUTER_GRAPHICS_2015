@@ -60,8 +60,9 @@ double zoomINOUT = 0;
 
 Playground * pl = new Playground(17,17,-9,-9);
 Point * origin = new Point(new Vec3(0,0,0));
-Cuboid * cuboid = new Cuboid(1,3,origin);
+Cuboid * cuboid = new Cuboid(1,3,new Point(origin,-5,0,0));
 Snake * snake = nullptr;
+Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
 
 Sphere *apple = new Sphere(0.3,origin);
 
@@ -388,21 +389,26 @@ int main() {
         currentScore += 1;
         string g = sp->intToString(currentScore);
         sp->printDefaultText("SCORE: " + g);
-      snake->setRotation(rotateY,*new Vec3(0,1,0));
-      snake->draw();
-      Vec3 headPoint = snake->getHeadPoint();
-      Utils::drawAxis(headPoint,5);
+        snake->setRotation(rotateY,*new Vec3(0,1,0));
 
-      if(apple->collision(snake->getHeadPoint())){
-        currentScore += 10;
-        apple->setTranslationVec(randomVec());
-      }else if(!pl->isVecInField(snake->getHeadPoint())){
-        h->changeText("You Lost. Your Score is: " + g);
-        gameStarted = false;
-      }
+        Vec3 headPoint = snake->getHeadPoint();
+        Utils::drawAxis(headPoint,5);
 
+        if(apple->collision(snake->getHeadPoint())){
+          currentScore += 10;
+          apple->setTranslationVec(randomVec());
+        }else if(!pl->isVecInField(snake->getHeadPoint())){
+          h->changeText("You Lost. Your Score is: " + g);
+          gameStarted = false;
+        }else if (snake->collidateThemSelf()){
+          h->changeText("You Lost. Your Score is: " + g);
+          gameStarted = false;
+        }
+        snake->draw();
         pl->drawPlaygrounD();
         apple->draw();
+        rectangle->setRotation(-M_PI*0.5, 0,1,0);
+        cuboid->draw();
     }
 
 
