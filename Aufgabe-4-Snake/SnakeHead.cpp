@@ -8,7 +8,7 @@
 SnakeHead::SnakeHead(double l, Point *origin)
         :SnakePart(l,origin){
     this->trackPositions = new std::deque<Vec3>();
-    this->velocity = 0.01;
+    this->velocity = 0.1;
     this->saveValuesToTrack();
     Point * headRotationX = new Point(this->originPoint);
     Point * headRotationY = new Point(headRotationX);

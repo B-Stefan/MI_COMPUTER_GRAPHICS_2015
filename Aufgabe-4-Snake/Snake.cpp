@@ -44,7 +44,7 @@ void Snake::draw() {
  */
 Vec3 Snake::getHeadPoint() {
     Point p = new Point(this->firstPart->getOriginPoint(),
-                        this->firstPart->getPartLength() / 2 * -1 + 0.1, 0,
+                        this->firstPart->getPartLength() / 2 * -1 -0.1, 0,
                         0);
 
     return *p.getPosition();

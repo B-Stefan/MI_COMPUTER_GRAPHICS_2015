@@ -21,6 +21,7 @@ public:
     double* getAngle();
     void setRotation(double angle, int x, int y, int z);
     void setRotation(double angle, Vec3 vec);
+    Point * getOriginPoint();
     std::deque<Vec3> * getTrack();
 
 protected:
@@ -32,8 +33,8 @@ protected:
     std::deque<Vec3> *trackPositions;
     std::deque<double> *trackRotations;
     Vec3 *innerTranslationVec;
-    GlObject *drawObject;
     Point* globalOrigin;
+    GlObject *drawObject;
     int index;
 
 private:
