@@ -66,14 +66,23 @@ bool Sphere::colidate(Vec3 * snakeHead) {
 //    std::cout << "point 1 : " << this->originPoint->getPosition()->p[0] << std::endl;
 //    std::cout << "point 2 : " << this->originPoint->getPosition()->p[2] << std::endl;
 
-    if(distanceX <= radius || distanceZ <= radius){
+//    if(distanceX <= radius || distanceZ <= radius){
+//
+//        std::cout << "treffer" << std::endl;
+//        return true;
+//    }
+//    return false;
 
+    Vec3 a = * this->originPoint->getPosition() -  *snakeHead;
+    double distance = a.Length();
+    std:: cout << distance << std::endl;
+    if(distance <= this->radius ){
         std::cout << "treffer" << std::endl;
         return true;
     }
-    return false;
-
-
+    else {
+        return false;
+    }
 }
 
 
