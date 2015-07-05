@@ -7,6 +7,7 @@
 #import "GLFW/glfw3.h"
 #import "iostream"
 #import "math.h"
+#include "../_lib/utils.h"
 
 Sphere::Sphere(double r, Point *origin):GlObject::GlObject(origin) {
     this->radius = r;
@@ -58,25 +59,12 @@ void Sphere::draw() {
 
 bool Sphere::colidate(Vec3 * snakeHead) {
 
-    double distanceX = fabs(this->originPoint->getPosition()->p[0] - snakeHead->p[0]);
-    double distanceZ = fabs(this->originPoint->getPosition()->p[2] - snakeHead->p[2]);
 
-//    std::cout << "distanceX: " << distanceX << std::endl;
-//    std::cout << "distanceZ: " << distanceZ << std::endl;
-//    std::cout << "point 1 : " << this->originPoint->getPosition()->p[0] << std::endl;
-//    std::cout << "point 2 : " << this->originPoint->getPosition()->p[2] << std::endl;
-
-//    if(distanceX <= radius || distanceZ <= radius){
-//
-//        std::cout << "treffer" << std::endl;
-//        return true;
-//    }
-//    return false;
-
-    Vec3 a = * this->originPoint->getPosition() -  *snakeHead;
-    double distance = a.Length();
+    Vec3 a = *snakeHead - * this->originPoint->getPosition();
+    double distance = fabs(a.Length());
+    distance = round(distance*10) / 10;
     std:: cout << distance << std::endl;
-    if(distance <= this->radius ){
+    if(distance <= this->radius+ 0.1 ){
         std::cout << "treffer" << std::endl;
         return true;
     }
