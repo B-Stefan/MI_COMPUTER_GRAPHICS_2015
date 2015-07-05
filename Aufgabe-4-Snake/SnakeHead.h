@@ -20,10 +20,6 @@ public:
 private:
     double velocity;
     void saveValuesToTrack();
-    Rectangle* side_a ;
-    Triangle* top ;
-    Triangle* bottom ;
-    Rectangle* side_c ;
 };
 
 

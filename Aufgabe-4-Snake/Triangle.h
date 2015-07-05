@@ -9,7 +9,7 @@
 #include "GlObject.h"
 #include "Rectangle.h"
 
-class Triangle :GlObject {
+class Triangle :public GlObject {
 private:
     Point * pointA;
     Point * pointB;
@@ -17,6 +17,7 @@ private:
 public:
     Triangle(double l, Point *origin);
     void draw();
+    bool colidate(Vec3 * point);
 };
 
 
