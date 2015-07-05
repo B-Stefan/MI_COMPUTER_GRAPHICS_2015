@@ -8,7 +8,7 @@
 #include <cmath>
 #include "./../_lib/utils.h";
 
-const double DELTA_STEPS_BETWEEN_PARTS = 120;
+const double DELTA_STEPS_BETWEEN_PARTS = 10;
 const double DEFAULT_VELOCITY  = 0.01;
 
 SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation, SnakePart *origin)
@@ -123,6 +123,9 @@ double SnakePart::getRotationFromTrack() {
     return track[this->index * DELTA_STEPS_BETWEEN_PARTS];
 
 
+}
+Point* SnakePart::getOriginPoint() {
+    return this->drawObject->getOriginPoint();
 }
 void SnakePart::draw() {
     GlObject::draw();
