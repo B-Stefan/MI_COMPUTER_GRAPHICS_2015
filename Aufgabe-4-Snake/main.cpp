@@ -72,11 +72,11 @@ TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
 Vec3 randomVec(){
 
 
-  double x = rand() & (int) pl->fieldWidth;
-  double z = rand() & (int) pl->fieldHeight;
+    double r = abs(pl->startX) - (pl->startX);
+    double s = abs(pl->startY) - (pl->startY);
+    double x = -9 + (r * rand()/(RAND_MAX+1.0));
+    double z = -9 + (s * rand()/(RAND_MAX+1.0));
 
-  x -= abs(pl->startX);
-  z -= abs(pl->startY);
 
   if(x > 0){
       x -= apple->getRadius();
@@ -90,11 +90,6 @@ Vec3 randomVec(){
   if(z < 0){
     z += apple->getRadius();
   }
-
-
-
-    std::cout<< "x: " << x << std::endl;
-    std::cout<< "z: " << z << std::endl;
 
   return Vec3(x,0,z);
 
