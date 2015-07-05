@@ -13,7 +13,6 @@ const double DEFAULT_VELOCITY  = 0.01;
 
 SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation, SnakePart *origin)
         : GlObject(origin->globalOrigin){
-    std::cout << index << std::endl;
     this->globalOrigin = origin->globalOrigin;
     this->applyValues(l);
     this->beforeNode = origin;

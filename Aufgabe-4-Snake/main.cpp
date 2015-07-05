@@ -13,6 +13,8 @@
 #include "Cuboid.h"
 #include "Rectangle.h"
 #include "Point.h"
+#include "Game.h"
+#include "TriangleCuboid.h"
 #include "ScorePrinter.h"
 #include <unistd.h>
 using namespace std;
@@ -63,10 +65,10 @@ Point * origin = new Point(new Vec3(0,2,0));
 Cuboid * cuboid = new Cuboid(1,3,new Point(origin,-5,0,0));
 Snake * snake = nullptr;
 Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
-
 Sphere *apple = new Sphere(0.3,origin);
-
-
+Game * game = new Game(origin);
+Triangle * triangle = new Triangle(2,origin);
+TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
 Vec3 randomVec(){
 
 
@@ -167,6 +169,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_SPACE:
         std::cout << "spalce " <<std::endl;
             gameStarted = true;
+            game->start();
             snake = new Snake(origin);
             break;
 
@@ -380,7 +383,9 @@ int main() {
     ScorePrinter * h = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     int currentScore = 0;
 
-  usleep(1000);
+    game->setTranslationVec(0,0,10);
+
+    usleep(1000);
   while(!glfwWindowShouldClose(window)) {
 
     Point::currentLoopNumber ++;
@@ -398,7 +403,7 @@ int main() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glRotated(45,1,0,0);
     glRotated(45,0,1,0);
-    alpha_ += 0.1;
+    alpha_ += 0.01;
 
 
 
@@ -430,6 +435,10 @@ int main() {
         rectangle->setRotation(-M_PI*0.5, 0,1,0);
         cuboid->draw();
     }
+      //triangle2->setRotation(alpha_, 0,1,0);
+      //triangle2->draw();
+
+      //game->draw();
 
 
 //    std::vector<double> test = pl->distanceFromSideS(a);
