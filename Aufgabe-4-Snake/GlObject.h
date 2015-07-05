@@ -19,12 +19,13 @@ class GlObject {
         void setMaterialColor(MATERIAL_SIDES side, double r, double g, double b);
         void setMaterialColor(MATERIAL_SIDES side, Vec3 *rgb);
         GlObject(Point *origin);
+        virtual bool colidate(Vec3 * point) = 0; //Abstract function. Implemented by the inheritance class
         virtual void draw();
-        void setRotation(double angle, Vec3 vec);
-        void setRotation(double angle, int x, int y, int z);
+        virtual void setRotation(double angle, Vec3 vec);
+        virtual void setRotation(double angle, int x, int y, int z);
         Point * getOriginPoint();
-        void setTranslationVec(Vec3 vec);
-        void setTranslationVec(int x, int y, int z);
+        virtual void setTranslationVec(Vec3 vec);
+        virtual void setTranslationVec(int x, int y, int z);
     protected:
         Point* originPoint;
         Vec3 * rotationVec;

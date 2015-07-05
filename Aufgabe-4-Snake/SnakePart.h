@@ -5,40 +5,42 @@
 #ifndef GLFW3_DEMO_WITH_CMAKE_SNAKEPART_H
 #define GLFW3_DEMO_WITH_CMAKE_SNAKEPART_H
 
+#include <deque>
 #include "GlObject.h"
 #include "Point.h"
 #include "Cuboid.h"
 class SnakePart : public GlObject{
 public:
+    SnakePart(double l,int index,std::deque<Vec3> * track,std::deque<double> * trackRot, SnakePart *origin);
     SnakePart(double l,SnakePart *origin);
     SnakePart(double l,Point *origin);
     SnakePart* addPart();
-    SnakePart* getBeforeNode();
-    Point* globalOrigin;
     void draw();
-    double* getAngle();
-    bool collidate(Vec3 * vec);
-    Vec3 getPositionForNewPart();
-    Vec3 getPositionBehind();
-    void setVelocity(double d);
-    double getVelocity();
-    void setRotation(double angle, int x, int y, int z);
     double getPartLength();
-    Point * getOriginPoint();
-    Point * getTranslationPoint();
-private:
-    Cuboid * cuboid;
-    Vec3 * cuboidTranslationVec;
-    void recalculateRotationValues();
-    void recalculateTranslationValues();
-    void applyValues(double l);
-    void applyLastPosition();
+    bool colidate(Vec3 * vec);
+    double* getAngle();
+    void setRotation(double angle, int x, int y, int z);
+    void setRotation(double angle, Vec3 vec);
+    std::deque<Vec3> * getTrack();
+
+protected:
+    Vec3 getPositionFromTrack();
+    double getRotationFromTrack();
     double part_length;
     SnakePart *beforeNode;
     SnakePart *nextNode;
-    Vec3 * oldAbsolutPosition;
-    Vec3 * oldAbsolutRotation;
-    double velocity;
+    std::deque<Vec3> *trackPositions;
+    std::deque<double> *trackRotations;
+    Vec3 *innerTranslationVec;
+    GlObject *drawObject;
+    Point* globalOrigin;
+    int index;
+
+private:
+    void recalculateRotationValues();
+    void recalculateTranslationValues();
+    void applyValues(double l);
+    bool isTrackReadyToDraw();
 };
 
 

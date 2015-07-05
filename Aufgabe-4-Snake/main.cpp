@@ -59,7 +59,7 @@ double zoomINOUT = 0;
 
 
 Playground * pl = new Playground(17,17,-9,-9);
-Point * origin = new Point(new Vec3(0,0,0));
+Point * origin = new Point(new Vec3(0,2,0));
 Cuboid * cuboid = new Cuboid(1,3,new Point(origin,-5,0,0));
 Snake * snake = nullptr;
 Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
@@ -394,7 +394,7 @@ int main() {
         Vec3 headPoint = snake->getHeadPoint();
         Utils::drawAxis(headPoint,5);
 
-        if(apple->collision(snake->getHeadPoint())){
+        if(apple->colidate(&headPoint)){
           currentScore += 10;
           apple->setTranslationVec(randomVec());
         }else if(!pl->isVecInField(snake->getHeadPoint())){

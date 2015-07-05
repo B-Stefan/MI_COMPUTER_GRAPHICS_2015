@@ -56,10 +56,10 @@ void Sphere::draw() {
 
 }
 
-bool Sphere::collision(Vec3 snakeHead) {
+bool Sphere::colidate(Vec3 * snakeHead) {
 
-    double distanceX = fabs(this->originPoint->getPosition()->p[0] - snakeHead.p[0]);
-    double distanceZ = fabs(this->originPoint->getPosition()->p[2] - snakeHead.p[2]);
+    double distanceX = fabs(this->originPoint->getPosition()->p[0] - snakeHead->p[0]);
+    double distanceZ = fabs(this->originPoint->getPosition()->p[2] - snakeHead->p[2]);
 
 //    std::cout << "distanceX: " << distanceX << std::endl;
 //    std::cout << "distanceZ: " << distanceZ << std::endl;

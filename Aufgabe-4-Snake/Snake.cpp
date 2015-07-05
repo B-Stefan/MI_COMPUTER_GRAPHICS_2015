@@ -7,12 +7,11 @@
 #include "Point.h"
 #include "SnakePart.h"
 #include "GlObject.h"
+#include "./../_lib/utils.h"
 Snake::Snake(Point *origin)
         : GlObject::GlObject(origin) {
 
-        this->firstPart = new SnakePart(1,origin);
-        this->firstPart->addPart();
-        this->firstPart->addPart();
+        this->firstPart = new SnakeHead(1,origin);
         this->firstPart->addPart();
         this->firstPart->addPart();
         this->firstPart->addPart();
@@ -21,15 +20,24 @@ Snake::Snake(Point *origin)
 }
 bool Snake::collidateThemSelf() {
     Vec3 headPoint = this->getHeadPoint();
-    return this->firstPart->collidate(&headPoint);
+    return this->firstPart->colidate(&headPoint);
 }
 bool Snake::colidate(Vec3 * vec) {
-    this->firstPart->collidate(vec);
+    this->firstPart->colidate(vec);
+}
+void Snake::addPart() {
+    this->firstPart->addPart();
 }
 void Snake::draw() {
         GlObject::draw();
         this->firstPart->setRotation(*this->angle, 0,1,0);
         this->firstPart->draw();
+
+
+        for  (auto  &p : *this->firstPart->getTrack()) // Problem part
+        {
+            Utils::drawAxis(p,3);
+        }
 }
 /**
  * Return the first point of the snake based on the current move direction

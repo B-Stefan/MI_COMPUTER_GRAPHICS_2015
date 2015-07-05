@@ -5,28 +5,20 @@
 #include "SnakeHead.h"
 #include <iostream>
 SnakeHead::SnakeHead(double l, Point *origin)
-        :GlObject(origin){
-
-        std::cout << l << std::endl;
-        this->originPoint = origin;
-
-        Point* top = new Point(this->originPoint, 0,0,l/2.0);
-        Point* bottom = new Point(this->originPoint, 0,0,-l/2.0);
-        Point* left = new Point(this->originPoint, -l/2.0,0,0);
-
-        this->top = new Triangle(l, top);
-        this->bottom = new Triangle(l, bottom);
-        this->side_a = new Rectangle(l,l, left);
-        //
-  //      this->top->setDefaultRotation(M_PI*0.25,0,0,1);
-    //    this->bottom->setDefaultRotation(M_PI*0.25,0,0,1);
-
-
-
+        :SnakePart(l,origin){
+    this->trackPositions = new std::deque<Vec3>();
+    this->velocity = 0.01;
+    this->saveValuesToTrack();
+}
+void SnakeHead::saveValuesToTrack() {
+    Vec3 *globalOrigin = this->globalOrigin->getPosition();
+    Vec3 vecToLastPosFromGlobalOrigin = *this->drawObject->getOriginPoint()->getPosition()- *globalOrigin;
+    this->trackPositions->push_front(vecToLastPosFromGlobalOrigin);
+    this->trackRotations->push_front(*this->getAngle());
 }
 void SnakeHead::draw() {
-    GlObject::draw();
-    this->top->draw();
-    this->bottom->draw();
+    SnakePart::draw();
+    this->innerTranslationVec->p[0] = this->velocity * -1;
+    this->saveValuesToTrack();
 
 }

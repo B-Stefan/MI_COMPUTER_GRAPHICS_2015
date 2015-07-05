@@ -8,68 +8,70 @@
 #include <cmath>
 #include "./../_lib/utils.h";
 
-double DELTA_BETWEEN_PARTS = 0.6;
-double DEFAULT_VELOCITY  = 0.01;
+const double DELTA_STEPS_BETWEEN_PARTS = 150;
+const double DEFAULT_VELOCITY  = 0.01;
 
+SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation, SnakePart *origin)
+        : GlObject(origin->globalOrigin){
+    std::cout << index << std::endl;
+    this->globalOrigin = origin->globalOrigin;
+    this->applyValues(l);
+    this->beforeNode = origin;
+    this->index = index;
+    this->trackPositions = trackPos;
+    this->trackRotations= trackRotation;
+}
 SnakePart::SnakePart(double l, SnakePart *origin)
         : GlObject(origin->globalOrigin) {
     this->globalOrigin = origin->globalOrigin;
-    this->beforeNode = origin;
     this->applyValues(l);
+    this->beforeNode = origin;
 
 }
-
 SnakePart::SnakePart(double l, Point *origin)
         : GlObject(origin) {
     this->globalOrigin = origin;
     this->applyValues(l);
-    this->beforeNode = nullptr;
 
 }
 
 double SnakePart::getPartLength() {
     return this->part_length;
 }
-double SnakePart::getVelocity() {
-    return this->velocity;
-}
+
 void SnakePart::applyValues(double l) {
+    this->index = 0;
+    this->trackPositions = new std::deque<Vec3>();
+    this->trackRotations = new std::deque<double>();
     this->part_length = l;
-    this->velocity = DEFAULT_VELOCITY;
-    this->cuboidTranslationVec = new Vec3(0, 0, 0);
-    this->cuboid = new Cuboid(this->part_length, this->part_length, this->originPoint);
-    this->cuboid->getOriginPoint()->setTranslationVec(this->cuboidTranslationVec);
-    this->oldAbsolutPosition = nullptr;
-    this->oldAbsolutRotation = new Vec3();
+    this->innerTranslationVec = new Vec3(0, 0, 0);
+    this->drawObject = new Cuboid(this->part_length, this->part_length, this->originPoint);
+    this->drawObject->getOriginPoint()->setTranslationVec(this->innerTranslationVec);
     this->nextNode = nullptr;
+    this->beforeNode = nullptr;
 
 }
-
-SnakePart *SnakePart::getBeforeNode() {
-    return this->beforeNode;
-}
-
 void SnakePart::setRotation(double angle, int x, int y, int z) {
-    this->cuboid->setRotation(angle, x, y, z);
+    this->drawObject->setRotation(angle,x,y,z);
 }
-double *SnakePart::getAngle() {
-    return this->cuboid->getOriginPoint()->getAngle();
+void SnakePart::setRotation(double angle, Vec3 vec) {
+    this->drawObject->setRotation(angle,vec);
 }
-Point* SnakePart::getOriginPoint() {
-    return this->cuboid->getOriginPoint();
+std::deque<Vec3>* SnakePart::getTrack() {
+    return  this->trackPositions;
 }
-
-Point *SnakePart::getTranslationPoint() {
-    return this->originPoint;
-}
-
 SnakePart *SnakePart::addPart() {
     if (this->nextNode != nullptr) {
         return this->nextNode->addPart();
     } else {
-        this->nextNode = new SnakePart(this->part_length, this);
+        int newIndex = this->index+1;
+        this->nextNode = new SnakePart(this->part_length,newIndex, this->trackPositions,this->trackRotations, this);
         return this->nextNode;
     }
+}
+
+double * SnakePart::getAngle() {
+    return this->drawObject->getOriginPoint()->getAngle();
 }
 /**
  * Calculates the rotation for the part, based on the previous parts
@@ -77,83 +79,27 @@ SnakePart *SnakePart::addPart() {
 void SnakePart::recalculateRotationValues() {
     //If the part is not the first part
     if (this->beforeNode != nullptr) {
-        double *angleBefore = this->beforeNode->getAngle();
-        double *currentangle = this->getAngle();
-        double delta = *angleBefore - *currentangle;
-        double  diff = 0;
-        // std::cout << "START FOR NEW PART " << std::endl;
-        // std::cout << "angleBefore: " << * angleBefore  << std::endl;
-        // std::cout << "currentangle: " << * currentangle  << std::endl;
-        // std::cout << "delta: " << delta  << std::endl;
-        // std::cout << "(0.004/delta): " << *currentangle / *angleBefore << std::endl;
+        this->setRotation(this->getRotationFromTrack(),0,1,0);
 
-
-
-        /**
-         * Set up rotation for part
-         */
-        if(delta != 0){
-
-            //Function diagramm: https://www.google.de/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=y%20%3D%201%2Fx%5E2
-            diff = 1/exp(delta);
-            //delta = delta * 0.004  + diff *delta * 0.004;
-            double percent = fabs(*currentangle / *angleBefore);
-            delta = delta * percent/55;// (1- fabs(*currentangle / *angleBefore));
-            if(fabs(delta) < 0.000005){
-                delta = 0;
-                *currentangle = *angleBefore;
-            }else {
-                *currentangle = *currentangle + delta;
-            }
-            double currentVelocity = this->getVelocity();
-            double deltaVelocity = this->getVelocity() - currentVelocity;
-           // this->setVelocity(currentVelocity + (deltaVelocity * percent)) ;
-            /*std::cout << percent<< std::endl;
-            std::cout << "Delta"<< deltaVelocity<< std::endl;
-            std::cout << "currentVelocity"<< this->velocity<< std::endl;
-        */
-        }
-
-        //std::cout << "delta: " << delta  << " - DIFF " << diff<<  std::endl;
-
-
-        this->cuboid->setRotation(*currentangle, 0, 1, 0);
-
-    } else {
-        //if the part is the first part
-        double *angle = this->getAngle();
-        this->cuboid->setRotation(*angle * 0.5, 0, 1, 0);
-        this->setVelocity(DEFAULT_VELOCITY);
     }
 }
 
-/**
- * Return a new postion for a part based an the current x orientation. So the new position is actual behind the this part
- */
-Vec3 SnakePart::getPositionForNewPart() {
-    this->cuboid->getOriginPoint()->recalculatePosition(true);
-    Point *newPos = new Point(this->cuboid->getOriginPoint(), this->part_length + DELTA_BETWEEN_PARTS, 0, 0);
-    Utils::printVec3(*newPos->getPosition(), "NEW POS");
-    return *newPos->getPosition();
 
-
+bool SnakePart::isTrackReadyToDraw() {
+    return this->trackPositions->size() >= (DELTA_STEPS_BETWEEN_PARTS * this->index);
 }
-bool SnakePart::collidate(Vec3 * vec) {
-    if(this->cuboid->colidate(vec)){
+
+bool SnakePart::colidate(Vec3 * vec) {
+    if(!this->isTrackReadyToDraw()){
+        return false;
+    }
+    if(this->drawObject->colidate(vec)){
         return true;
     }else if(this->nextNode != nullptr){
-        return this->nextNode->collidate(vec);
+        return this->nextNode->colidate(vec);
     }else {
         return false;
     }
-    return false;
-}
-
-/**
- * Set up velocity for the current part s
- */
-void SnakePart::setVelocity(double d) {
-    this->velocity = d;
 }
 
 /**
@@ -161,81 +107,40 @@ void SnakePart::setVelocity(double d) {
  * This functions generate an vector that points to the old position relative to the global origin of the snake
  */
 void SnakePart::recalculateTranslationValues() {
-    Vec3 *globalOrigin = this->globalOrigin->getPosition();
-    Vec3 vecToLastPosFromGlobalOrigin = *this->oldAbsolutPosition - *globalOrigin;
-    Vec3 translationVecToOldPos = vecToLastPosFromGlobalOrigin;
-/*
-        Utils::printVec3(*globalOrigin, "globalOrigin");
-        Utils::printVec3(*this->oldAbsolutPosition, "oldAbsolutPosition");
-        Utils::printVec3(vecTocurrentPositionFromGlobalOrigin, "vecTocurrentPositionFromGlobalOrigin");
-        Utils::printVec3(vecToLastPosFromGlobalOrigin, "vecToLastPosFromGlobalOrigin");
-        Utils::printVec3(translationVecToOldPos);
-*/
-
+    Vec3 translationVecToOldPos = this->getPositionFromTrack();
 
     this->translationVec->p[0] = translationVecToOldPos.p[0];
     this->translationVec->p[1] = translationVecToOldPos.p[1];
     this->translationVec->p[2] = translationVecToOldPos.p[2];
 
-    this->cuboidTranslationVec->p[0] = this->velocity * -1;//delta;
-
 }
 
-/**
- * Save the current position
- */
-void SnakePart::applyLastPosition() {
+Vec3 SnakePart::getPositionFromTrack() {
+    std::deque <Vec3> track = *this->trackPositions;
+    return track[this->index * DELTA_STEPS_BETWEEN_PARTS];
+}
+double SnakePart::getRotationFromTrack() {
+    std::deque <double > track = *this->trackRotations;
+    return track[this->index * DELTA_STEPS_BETWEEN_PARTS];
 
-    /**
-     * If it is the fist time this function called set up the postion behind the part before
-     */
-    if (this->oldAbsolutPosition == nullptr) {
-        if (this->beforeNode != nullptr) {
-            this->oldAbsolutPosition = new Vec3(this->beforeNode->getPositionForNewPart());
-        } else {
-            this->oldAbsolutPosition = new Vec3();
-        }
-    } else {
-        //store the absolut position of the cuboid in a vector
-
-
-
-            this->cuboid->getOriginPoint()->recalculatePosition(true);
-            Vec3 *calculatedInnerPos = this->cuboid->getOriginPoint()->getPosition();
-            this->oldAbsolutPosition->p[0] = calculatedInnerPos->p[0];
-            this->oldAbsolutPosition->p[1] = calculatedInnerPos->p[1];
-            this->oldAbsolutPosition->p[2] = calculatedInnerPos->p[2];
-
-
-
-        double *calculatedInnerRotation = this->cuboid->getOriginPoint()->getAngle();
-        this->oldAbsolutRotation->p[0] = 0;
-        this->oldAbsolutRotation->p[1] = *calculatedInnerRotation;
-        this->oldAbsolutRotation->p[2] = 0;
-    }
 
 }
-
 void SnakePart::draw() {
     GlObject::draw();
-    //Only called once, on the first draw of the object
-    if (this->oldAbsolutPosition == nullptr) {
-        std::cout << "FIRST DRAW " << std::endl;
-        this->applyLastPosition();
+
+    if(!this->isTrackReadyToDraw()){
+        return;
     }
 
     this->recalculateRotationValues();
     this->recalculateTranslationValues();
 
-    this->cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, 1, 0, 0);
-    this->cuboid->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, 1, 0, 0);
+    this->drawObject->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, 1, 0, 0);
+    this->drawObject->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, 1, 0, 0);
 
-    this->cuboid->draw();
+    this->drawObject->draw();
 
     if (this->nextNode != nullptr) {
         this->nextNode->draw();
     }
-
-    this->applyLastPosition();
-
 }

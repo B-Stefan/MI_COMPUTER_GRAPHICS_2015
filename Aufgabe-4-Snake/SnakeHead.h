@@ -10,11 +10,16 @@
 #import "Rectangle.h"
 #import "Triangle.h"
 #import "Rectangle.h"
-class SnakeHead : public GlObject{
+#include "SnakePart.h"
+
+class SnakeHead : public SnakePart{
 public:
     SnakeHead(double l,Point *origin);
     void draw();
+    void  setVelocity(double v);
 private:
+    double velocity;
+    void saveValuesToTrack();
     Rectangle* side_a ;
     Triangle* top ;
     Triangle* bottom ;

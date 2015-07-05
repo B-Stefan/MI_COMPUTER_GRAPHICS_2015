@@ -14,7 +14,7 @@ public:
 
     void draw();
     double getMiddlePoint();
-    bool collision(Vec3 snakeHead);
+    bool colidate(Vec3 * snakeHead);
 
 private:
     double radius;

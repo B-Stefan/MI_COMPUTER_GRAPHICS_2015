@@ -8,6 +8,7 @@
 #import "GlObject.h"
 #import "SnakeHead.h"
 #import "SnakePart.h"
+#import <vector>
 class Snake : public GlObject{
 public:
     Snake(Point *origin);
@@ -15,9 +16,10 @@ public:
     Vec3 getHeadPoint();
     bool collidateThemSelf();
     bool colidate(Vec3 * vec);
+    void addPart();
 private:
     SnakePart * firstPart;
-    void addPart();
+    std::vector<Vec3> * track;
 };
 
 
