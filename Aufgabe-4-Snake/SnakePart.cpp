@@ -8,7 +8,7 @@
 #include <cmath>
 #include "./../_lib/utils.h";
 
-const double DELTA_STEPS_BETWEEN_PARTS = 150;
+const double DELTA_STEPS_BETWEEN_PARTS = 120;
 const double DEFAULT_VELOCITY  = 0.01;
 
 SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation, SnakePart *origin)

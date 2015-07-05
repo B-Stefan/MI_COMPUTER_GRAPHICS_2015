@@ -25,7 +25,7 @@ class GlObject {
         virtual void setRotation(double angle, int x, int y, int z);
         Point * getOriginPoint();
         virtual void setTranslationVec(Vec3 vec);
-        virtual void setTranslationVec(int x, int y, int z);
+        virtual void setTranslationVec(double x, double y, double z);
     protected:
         Point* originPoint;
         Vec3 * rotationVec;

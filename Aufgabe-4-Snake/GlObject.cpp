@@ -71,7 +71,7 @@ GlObject::GlObject(Point *origin) {
 Point* GlObject::getOriginPoint() {
     return this->originPoint;
 }
-void GlObject::setTranslationVec(int x, int y, int z) {
+void GlObject::setTranslationVec(double x, double y, double z) {
     this->setTranslationVec(*new Vec3(x,y,z));
 }
 void GlObject::setTranslationVec(Vec3 vec) {

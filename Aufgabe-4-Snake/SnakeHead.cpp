@@ -10,7 +10,11 @@ SnakeHead::SnakeHead(double l, Point *origin)
     this->trackPositions = new std::deque<Vec3>();
     this->velocity = 0.01;
     this->saveValuesToTrack();
-    this->drawObject = new SnakeHeadObject(this->part_length,this->originPoint);
+    Point * headRotationX = new Point(this->originPoint);
+    Point * headRotationY = new Point(headRotationX);
+
+
+    this->drawObject = new SnakeHeadObject(this->part_length/2, this->part_length,headRotationY);
     this->drawObject->getOriginPoint()->setTranslationVec(this->innerTranslationVec);
 }
 void SnakeHead::saveValuesToTrack() {

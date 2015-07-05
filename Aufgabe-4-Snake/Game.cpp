@@ -23,7 +23,9 @@ Game::Game(Point * origin)
 }
 void Game::applyDefaults() {
     this->playground = new Playground(17,17,-9,-9);
-    this->snake= new Snake(this->originPoint);
+    Point * snakePoint = new Point(this->originPoint);
+    snakePoint->setTranslationVec(new Vec3(0,1,0));
+    this->snake= new Snake(snakePoint);
     this->apple = new Sphere(0.3,this->originPoint);
     this->scorePrinter = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     this->isRunning = false;

@@ -12,7 +12,7 @@
 
 class SnakeHeadObject : public GlObject {
 public:
-    SnakeHeadObject(double l, Point * origin);
+    SnakeHeadObject(double width,double  height, Point * origin);
     bool colidate(Vec3 * point);
     void draw();
 
