@@ -32,7 +32,7 @@ void Game::applyDefaults() {
     srand(time(0));
     this->playground = new Playground(17,17,-9,-9);
     this->snake= new Snake(this->originPoint);
-    this->apple = new Sphere(0.5,this->originPoint);
+    this->apple = new Sphere(0.6,this->originPoint);
     this->scorePrinter = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     this->isRunning = false;
     this->score = 0;
@@ -75,6 +75,7 @@ void Game::applyLogic() {
     else if(this->apple->colidate(&headPoint)){
         std:: cout << this->apple->colidate(&headPoint) << std::endl;
         this->apple->setTranslationVec(randomVec());
+        this->snake->addPart();
         this->increaseScore();
     }
 }
