@@ -18,8 +18,8 @@ set(TASK4_SOURCES
     ${CMAKE_CURRENT_SOURCE_DIR}/ScorePrinter.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Sphere.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Game.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Triangle.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/TriangleCuboid.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/SnakeHeadObject.cpp
     # add new source files here
     ${CMAKE_CURRENT_SOURCE_DIR}/Playground.cpp
 	PARENT_SCOPE

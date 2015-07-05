@@ -14,7 +14,7 @@
 #include "Rectangle.h"
 #include "Point.h"
 #include "Game.h"
-#include "TriangleCuboid.h"
+#include "SnakeHeadObject.h"
 #include "ScorePrinter.h"
 #include <unistd.h>
 using namespace std;
@@ -68,8 +68,8 @@ Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
 Sphere *apple = new Sphere(0.3,origin);
 Game * game = new Game(origin);
 Game *secenodGame = new Game(origin);
-Triangle * triangle = new Triangle(2,origin);
-TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
+TriangleCuboid * triangle2 = new TriangleCuboid(2,2,origin);
+TriangleCuboid * triangle = new TriangleCuboid(2,2,origin);
 
 
 bool mouseClicked = false;

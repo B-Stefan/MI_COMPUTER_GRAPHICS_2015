@@ -27,7 +27,7 @@ Playground::Playground(double field_width, double field_height, double start_x, 
     //field width
     this->fieldWidth = field_width;
     //height of the side fence
-    this->fieldZ = 2;
+    this->fieldZ = 1;
     // left down corner x position
     this->startX = start_x;
     // left down corner y position
