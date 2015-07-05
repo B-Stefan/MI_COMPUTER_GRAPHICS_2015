@@ -20,6 +20,7 @@ public:
     void stop();
     void draw();
     bool colidate(Vec3 *point);
+    void setSnakeMovement(double angle);
 
 private:
     int score;

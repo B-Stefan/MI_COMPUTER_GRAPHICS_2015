@@ -61,12 +61,13 @@ double zoomINOUT = 0;
 
 
 Playground * pl = new Playground(17,17,-9,-9);
-Point * origin = new Point(new Vec3(0,2,0));
+Point * origin = new Point(new Vec3(0,0,0));
 Cuboid * cuboid = new Cuboid(1,3,new Point(origin,-5,0,0));
 Snake * snake = nullptr;
 Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
 Sphere *apple = new Sphere(0.3,origin);
 Game * game = new Game(origin);
+Game *secenodGame = new Game(origin);
 Triangle * triangle = new Triangle(2,origin);
 TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
 Vec3 randomVec(){
@@ -150,6 +151,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         std::cout << "spalce " <<std::endl;
             gameStarted = true;
             game->start();
+            secenodGame->start();
             snake = new Snake(origin);
             break;
 
@@ -363,7 +365,8 @@ int main() {
     ScorePrinter * h = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     int currentScore = 0;
 
-    game->setTranslationVec(0,0,10);
+    game->setTranslationVec(-10,0,0);
+    secenodGame->setTranslationVec(10,0,0);
 
     usleep(1000);
   while(!glfwWindowShouldClose(window)) {
@@ -387,38 +390,41 @@ int main() {
 
 
 
-    h->print();
-
-    if(gameStarted){
-        h->changeText("");
-        currentScore += 1;
-        string g = sp->intToString(currentScore);
-        sp->printDefaultText("SCORE: " + g);
-        snake->setRotation(rotateY,*new Vec3(0,1,0));
-
-        Vec3 headPoint = snake->getHeadPoint();
-        Utils::drawAxis(headPoint,5);
-
-        if(apple->colidate(&headPoint)){
-          currentScore += 10;
-          apple->setTranslationVec(randomVec());
-        }else if(!pl->isVecInField(snake->getHeadPoint())){
-          h->changeText("You Lost. Your Score is: " + g);
-          gameStarted = false;
-        }else if (snake->collidateThemSelf()){
-          h->changeText("You Lost. Your Score is: " + g);
-          gameStarted = false;
-        }
-        snake->draw();
-        pl->drawPlaygrounD();
-        apple->draw();
-        rectangle->setRotation(-M_PI*0.5, 0,1,0);
-        cuboid->draw();
-    }
+//    h->print();
+//
+//    if(gameStarted){
+//        h->changeText("");
+//        currentScore += 1;
+//        string g = sp->intToString(currentScore);
+//        sp->printDefaultText("SCORE: " + g);
+//        snake->setRotation(rotateY,*new Vec3(0,1,0));
+//
+//        Vec3 headPoint = snake->getHeadPoint();
+//        Utils::drawAxis(headPoint,5);
+//
+//        if(apple->colidate(&headPoint)){
+//          currentScore += 10;
+//          apple->setTranslationVec(randomVec());
+//        }else if(!pl->isVecInField(snake->getHeadPoint())){
+//          h->changeText("You Lost. Your Score is: " + g);
+//          gameStarted = false;
+//        }else if (snake->collidateThemSelf()){
+//          h->changeText("You Lost. Your Score is: " + g);
+//          gameStarted = false;
+//        }
+//        snake->draw();
+//        pl->drawPlaygrounD();
+//        apple->draw();
+//        rectangle->setRotation(-M_PI*0.5, 0,1,0);
+//        cuboid->draw();
+//    }
       //triangle2->setRotation(alpha_, 0,1,0);
       //triangle2->draw();
 
-      //game->draw();
+      game->draw();
+      game->setSnakeMovement(rotateY);
+      secenodGame->draw();
+      secenodGame->setSnakeMovement(rotateY);
 
 
 //    std::vector<double> test = pl->distanceFromSideS(a);
