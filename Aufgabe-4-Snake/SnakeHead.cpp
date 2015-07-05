@@ -3,15 +3,16 @@
 //
 
 #include "SnakeHead.h"
+#include "SnakeHeadObject.h"
 #include <iostream>
 SnakeHead::SnakeHead(double l, Point *origin)
         :SnakePart(l,origin){
     this->trackPositions = new std::deque<Vec3>();
     this->velocity = 0.01;
     this->saveValuesToTrack();
-    /*this->drawObject = new Triangle(this->part_length,this->originPoint);
+    this->drawObject = new SnakeHeadObject(this->part_length,this->originPoint);
     this->drawObject->getOriginPoint()->setTranslationVec(this->innerTranslationVec);
-*/}
+}
 void SnakeHead::saveValuesToTrack() {
     Vec3 *globalOrigin = this->globalOrigin->getPosition();
     Vec3 vecToLastPosFromGlobalOrigin = *this->drawObject->getOriginPoint()->getPosition()- *globalOrigin;

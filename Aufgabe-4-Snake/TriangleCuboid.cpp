@@ -1,53 +1,73 @@
 //
-// Created by Stefan B. on 05.07.15.
+// Created by Stefan B. on 02.07.15.
 //
 
 #include "TriangleCuboid.h"
 #include "./../_lib/utils.h"
+#include <GLFW/glfw3.h>
 
-TriangleCuboid::TriangleCuboid(double l, Point *origin) : GlObject(origin){
-        this->length = l;
+TriangleCuboid::TriangleCuboid(double widht, double height, Point *origin) :GlObject(origin){
 
-        Point * topPoint = new Point(this->originPoint, 0,l/2,0);
-        Point * bottomPoint = new Point(this->originPoint, 0,-l/2,0);
-        Point * leftPoint = new Point(this->originPoint, l/2,0,0);
+    this->topArea = new Point(this->originPoint, 0,0,+height/2);
+    this->bottomArea = new Point(this->originPoint, 0,0,-height/2);
 
-        this->top = new Triangle(l,topPoint);
-        this->bottom= new Triangle(l,bottomPoint);
-        this->side_a = new Rectangle(l,l + l/2,leftPoint);
+    this->pointA = new Point(this->topArea, -widht,-widht/2,0);
+    this->pointB = new Point(this->topArea, 0,widht,0);
+    this->pointC = new Point(this->topArea, widht,-widht/2,0);
 
+    this->pointA_bottom = new Point(this->bottomArea, -widht,-widht/2,0);
+    this->pointB_bottom = new Point(this->bottomArea, 0,widht,0);
+    this->pointC_bottom = new Point(this->bottomArea, widht,-widht/2,0);
 
-        this->top->setRotation(M_PI * 0.5, 1,0,0);
-        this->bottom->setRotation(M_PI * 0.5, 1,0,0);
-        this->side_a->setRotation(M_PI*0.25,0,1,0);
-        //Material
-        this->top->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, this->material_front);
-        this->top->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, this->material_back);
-
-        this->bottom->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, this->material_front);
-        this->bottom->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, this->material_back);
-
-
-        this->side_a->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT, new Vec3(1,0,0));
-        this->side_a->setMaterialColor(GlObject::MATERIAL_SIDES::BACK, new Vec3(1,0,0));
 
 
 }
 bool TriangleCuboid::colidate(Vec3 *point) {
-    if (this->top->colidate(point)){
-        return true;
-    }
-    else if (this->bottom->colidate(point)){
-        return true;
-    }else {
-        return false;
-    }
+    return false;
 }
 void TriangleCuboid::draw() {
     GlObject::draw();
+    glBegin(GL_TRIANGLES);
+    glVertex3f(this->pointA->getPosition()->p[0], this->pointA->getPosition()->p[1], this->pointA->getPosition()->p[2]);
+    glVertex3f(this->pointB->getPosition()->p[0], this->pointB->getPosition()->p[1], this->pointB->getPosition()->p[2]);
+    glVertex3f(this->pointC->getPosition()->p[0], this->pointC->getPosition()->p[1], this->pointC->getPosition()->p[2]);
+    glEnd();
 
-    Utils::drawPoint(this->originPoint,1);
-    this->top->draw();
-    this->bottom->draw();
-    this->side_a->draw();
+
+    Utils::drawPoint(this->originPoint,5);
+    glBegin(GL_TRIANGLES);
+    glVertex3f(this->pointA_bottom->getPosition()->p[0], this->pointA_bottom->getPosition()->p[1], this->pointA_bottom->getPosition()->p[2]);
+    glVertex3f(this->pointB_bottom->getPosition()->p[0], this->pointB_bottom->getPosition()->p[1], this->pointB_bottom->getPosition()->p[2]);
+    glVertex3f(this->pointC_bottom->getPosition()->p[0], this->pointC_bottom->getPosition()->p[1], this->pointC_bottom->getPosition()->p[2]);
+    glEnd();
+
+
+
+    glBegin(GL_QUADS);
+    glEnable(GL_NORMALIZE);
+    glVertex3f(this->pointA_bottom->getPosition()->p[0],this->pointA_bottom->getPosition()->p[1],this->pointA_bottom->getPosition()->p[2]);
+    glVertex3f(this->pointA->getPosition()->p[0],this->pointA->getPosition()->p[1],this->pointA->getPosition()->p[2]);
+    glVertex3f(this->pointB->getPosition()->p[0],this->pointB->getPosition()->p[1],this->pointB->getPosition()->p[2]);
+    glVertex3f(this->pointB_bottom->getPosition()->p[0],this->pointB_bottom->getPosition()->p[1],this->pointB_bottom->getPosition()->p[2]);
+    glEnd();
+
+
+
+    glBegin(GL_QUADS);
+    glEnable(GL_NORMALIZE);
+    glVertex3f(this->pointC_bottom->getPosition()->p[0],this->pointC_bottom->getPosition()->p[1],this->pointC_bottom->getPosition()->p[2]);
+    glVertex3f(this->pointC->getPosition()->p[0],this->pointC->getPosition()->p[1],this->pointC->getPosition()->p[2]);
+    glVertex3f(this->pointB->getPosition()->p[0],this->pointB->getPosition()->p[1],this->pointB->getPosition()->p[2]);
+    glVertex3f(this->pointB_bottom->getPosition()->p[0],this->pointB_bottom->getPosition()->p[1],this->pointB_bottom->getPosition()->p[2]);
+    glEnd();
+
+
+
+    glBegin(GL_QUADS);
+    glEnable(GL_NORMALIZE);
+    glVertex3f(this->pointA_bottom->getPosition()->p[0],this->pointA_bottom->getPosition()->p[1],this->pointA_bottom->getPosition()->p[2]);
+    glVertex3f(this->pointA->getPosition()->p[0],this->pointA->getPosition()->p[1],this->pointA->getPosition()->p[2]);
+    glVertex3f(this->pointC->getPosition()->p[0],this->pointC->getPosition()->p[1],this->pointC->getPosition()->p[2]);
+    glVertex3f(this->pointC_bottom->getPosition()->p[0],this->pointC_bottom->getPosition()->p[1],this->pointC_bottom->getPosition()->p[2]);
+    glEnd();
 }

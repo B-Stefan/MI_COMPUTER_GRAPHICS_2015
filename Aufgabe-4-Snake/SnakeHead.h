@@ -8,7 +8,7 @@
 
 #import "GlObject.h"
 #import "Rectangle.h"
-#import "Triangle.h"
+#import "TriangleCuboid.h"
 #import "Rectangle.h"
 #include "SnakePart.h"
 
