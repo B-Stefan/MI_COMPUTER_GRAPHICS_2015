@@ -8,6 +8,12 @@
 #include "Snake.h"
 #include "Point.h"
 
+
+
+
+
+
+
 Game::Game(Point * origin)
     :GlObject::GlObject(origin)
     {
@@ -23,18 +29,46 @@ void Game::applyDefaults() {
     this->isRunning = false;
     this->score = 0;
 }
+
+Vec3 Game::randomVec(){
+
+
+    double r = abs(this->playground->startX) - (this->playground->startX);
+    double s = abs(this->playground->startY) - (this->playground->startY);
+    double x = -9 + (r * rand()/(RAND_MAX+1.0));
+    double z = -9 + (s * rand()/(RAND_MAX+1.0));
+
+
+    if(x > 0){
+        x -= this->apple->getRadius();
+    }
+    if(z > 0){
+        z -= this->apple->getRadius();
+    }
+    if(x < 0){
+        x += this->apple->getRadius();
+    }
+    if(z < 0){
+        z += this->apple->getRadius();
+    }
+
+    return Vec3(x,0,z);
+
+}
 void Game::increaseScore() {
     this->score  += 10;
 }
 void Game::start() {
+    this->scorePrinter->changeText("");
     this->isRunning = true;
+
 }
 void Game::stop() {
     this->isRunning = false;
     this->applyDefaults();
 }
 void Game::loseGame() {
-    this->scorePrinter->changeText("You lose the game! Score: " + this->score);
+    this->scorePrinter->changeText("You lose the game! Score: " + this->scorePrinter->intToString(this->score));
     this->stop();
 }
 void Game::applyLogic() {
@@ -44,12 +78,17 @@ void Game::applyLogic() {
         || this->snake->collidateThemSelf()){
 
 
-        //this->loseGame();
+        this->loseGame();
     }
     else if(this->apple->colidate(&headPoint)){
-
+        std:: cout << this->apple->colidate(&headPoint) << std::endl;
+        this->apple->setTranslationVec(randomVec());
         this->increaseScore();
     }
+}
+
+void Game::setSnakeMovement(double angle) {
+    this->snake->setRotation(angle,*new Vec3(0,1,0));
 }
 
 bool Game::colidate(Vec3 *point) {
@@ -61,6 +100,7 @@ void Game::draw() {
     glPushMatrix();
     this->applyLogic();
     if(this->isRunning){
+        this->scorePrinter->printDefaultText("Score: " + this->scorePrinter->intToString(this->score));
         this->playground->drawPlaygrounD();
         this->apple->draw();
         this->snake->draw();
@@ -69,3 +109,5 @@ void Game::draw() {
     glPopMatrix();
     glTranslated(this->translationVec->p[0]*-1,this->translationVec->p[1]*-1,this->translationVec->p[2]*-1);
 }
+
+

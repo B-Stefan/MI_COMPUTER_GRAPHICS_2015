@@ -8,45 +8,44 @@
 #include "SnakePart.h"
 #include "GlObject.h"
 #include "./../_lib/utils.h"
+
 Snake::Snake(Point *origin)
         : GlObject::GlObject(origin) {
 
-        this->firstPart = new SnakeHead(1,origin);
-        this->firstPart->addPart();
-        this->firstPart->addPart();
-        this->firstPart->addPart();
-        this->firstPart->addPart();
+    this->firstPart = new SnakeHead(1, origin);
+    this->firstPart->addPart();
+    this->firstPart->addPart();
+    this->firstPart->addPart();
+    this->firstPart->addPart();
 
 }
+
 bool Snake::collidateThemSelf() {
     Vec3 headPoint = this->getHeadPoint();
     return this->firstPart->colidate(&headPoint);
 }
-bool Snake::colidate(Vec3 * vec) {
+
+bool Snake::colidate(Vec3 *vec) {
     this->firstPart->colidate(vec);
 }
+
 void Snake::addPart() {
     this->firstPart->addPart();
 }
+
 void Snake::draw() {
-        GlObject::draw();
-        this->firstPart->setRotation(*this->angle, 0,1,0);
-        this->firstPart->draw();
-
-
-        for  (auto  &p : *this->firstPart->getTrack()) // Problem part
-        {
-            Utils::drawAxis(p,3);
-        }
+    GlObject::draw();
+    this->firstPart->setRotation(*this->angle, 0, 1, 0);
+    this->firstPart->draw();
 }
+
 /**
  * Return the first point of the snake based on the current move direction
  */
 Vec3 Snake::getHeadPoint() {
-        Point p = new Point(this->firstPart->getOriginPoint(),
-                            this->firstPart->getPartLength()/2*-1 + 0.1
-                           ,0,
-                            0);
+    Point p = new Point(this->firstPart->getOriginPoint(),
+                        this->firstPart->getPartLength() / 2 * -1 + 0.1, 0,
+                        0);
 
-        return *p.getPosition();
+    return *p.getPosition();
 }
