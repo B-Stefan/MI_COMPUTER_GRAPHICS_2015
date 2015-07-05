@@ -68,10 +68,8 @@ Rectangle * rectangle= new Rectangle(1,3,new Point(origin, -5,0,0));
 Sphere *apple = new Sphere(0.3,origin);
 Game * game = new Game(origin);
 Game *secenodGame = new Game(origin);
-Triangle * triangle = new Triangle(2,origin);
 TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
 TriangleCuboid * triangle = new TriangleCuboid(2,2,origin);
-SnakeHeadObject * triangle2 = new SnakeHeadObject(2,origin);
 Vec3 randomVec(){
 
 
