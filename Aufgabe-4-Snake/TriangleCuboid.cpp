@@ -34,7 +34,6 @@ void TriangleCuboid::draw() {
     glEnd();
 
 
-    Utils::drawPoint(this->originPoint,5);
     glBegin(GL_TRIANGLES);
     glVertex3f(this->pointA_bottom->getPosition()->p[0], this->pointA_bottom->getPosition()->p[1], this->pointA_bottom->getPosition()->p[2]);
     glVertex3f(this->pointB_bottom->getPosition()->p[0], this->pointB_bottom->getPosition()->p[1], this->pointB_bottom->getPosition()->p[2]);
