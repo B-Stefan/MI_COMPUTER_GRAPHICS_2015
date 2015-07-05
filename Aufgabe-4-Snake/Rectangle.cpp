@@ -43,20 +43,6 @@ Rectangle::Rectangle(double height, double width, Point *origin)
 
 }
 bool Rectangle::colidate(Vec3* postition) {
-    double x = round(postition->p[0]* 100) / 100;
-    double y = round(postition->p[1]* 100) / 100;
-    double z = round(postition->p[2]* 100) / 100;
-
-    Vec3* borderLeftTopCorner = new Vec3();
-    borderLeftTopCorner->p[0] = round(this->B->getPosition()->p[0]* 100) / 100;
-    borderLeftTopCorner->p[1] = round(this->B->getPosition()->p[1]* 100) / 100;
-    borderLeftTopCorner->p[2] = round(this->B->getPosition()->p[2]* 100) / 100;
-
-    Vec3* borderRightBottomCorner = new Vec3();
-    borderRightBottomCorner->p[0] =  round(this->D->getPosition()->p[0]* 100) / 100;
-    borderRightBottomCorner->p[1] =  round(this->D->getPosition()->p[1]* 100) / 100;
-    borderRightBottomCorner->p[2] =  round(this->D->getPosition()->p[2]* 100) / 100;
-
     Vec3 * p = new Vec3(*this->A->getPosition());
     Vec3 * q = new Vec3(*this->B->getPosition());
     Vec3 * r = new Vec3(*this->C->getPosition());
