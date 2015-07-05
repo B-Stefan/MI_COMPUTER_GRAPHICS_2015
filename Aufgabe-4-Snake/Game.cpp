@@ -2,6 +2,7 @@
 // Created by Stefan B. on 05.07.15.
 //
 
+#include <random>
 #include "Game.h"
 #include "Sphere.h"
 #include "Playground.h"
@@ -12,6 +13,12 @@
 
 
 
+double fRand(double fMin, double fMax)
+{
+
+    double f = (double)rand() / RAND_MAX;
+    return fMin + f * (fMax - fMin);
+}
 
 
 Game::Game(Point * origin)
@@ -22,9 +29,10 @@ Game::Game(Point * origin)
         //this->originPoint->setRotate(0,new Vec3());
 }
 void Game::applyDefaults() {
+    srand(time(0));
     this->playground = new Playground(17,17,-9,-9);
     this->snake= new Snake(this->originPoint);
-    this->apple = new Sphere(0.3,this->originPoint);
+    this->apple = new Sphere(0.5,this->originPoint);
     this->scorePrinter = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     this->isRunning = false;
     this->score = 0;
@@ -32,27 +40,11 @@ void Game::applyDefaults() {
 
 Vec3 Game::randomVec(){
 
-
-    double r = abs(this->playground->startX) - (this->playground->startX);
-    double s = abs(this->playground->startY) - (this->playground->startY);
-    double x = -9 + (r * rand()/(RAND_MAX+1.0));
-    double z = -9 + (s * rand()/(RAND_MAX+1.0));
+    double testX =fRand(-8,7);
+    double testY =fRand(-8,7);
 
 
-    if(x > 0){
-        x -= this->apple->getRadius();
-    }
-    if(z > 0){
-        z -= this->apple->getRadius();
-    }
-    if(x < 0){
-        x += this->apple->getRadius();
-    }
-    if(z < 0){
-        z += this->apple->getRadius();
-    }
-
-    return Vec3(x,0,z);
+    return Vec3(testX,0,testY);
 
 }
 void Game::increaseScore() {
@@ -108,6 +100,8 @@ void Game::draw() {
     this->scorePrinter->print();
     glPopMatrix();
     glTranslated(this->translationVec->p[0]*-1,this->translationVec->p[1]*-1,this->translationVec->p[2]*-1);
+
+
 }
 
 
