@@ -86,7 +86,7 @@ bool Sphere::colidate(Vec3 * snakeHead) {
 }
 
 
-double Sphere::getMiddlePoint(){
+double Sphere::getRadius(){
 
     return this->radius;
 }

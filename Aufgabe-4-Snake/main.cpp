@@ -73,10 +73,29 @@ TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
 Vec3 randomVec(){
 
 
-  double x = rand() &9;
-  double z = rand() &9;
-  x -= apple->getMiddlePoint();
-  z -= apple->getMiddlePoint();
+  double x = rand() & (int) pl->fieldWidth;
+  double z = rand() & (int) pl->fieldHeight;
+
+  x -= abs(pl->startX);
+  z -= abs(pl->startY);
+
+  if(x > 0){
+      x -= apple->getRadius();
+  }
+  if(z > 0){
+    z -= apple->getRadius();
+  }
+  if(x < 0){
+    x += apple->getRadius();
+  }
+  if(z < 0){
+    z += apple->getRadius();
+  }
+
+
+
+    std::cout<< "x: " << x << std::endl;
+    std::cout<< "z: " << z << std::endl;
 
   return Vec3(x,0,z);
 
@@ -126,6 +145,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
             translateX -= 1;
+            apple->setTranslationVec(randomVec());
             sx -= step;
             break;
       case GLFW_KEY_DOWN:
