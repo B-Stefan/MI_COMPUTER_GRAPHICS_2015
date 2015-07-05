@@ -380,7 +380,7 @@ int main() {
     ScorePrinter * h = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     int currentScore = 0;
 
-    game->setTranslationVec(-10,0,0);
+    game->setTranslationVec(0,0,0);
     secenodGame->setTranslationVec(10,0,0);
 
     usleep(1000);
@@ -438,7 +438,7 @@ int main() {
 
       game->draw();
       game->setSnakeMovement(rotateY);
-      secenodGame->draw();
+     // secenodGame->draw();
       secenodGame->setSnakeMovement(rotateY);
 
 
