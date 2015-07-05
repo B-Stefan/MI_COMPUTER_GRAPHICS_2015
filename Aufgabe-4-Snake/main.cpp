@@ -86,7 +86,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_A:
             std::cout << "a"<<std::endl;
-            rotateY =  rotateY  -0.1;
+            rotateY =  rotateY  -0.2 ;
             break;
       case GLFW_KEY_S:
         std::cout << "s"<<std::endl;
@@ -94,7 +94,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             break;
       case GLFW_KEY_D:
         std::cout << "d"<<std::endl;
-            rotateY = rotateY + 0.1;
+            rotateY = rotateY + 0.2;
             break;
       case GLFW_KEY_O:
         std::cout << "open"<<std::endl;
