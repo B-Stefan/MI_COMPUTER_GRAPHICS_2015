@@ -8,6 +8,12 @@
 #include "Snake.h"
 #include "Point.h"
 
+
+
+
+
+
+
 Game::Game(Point * origin)
     :GlObject::GlObject(origin)
     {
@@ -22,6 +28,32 @@ void Game::applyDefaults() {
     this->scorePrinter = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     this->isRunning = false;
     this->score = 0;
+}
+
+Vec3 Game::randomVec(){
+
+
+    double r = abs(this->playground->startX) - (this->playground->startX);
+    double s = abs(this->playground->startY) - (this->playground->startY);
+    double x = -9 + (r * rand()/(RAND_MAX+1.0));
+    double z = -9 + (s * rand()/(RAND_MAX+1.0));
+
+
+    if(x > 0){
+        x -= this->apple->getRadius();
+    }
+    if(z > 0){
+        z -= this->apple->getRadius();
+    }
+    if(x < 0){
+        x += this->apple->getRadius();
+    }
+    if(z < 0){
+        z += this->apple->getRadius();
+    }
+
+    return Vec3(x,0,z);
+
 }
 void Game::increaseScore() {
     this->score  += 10;
@@ -50,6 +82,7 @@ void Game::applyLogic() {
     }
     else if(this->apple->colidate(&headPoint)){
         std:: cout << this->apple->colidate(&headPoint) << std::endl;
+        this->apple->setTranslationVec(randomVec());
         this->increaseScore();
     }
 }
@@ -76,3 +109,5 @@ void Game::draw() {
     glPopMatrix();
     glTranslated(this->translationVec->p[0]*-1,this->translationVec->p[1]*-1,this->translationVec->p[2]*-1);
 }
+
+

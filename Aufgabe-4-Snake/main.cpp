@@ -70,31 +70,7 @@ Game * game = new Game(origin);
 Game *secenodGame = new Game(origin);
 Triangle * triangle = new Triangle(2,origin);
 TriangleCuboid * triangle2 = new TriangleCuboid(2,origin);
-Vec3 randomVec(){
 
-
-    double r = abs(pl->startX) - (pl->startX);
-    double s = abs(pl->startY) - (pl->startY);
-    double x = -9 + (r * rand()/(RAND_MAX+1.0));
-    double z = -9 + (s * rand()/(RAND_MAX+1.0));
-
-
-  if(x > 0){
-      x -= apple->getRadius();
-  }
-  if(z > 0){
-    z -= apple->getRadius();
-  }
-  if(x < 0){
-    x += apple->getRadius();
-  }
-  if(z < 0){
-    z += apple->getRadius();
-  }
-
-  return Vec3(x,0,z);
-
-}
 
 bool mouseClicked = false;
 
@@ -140,7 +116,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
       case GLFW_KEY_LEFT:
         std::cout << "left"<<std::endl;
             translateX -= 1;
-            apple->setTranslationVec(randomVec());
             sx -= step;
             break;
       case GLFW_KEY_DOWN:

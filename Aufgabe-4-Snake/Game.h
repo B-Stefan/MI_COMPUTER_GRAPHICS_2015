@@ -21,6 +21,7 @@ public:
     void draw();
     bool colidate(Vec3 *point);
     void setSnakeMovement(double angle);
+    Vec3 randomVec();
 
 private:
     int score;
