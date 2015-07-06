@@ -42,13 +42,16 @@ void Playground::setMaterialColoR(GlObject::MATERIAL_SIDES side, double r, doubl
 
 void Playground::drawPlaygrounD(){
 
-    Vec3 *normale = new Vec3(0,1,0);
-    Vec3 *normaleLeft = new Vec3(1,0,0);
+
+    Vec3 *normaleLeft   = new Vec3(-1,0,0);
+    Vec3 *normaleRight  = new Vec3(-1,0,0);
+    Vec3 *normaleTop    = new Vec3(0,0,-1);
+    Vec3 *normaleDown   = new Vec3(0,0,-1);
+    Vec3 *normalGround  = new Vec3(0, -1,0);
 
     //ground
     glBegin(GL_QUADS);
-    glEnable(GL_NORMALIZE);
-    glNormal3dv(normale->p);
+    glNormal3dv(normalGround->p);
     setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT ,0,238,0);
     setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,238,0);
     glVertex3f(startX,fieldPosZ,startY);
@@ -60,7 +63,6 @@ void Playground::drawPlaygrounD(){
 
     //left
     glBegin(GL_QUAD_STRIP);
-    glEnable(GL_NORMALIZE);
     glNormal3dv(normaleLeft->p);
     setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,1,1,1);
     setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,1,1,1);
@@ -73,8 +75,7 @@ void Playground::drawPlaygrounD(){
 
     //right
     glBegin(GL_QUAD_STRIP);
-    glEnable(GL_NORMALIZE);
-    glNormal3dv(normaleLeft->p);
+    glNormal3dv(normaleRight->p);
     setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,1,1,1);
     setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(fieldWidth + startX, fieldPosZ, startY);
@@ -86,8 +87,7 @@ void Playground::drawPlaygrounD(){
 
     //down
     glBegin(GL_QUAD_STRIP);
-    glEnable(GL_NORMALIZE);
-    glNormal3dv(normaleLeft->p);
+    glNormal3dv(normaleDown->p);
     setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,0,0,0);
     setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,fieldPosZ,startY);
@@ -99,8 +99,7 @@ void Playground::drawPlaygrounD(){
 
     //Top
     glBegin(GL_QUAD_STRIP);
-    glEnable(GL_NORMALIZE);
-    glNormal3dv(normaleLeft->p);
+    glNormal3dv(normaleTop->p);
     setMaterialColoR(GlObject::MATERIAL_SIDES::FRONT,1,1,1);
     setMaterialColoR(GlObject::MATERIAL_SIDES::BACK,0,0,0);
     glVertex3f(startX,fieldPosZ,fieldHeight + startY);
