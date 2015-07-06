@@ -14,6 +14,7 @@ public:
 
     void draw();
     double getRadius();
+    double getDistance(Vec3 * snakeHead);
     bool colidate(Vec3 * snakeHead);
 
 private:

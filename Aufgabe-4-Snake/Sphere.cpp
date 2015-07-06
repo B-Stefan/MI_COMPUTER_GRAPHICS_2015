@@ -56,14 +56,15 @@ void Sphere::draw() {
 
 
 }
-
-bool Sphere::colidate(Vec3 * snakeHead) {
-
-
+double Sphere::getDistance(Vec3 *snakeHead) {
     Vec3 a = *snakeHead - * this->originPoint->getPosition();
     double distance = fabs(a.Length());
     distance = round(distance*10) / 10;
-    if(distance <= this->radius+ 0.1 ){
+    return distance - this->radius;
+}
+bool Sphere::colidate(Vec3 * snakeHead) {
+
+    if(this->getDistance(snakeHead) <= 0){
         return true;
     }
     else {

@@ -15,9 +15,11 @@ public:
     SnakeHeadObject(double width,double  height, Point * origin);
     bool colidate(Vec3 * point);
     void draw();
+    void setOpenPercent(double percent);
+    double  getOpenPercent();
 
 private:
-    double length;
+    double openPercent;
     Point * rotationPointForTop;
     TriangleCuboid* top ;
     TriangleCuboid* bottom ;

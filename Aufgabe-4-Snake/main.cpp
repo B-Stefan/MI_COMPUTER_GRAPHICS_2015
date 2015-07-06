@@ -53,7 +53,7 @@ double zoomValue = 1;
 
 
 //Create objects
-Point *origin = new Point(new Vec3(0, 2, 0)); //From this point all objects drawn to canvas
+Point *origin = new Point(new Vec3(0, 1, 0)); //From this point all objects drawn to canvas
 Game *game = new Game(origin); // Create a new snake game
 Game *secenodGame = new Game(origin); // Create the second snake game.
 Cuboid *cuboid = new Cuboid(3,3,origin);

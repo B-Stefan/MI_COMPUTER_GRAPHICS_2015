@@ -7,11 +7,12 @@
 
 #import "GlObject.h"
 #import "SnakeHead.h"
+#import "Sphere.h"
 #import "SnakePart.h"
 #import <vector>
 class Snake : public GlObject{
 public:
-    Snake(Point *origin);
+    Snake(Point *origin, Sphere * apple);
     void draw();
     Vec3 getHeadPoint();
     bool collidateThemSelf();

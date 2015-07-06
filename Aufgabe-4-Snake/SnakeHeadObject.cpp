@@ -7,6 +7,7 @@
 
 SnakeHeadObject::SnakeHeadObject(double width,double height, Point *origin) : GlObject(origin){
 
+        this->openPercent = 0;
         Point * totalRotate = new Point(this->originPoint);
         Point * totalRotateY = new Point(totalRotate);
 
@@ -42,13 +43,16 @@ bool SnakeHeadObject::colidate(Vec3 *point) {
         return false;
     }
 }
+void SnakeHeadObject::setOpenPercent(double percent) {
+    this->openPercent = percent;
+}
+double SnakeHeadObject::getOpenPercent() {
+    return this->openPercent;
+}
 void SnakeHeadObject::draw() {
     GlObject::draw();
-    double  * angle =  new double(*this->getOriginPoint()->getAngle());
-    * angle = sin(*angle);
-    if(*angle < 0 ){
-     this->top->setRotation(*angle,1,0,0);
-    }
+
+    this->top->setRotation(openPercent,1,0,0);
     this->top->draw();
     this->bottom->draw();
 }

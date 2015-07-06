@@ -9,11 +9,11 @@
 #include "GlObject.h"
 #include "./../_lib/utils.h"
 
-Snake::Snake(Point *origin)
+Snake::Snake(Point *origin, Sphere * apple)
         : GlObject::GlObject(origin) {
     this->velocity = new double(0.01);
 
-    this->firstPart = new SnakeHead(1,this->velocity, origin);
+    this->firstPart = new SnakeHead(1,this->velocity,apple, origin);
     this->firstPart->addPart();
     this->firstPart->addPart();
     this->firstPart->addPart();

@@ -8,17 +8,20 @@
 
 #import "GlObject.h"
 #import "Rectangle.h"
+#import "Sphere.h"
 #import "TriangleCuboid.h"
 #import "Rectangle.h"
 #include "SnakePart.h"
 
 class SnakeHead : public SnakePart{
 public:
-    SnakeHead(double l,double * velocity, Point *origin);
+    SnakeHead(double l,double * velocity, Sphere * apple,  Point *origin);
     void draw();
     void  setVelocity(double v);
 private:
+    void applyOpenPercent();
     double * velocity;
+    Sphere * apple;
     void saveValuesToTrack();
 };
 
