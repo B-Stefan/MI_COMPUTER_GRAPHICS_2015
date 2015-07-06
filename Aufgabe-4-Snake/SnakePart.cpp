@@ -99,9 +99,9 @@ bool SnakePart::colidate(Vec3 * vec) {
 
     }
     else if(this->nextNode != nullptr){
-        if(this->nextNode->colidate(this->getOriginPoint()->getPosition())){
+        /*if(this->nextNode->colidate(this->getOriginPoint()->getPosition())){
             return true;
-        }
+        }*/
         return this->nextNode->colidate(vec);
     }else {
         return false;
