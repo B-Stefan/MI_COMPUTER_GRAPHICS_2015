@@ -28,6 +28,7 @@ Game::Game(Point * origin)
     {
         this->applyDefaults();
         this->originPoint->setTranslationVec(new Vec3());
+        this->originPoint->setRotate(new double(),new Vec3(0,0,0));
 }
 void Game::applyDefaults() {
     srand(time(0));
@@ -39,7 +40,9 @@ void Game::applyDefaults() {
     this->isSpecialApple = false;
     this->score = 0;
     this->setVelocity(DEFAULT_VELOCITY);
-    this->specialAppleTimer = 0;
+    *this->angle = 0;
+    this->rotationVec->p[1] = 1;
+    this->apple->setTranslationVec(randomVec());
 }
 
 Vec3 Game::randomVec(){
@@ -72,10 +75,7 @@ void Game::applyLogic() {
 
     //Special apple
     if(this->isSpecialApple){
-        if(fRand(0,100) < 10){
-            this->setVelocity(DEFAULT_VELOCITY);
-            this->isSpecialApple = false;
-        }
+        * this->angle = *this->angle +0.1;
     }
 
 
@@ -87,14 +87,13 @@ void Game::applyLogic() {
         this->loseGame();
     }
     else if(this->apple->colidate(&headPoint)){
-
-        std:: cout << this->apple->colidate(&headPoint) << std::endl;
-
+        if(this->isSpecialApple){
+            this->isSpecialAppleActive = !this->isSpecialAppleActive;
+        }
         this->apple->setTranslationVec(randomVec());
-        if(fRand(0,100) < 10){
+        if(fRand(0,100) < 90){
             std::cout << "SPECIAL APPLE " << std::endl;
-            this->setVelocity(DEFAULT_VELOCITY_SPEED_APPLE);
-            this->isSpecialApple = true;
+            this->isSpecialApple = !this->isSpecialApple;
         }
         this->snake->addPart();
         this->increaseScore();
@@ -114,18 +113,28 @@ bool Game::colidate(Vec3 *point) {
 }
 void Game::draw() {
     GlObject::draw();
-    glTranslated(this->translationVec->p[0],this->translationVec->p[1],this->translationVec->p[2]);
     glPushMatrix();
+    glTranslated(this->translationVec->p[0],this->translationVec->p[1],this->translationVec->p[2]);
+    glRotated(*this->angle,this->rotationVec->p[0],this->rotationVec->p[1],this->rotationVec->p[2]);
     this->applyLogic();
     if(this->isRunning){
         this->scorePrinter->printDefaultText("Score: " + this->scorePrinter->intToString(this->score));
         this->playground->drawPlaygrounD();
+
+        if(this->isSpecialApple){
+            this->apple->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
+            this->apple->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,1,0,0);
+            this->apple->setTranslationVec(0,sin(Point::currentLoopNumber/5),0);
+        }else {
+            this->apple->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,0,0,0);
+            this->apple->setMaterialColor(GlObject::MATERIAL_SIDES::BACK,0,0,0);
+        }
         this->apple->draw();
         this->snake->draw();
     }
     this->scorePrinter->print();
     glPopMatrix();
-    glTranslated(this->translationVec->p[0]*-1,this->translationVec->p[1]*-1,this->translationVec->p[2]*-1);
+
 
 
 }

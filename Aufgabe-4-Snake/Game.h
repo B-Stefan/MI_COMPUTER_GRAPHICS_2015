@@ -32,7 +32,7 @@ private:
     void loseGame();
     bool isRunning;
     bool isSpecialApple;
-    int  specialAppleTimer;
+    int  isSpecialAppleActive;
     void increaseScore();
     Snake * snake;
     Playground * playground;

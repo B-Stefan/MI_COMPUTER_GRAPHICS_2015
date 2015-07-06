@@ -314,8 +314,8 @@ int main() {
 
         if(useTwoGameMode){
             zoomOut(-10);
-            game->setTranslationVec(-10, 0, 0);
-            secenodGame->setTranslationVec(10, 0, 0);
+            game->setTranslationVec(-12, 0, 0);
+            secenodGame->setTranslationVec(12, 0, 0);
 
             secenodGame->setSnakeMovement(rotateY);
             secenodGame->draw();
