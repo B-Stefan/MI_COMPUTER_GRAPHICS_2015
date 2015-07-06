@@ -64,10 +64,18 @@ bool Rectangle::colidate(Vec3* postition) {
 void Rectangle::draw() {
     GlObject::draw();
 
-    Vec3 normal = Vec3(0,0,1);
+    Vec3 * p = new Vec3(*this->A->getPosition());
+    Vec3 * q = new Vec3(*this->B->getPosition());
+    Vec3 * r = new Vec3(*this->C->getPosition());
+
+    Vec3 u = *p-*q;
+    Vec3 v = *r-*p;
+    Vec3 normal = u%v;
+    normal.Normalize();
+    normal = normal * -1;
+
     //Begin to draw the plane
     glBegin(GL_QUADS);
-    glEnable(GL_NORMALIZE);
     glNormal3dv(normal.p);
     glVertex3f(this->A->getPosition()->p[0],this->A->getPosition()->p[1],this->A->getPosition()->p[2]);
     glVertex3f(this->B->getPosition()->p[0],this->B->getPosition()->p[1],this->B->getPosition()->p[2]);
