@@ -11,7 +11,7 @@
 const double DELTA_STEPS_BETWEEN_PARTS = 10;
 const double DEFAULT_VELOCITY  = 0.01;
 
-SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation, SnakePart *origin)
+SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<double>* trackRotation,int * deltaBetweenParts, SnakePart *origin)
         : GlObject(origin->globalOrigin){
     this->globalOrigin = origin->globalOrigin;
     this->applyValues(l);
@@ -19,6 +19,7 @@ SnakePart::SnakePart(double l, int index,std::deque<Vec3>* trackPos,std::deque<d
     this->index = index;
     this->trackPositions = trackPos;
     this->trackRotations= trackRotation;
+    this->deltaBetweenParts = deltaBetweenParts;
 }
 SnakePart::SnakePart(double l, SnakePart *origin)
         : GlObject(origin->globalOrigin) {
@@ -48,6 +49,7 @@ void SnakePart::applyValues(double l) {
     this->drawObject->getOriginPoint()->setTranslationVec(this->innerTranslationVec);
     this->nextNode = nullptr;
     this->beforeNode = nullptr;
+    this->deltaBetweenParts = new int(DELTA_STEPS_BETWEEN_PARTS);
 
 }
 void SnakePart::setRotation(double angle, int x, int y, int z) {
@@ -64,7 +66,7 @@ SnakePart *SnakePart::addPart() {
         return this->nextNode->addPart();
     } else {
         int newIndex = this->index+1;
-        this->nextNode = new SnakePart(this->part_length,newIndex, this->trackPositions,this->trackRotations, this);
+        this->nextNode = new SnakePart(this->part_length,newIndex, this->trackPositions,this->trackRotations,this->deltaBetweenParts, this);
         return this->nextNode;
     }
 }
@@ -85,7 +87,7 @@ void SnakePart::recalculateRotationValues() {
 
 
 bool SnakePart::isTrackReadyToDraw() {
-    return this->trackPositions->size() >= (DELTA_STEPS_BETWEEN_PARTS * this->index);
+    return this->trackPositions->size() >= (*this->deltaBetweenParts * this->index);
 }
 
 bool SnakePart::colidate(Vec3 * vec) {
@@ -116,11 +118,11 @@ void SnakePart::recalculateTranslationValues() {
 
 Vec3 SnakePart::getPositionFromTrack() {
     std::deque <Vec3> track = *this->trackPositions;
-    return track[this->index * DELTA_STEPS_BETWEEN_PARTS];
+    return track[this->index * *this->deltaBetweenParts];
 }
 double SnakePart::getRotationFromTrack() {
     std::deque <double > track = *this->trackRotations;
-    return track[this->index * DELTA_STEPS_BETWEEN_PARTS];
+    return track[this->index * *this->deltaBetweenParts];
 
 
 }

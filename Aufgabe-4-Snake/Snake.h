@@ -16,10 +16,14 @@ public:
     Vec3 getHeadPoint();
     bool collidateThemSelf();
     bool colidate(Vec3 * vec);
+    void setVelocity(double v);
+    double getVelocity();
     void addPart();
 private:
     SnakePart * firstPart;
+    double * velocity;
     std::vector<Vec3> * track;
+
 };
 
 

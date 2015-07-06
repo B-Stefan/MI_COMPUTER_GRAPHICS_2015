@@ -11,8 +11,9 @@
 
 Snake::Snake(Point *origin)
         : GlObject::GlObject(origin) {
+    this->velocity = new double(0.01);
 
-    this->firstPart = new SnakeHead(1, origin);
+    this->firstPart = new SnakeHead(1,this->velocity, origin);
     this->firstPart->addPart();
     this->firstPart->addPart();
     this->firstPart->addPart();
@@ -32,7 +33,12 @@ bool Snake::colidate(Vec3 *vec) {
 void Snake::addPart() {
     this->firstPart->addPart();
 }
-
+void Snake::setVelocity(double v) {
+    * this->velocity = v;
+}
+double Snake::getVelocity(){
+    return *this->velocity;
+}
 void Snake::draw() {
     GlObject::draw();
     this->firstPart->setRotation(*this->angle, 0, 1, 0);

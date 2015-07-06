@@ -14,11 +14,11 @@
 
 class SnakeHead : public SnakePart{
 public:
-    SnakeHead(double l,Point *origin);
+    SnakeHead(double l,double * velocity, Point *origin);
     void draw();
     void  setVelocity(double v);
 private:
-    double velocity;
+    double * velocity;
     void saveValuesToTrack();
 };
 

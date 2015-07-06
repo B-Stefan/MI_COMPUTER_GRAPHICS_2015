@@ -19,6 +19,8 @@ public:
     void start();
     void stop();
     void draw();
+    void setVelocity(double v);
+    double getVelocity();
     bool colidate(Vec3 *point);
     void setSnakeMovement(double angle);
     Vec3 randomVec();
@@ -29,6 +31,8 @@ private:
     void applyDefaults();
     void loseGame();
     bool isRunning;
+    bool isSpecialApple;
+    int  specialAppleTimer;
     void increaseScore();
     Snake * snake;
     Playground * playground;

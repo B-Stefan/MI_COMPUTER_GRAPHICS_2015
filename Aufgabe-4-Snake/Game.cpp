@@ -11,7 +11,9 @@
 
 
 
-
+const double DEFAULT_VELOCITY = 0.06;
+const double DEFAULT_VELOCITY_SPEED_APPLE = DEFAULT_VELOCITY + 0.09;
+const int  DEFAULT_SPECIAL_TIMER= 1000;
 
 double fRand(double fMin, double fMax)
 {
@@ -26,29 +28,26 @@ Game::Game(Point * origin)
     {
         this->applyDefaults();
         this->originPoint->setTranslationVec(new Vec3());
-        //this->originPoint->setRotate(0,new Vec3());
 }
 void Game::applyDefaults() {
     srand(time(0));
     this->playground = new Playground(17,17,-9,-9);
-    Point * snakePoint = new Point(this->originPoint);
-    snakePoint->setTranslationVec(new Vec3(0,1,0));
-    this->snake= new Snake(snakePoint);
-    this->apple = new Sphere(0.3,this->originPoint);
     this->snake= new Snake(this->originPoint);
     this->apple = new Sphere(0.6,this->originPoint);
     this->scorePrinter = new ScorePrinter(-3,0,-3,"PRESS SPACEBAR TO START THE GAME");
     this->isRunning = false;
+    this->isSpecialApple = false;
     this->score = 0;
+    this->setVelocity(DEFAULT_VELOCITY);
+    this->specialAppleTimer = 0;
 }
 
 Vec3 Game::randomVec(){
 
-    double testX =fRand(-8,7);
-    double testY =fRand(-8,7);
+    double randX =fRand(-8,7);
+    double randY =fRand(-8,7);
 
-
-    return Vec3(testX,0,testY);
+    return Vec3(randX,0,randY);
 
 }
 void Game::increaseScore() {
@@ -70,6 +69,17 @@ void Game::loseGame() {
 void Game::applyLogic() {
     Vec3 headPoint = this->snake->getHeadPoint();
 
+
+    //Special apple
+    if(this->isSpecialApple){
+        if(fRand(0,100) < 10){
+            this->setVelocity(DEFAULT_VELOCITY);
+            this->isSpecialApple = false;
+        }
+    }
+
+
+    //Collisition
     if( !this->playground->isVecInField(headPoint)
         || this->snake->collidateThemSelf()){
 
@@ -77,17 +87,28 @@ void Game::applyLogic() {
         this->loseGame();
     }
     else if(this->apple->colidate(&headPoint)){
+
         std:: cout << this->apple->colidate(&headPoint) << std::endl;
+
         this->apple->setTranslationVec(randomVec());
+        if(fRand(0,100) < 10){
+            std::cout << "SPECIAL APPLE " << std::endl;
+            this->setVelocity(DEFAULT_VELOCITY_SPEED_APPLE);
+            this->isSpecialApple = true;
+        }
         this->snake->addPart();
         this->increaseScore();
     }
 }
-
 void Game::setSnakeMovement(double angle) {
     this->snake->setRotation(angle,*new Vec3(0,1,0));
 }
-
+void Game::setVelocity(double v) {
+    this->snake->setVelocity(v);
+}
+double Game::getVelocity() {
+    return this->snake->getVelocity();
+}
 bool Game::colidate(Vec3 *point) {
     return false;
 }

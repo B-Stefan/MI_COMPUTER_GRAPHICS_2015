@@ -11,7 +11,7 @@
 #include "Cuboid.h"
 class SnakePart : public GlObject{
 public:
-    SnakePart(double l,int index,std::deque<Vec3> * track,std::deque<double> * trackRot, SnakePart *origin);
+    SnakePart(double l,int index,std::deque<Vec3> * track,std::deque<double> * trackRot,int * deltaBetweenParts, SnakePart *origin);
     SnakePart(double l,SnakePart *origin);
     SnakePart(double l,Point *origin);
     SnakePart* addPart();
@@ -28,6 +28,7 @@ protected:
     Vec3 getPositionFromTrack();
     double getRotationFromTrack();
     double part_length;
+    int * deltaBetweenParts;
     SnakePart *beforeNode;
     SnakePart *nextNode;
     std::deque<Vec3> *trackPositions;

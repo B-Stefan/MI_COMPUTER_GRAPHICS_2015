@@ -34,7 +34,7 @@ static int heightActual = 0;
 
 //Values for Key-Input
 //Rotation
-double rotateX = 0.0;
+double rotateX = 0.04;
 double rotateY = 0.0;
 double rotateZ = 0.0;
 
@@ -76,15 +76,17 @@ void key_callback(GLFWwindow *window, int key, int scancode, int action, int mod
                 break;
             case GLFW_KEY_W:
                 std::cout << "w" << std::endl;
-                rotateX = 1;
+                rotateX = rotateX + 0.01;
+                game->setVelocity(rotateX);
                 break;
             case GLFW_KEY_A:
                 std::cout << "a" << std::endl;
                 rotateY = rotateY + 0.2;
+                game->setVelocity(rotateX);
                 break;
             case GLFW_KEY_S:
                 std::cout << "s" << std::endl;
-                rotateX = -1;
+                rotateX = rotateX - 0.01;
                 break;
             case GLFW_KEY_D:
                 std::cout << "d" << std::endl;
@@ -311,20 +313,19 @@ int main() {
         glRotated(45, 0, 1, 0);
 
         if(useTwoGameMode){
-            zoomOut(-5);
+            zoomOut(-10);
             game->setTranslationVec(-10, 0, 0);
             secenodGame->setTranslationVec(10, 0, 0);
 
-            secenodGame->draw();
             secenodGame->setSnakeMovement(rotateY);
+            secenodGame->draw();
         }else {
             zoomIn(1);
             game->setTranslationVec(0, 0, 0);
             secenodGame->setTranslationVec(0, 0, 0);
         }
-
-        game->draw();
         game->setSnakeMovement(translateX);
+        game->draw();
         rectangle->setRotation(rotateY,0,1,0);
         rectangle->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
         //rectangle->draw();

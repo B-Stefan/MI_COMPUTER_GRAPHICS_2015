@@ -36,7 +36,7 @@ void ScorePrinter::print() {
 
 void ScorePrinter::printDefaultText(string defaultText) {
     //x,y & z position of the text
-    glRasterPos3f(-1,1,19);
+    glRasterPos3f(-1,1,10);
     //get lenght of the string
     int len = defaultText.length();
     //display char by char

@@ -5,10 +5,10 @@
 #include "SnakeHead.h"
 #include "SnakeHeadObject.h"
 #include <iostream>
-SnakeHead::SnakeHead(double l, Point *origin)
+SnakeHead::SnakeHead(double l,double * velocity, Point *origin)
         :SnakePart(l,origin){
     this->trackPositions = new std::deque<Vec3>();
-    this->velocity = 0.1;
+    this->velocity = velocity;
     this->saveValuesToTrack();
     Point * headRotationX = new Point(this->originPoint);
     Point * headRotationY = new Point(headRotationX);
@@ -25,7 +25,8 @@ void SnakeHead::saveValuesToTrack() {
 }
 void SnakeHead::draw() {
     SnakePart::draw();
-    this->innerTranslationVec->p[0] = this->velocity * -1;
+    * this->deltaBetweenParts  = exp(*this->velocity)+120/(*this->velocity*100);
+    this->innerTranslationVec->p[0] = *this->velocity * -1;
     this->saveValuesToTrack();
 
 }
