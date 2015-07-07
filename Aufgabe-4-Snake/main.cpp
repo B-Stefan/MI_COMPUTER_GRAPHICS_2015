@@ -56,8 +56,7 @@ double zoomValue = 1;
 Point *origin = new Point(new Vec3(0, 1, 0)); //From this point all objects drawn to canvas
 Game *game = new Game(origin); // Create a new snake game
 Game *secenodGame = new Game(origin); // Create the second snake game.
-Cuboid *cuboid = new Cuboid(3,3,origin);
-Rectangle *rectangle = new Rectangle(3,3,origin);
+
 bool mouseClicked = false;
 
 
@@ -326,9 +325,7 @@ int main() {
         }
         game->setSnakeMovement(translateX);
         game->draw();
-        rectangle->setRotation(rotateY,0,1,0);
-        rectangle->setMaterialColor(GlObject::MATERIAL_SIDES::FRONT,1,0,0);
-        //rectangle->draw();
+
 
 
         // make it appear (before this, it's hidden in the rear buffer)
