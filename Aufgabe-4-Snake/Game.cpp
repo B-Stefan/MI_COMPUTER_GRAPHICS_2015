@@ -74,7 +74,7 @@ void Game::applyLogic() {
 
 
     //Special apple
-    if(this->isSpecialApple){
+    if(this->isSpecialAppleActive){
         * this->angle = *this->angle +0.1;
     }
 
